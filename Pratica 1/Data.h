@@ -7,7 +7,6 @@ private:
 
 public:
     Data(int d = 1, int m = 1, int a = 2018);
-
     Data(const Data &dt);
 
     void setDia(int d);

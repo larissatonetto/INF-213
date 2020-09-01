@@ -60,6 +60,7 @@ int Data::difDias(const Data& dma) {
 
     int dias_d = dia + mes*30 + ano*365;
     int dias_dma = dma.dia + dma.mes*30 + dma.ano*365;
+    
     if (compData(dma) > 0) return dias_d - dias_dma;
     else return dias_dma - dias_d;
 }
