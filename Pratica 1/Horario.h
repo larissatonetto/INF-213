@@ -12,15 +12,15 @@ public:
     void setMinuto(int m);
     void setSegundo(int s);
 
-    int getHora() const;
-    int getMinuto() const;
-    int getSegundo() const;
+    const int getHora() const;
+    const int getMinuto() const;
+    const int getSegundo() const;
 
-    int compHorario(const Horario& hms) const;
+    const int compHorario(const Horario& hms) const;
 
-    int difSegundos(const Horario& hms) const;
+    const int difSegundos(const Horario& hms) const;
 
-    void imprime() const;
+    const void imprime() const;
 
     // Leitura e escrita
     friend std::ostream& operator<<(std::ostream& os, const Horario& hr);

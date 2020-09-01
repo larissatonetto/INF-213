@@ -14,37 +14,37 @@ Data::Data(const Data &dt) {
     ano = dt.ano;
 }
 
-void Data::setDia(int d) {
+void Data::setDia(const int &d) {
     if (d < 1) dia = 1;
     else if (d > 30) dia = 30;
     else dia = d;
 }
 
-void Data::setMes(int m) {
+void Data::setMes(const int &m) {
     if (m < 1) mes = 1;
     else if (m > 12) mes = 12;
     else mes = m;
 }
 
-void Data::setAno(int a) {
+void Data::setAno(const int &a) {
     if (a < 2018) ano = 2018;
     else if (a > 2020) ano = 2020;
     else ano = a;
 }
 
-int Data::getDia() const {
+const int Data::getDia() const {
     return dia;
 }
 
-int Data::getMes() const {
+const int Data::getMes() const {
     return mes;
 }
 
-int Data::getAno() const {
+const int Data::getAno() const {
     return ano;
 }
 
-int Data::compData(const Data& dma) const {
+const int Data::compData(const Data& dma) const {
     if (ano == dma.ano) {
         if (mes == dma.mes) {
             if (dia == dma.dia) return 0;
@@ -55,7 +55,7 @@ int Data::compData(const Data& dma) const {
     return (ano > dma.ano) ? 1 : -1;
 }
 
-int Data::difDias(const Data& dma) const {
+const int Data::difDias(const Data& dma) const {
     if (compData(dma) == 0) return 0;
 
     // Converter o tempo em dias
@@ -66,7 +66,7 @@ int Data::difDias(const Data& dma) const {
     else return dias_dma - dias_d;
 }
 
-void Data::imprime() const {
+const void Data::imprime() const {
     std::cout << dia << " " << mes << " " << ano << "\n";
 }
 

@@ -9,19 +9,19 @@ public:
     Data(int d = 1, int m = 1, int a = 2018);
     Data(const Data &dt);
 
-    void setDia(int d);
-    void setMes(int m);
-    void setAno(int a);
+    void setDia(const int &d);
+    void setMes(const int &m);
+    void setAno(const int &a);
 
-    int getDia() const;
-    int getMes() const;
-    int getAno() const;
+    const int getDia() const;
+    const int getMes() const;
+    const int getAno() const;
 
-    int compData(const Data& dma) const;
+    const int compData(const Data& dma) const;
 
-    int difDias(const Data& dma) const;
+    const int difDias(const Data& dma) const;
 
-    void imprime() const;
+    const void imprime() const;
 
     // Leitura e escrita
     friend std::ostream& operator<<(std::ostream& os, const Data& dt);

@@ -32,19 +32,19 @@ void Horario::setSegundo(int s) {
     else segundo = s;
 }
 
-int Horario::getHora() const {
+const int Horario::getHora() const {
     return hora;
 }
 
-int Horario::getMinuto() const {
+const int Horario::getMinuto() const {
     return minuto;
 }
 
-int Horario::getSegundo() const {
+const int Horario::getSegundo() const {
     return segundo;
 }
 
-int Horario::compHorario(const Horario& hms) const {
+const int Horario::compHorario(const Horario& hms) const {
     if (hora == hms.hora) {
         if (minuto == hms.minuto) {
             if (segundo == hms.segundo) return 0;
@@ -55,7 +55,7 @@ int Horario::compHorario(const Horario& hms) const {
     return (hora > hms.hora) ? 1 : -1;
 }
 
-int Horario::difSegundos(const Horario& hms) const {
+const int Horario::difSegundos(const Horario& hms) const {
     if (compHorario(hms) == 0) return 0;
 
     // Converter o tempo em segundos
@@ -66,7 +66,7 @@ int Horario::difSegundos(const Horario& hms) const {
     else return segundos_hms - seg_h;
 }
 
-void Horario::imprime() const {
+const void Horario::imprime() const {
     std::cout << hora << " " << minuto << " " << segundo << "\n";
 }
 
