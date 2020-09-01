@@ -32,19 +32,19 @@ void Horario::setSegundo(int s) {
     else segundo = s;
 }
 
-int Horario::getHora() {
+int Horario::getHora() const {
     return hora;
 }
 
-int Horario::getMinuto() {
+int Horario::getMinuto() const {
     return minuto;
 }
 
-int Horario::getSegundo() {
+int Horario::getSegundo() const {
     return segundo;
 }
 
-int Horario::compHorario(const Horario& hms) {
+int Horario::compHorario(const Horario& hms) const {
     if (hora == hms.hora) {
         if (minuto == hms.minuto) {
             if (segundo == hms.segundo) return 0;
@@ -55,7 +55,7 @@ int Horario::compHorario(const Horario& hms) {
     return (hora > hms.hora) ? 1 : -1;
 }
 
-int Horario::difSegundos(const Horario& hms) {
+int Horario::difSegundos(const Horario& hms) const {
     if (compHorario(hms) == 0) return 0;
 
     // Converter o tempo em segundos
@@ -66,6 +66,23 @@ int Horario::difSegundos(const Horario& hms) {
     else return segundos_hms - seg_h;
 }
 
-void Horario::imprime() {
+void Horario::imprime() const {
     std::cout << hora << " " << minuto << " " << segundo << "\n";
+}
+
+std::ostream& operator<<(std::ostream& os, const Horario& hr) {
+    os << hr.hora << " " << hr.minuto << " " << hr.segundo;
+
+    return os;
+}
+
+std::istream& operator>>(std::istream& is, Horario& hr) {
+    is >> hr.hora >> hr.minuto >> hr.segundo;
+
+    // Tratamendo da entrada, caso haja algum valor inválido
+    hr.setHora(hr.hora);
+    hr.setMinuto(hr.minuto);
+    hr.setSegundo(hr.segundo);
+
+    return is;
 }

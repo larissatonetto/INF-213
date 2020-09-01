@@ -32,19 +32,19 @@ void Data::setAno(int a) {
     else ano = a;
 }
 
-int Data::getDia() {
+int Data::getDia() const {
     return dia;
 }
 
-int Data::getMes() {
+int Data::getMes() const {
     return mes;
 }
 
-int Data::getAno() {
+int Data::getAno() const {
     return ano;
 }
 
-int Data::compData(const Data& dma) {
+int Data::compData(const Data& dma) const {
     if (ano == dma.ano) {
         if (mes == dma.mes) {
             if (dia == dma.dia) return 0;
@@ -55,9 +55,10 @@ int Data::compData(const Data& dma) {
     return (ano > dma.ano) ? 1 : -1;
 }
 
-int Data::difDias(const Data& dma) {
+int Data::difDias(const Data& dma) const {
     if (compData(dma) == 0) return 0;
 
+    // Converter o tempo em dias
     int dias_d = dia + mes*30 + ano*365;
     int dias_dma = dma.dia + dma.mes*30 + dma.ano*365;
     
@@ -65,6 +66,23 @@ int Data::difDias(const Data& dma) {
     else return dias_dma - dias_d;
 }
 
-void Data::imprime() {
+void Data::imprime() const {
     std::cout << dia << " " << mes << " " << ano << "\n";
+}
+
+std::ostream& operator<<(std::ostream& os, const Data& dt) {
+     os << dt.dia << " " << dt.mes << " " << dt.ano;
+
+     return os;
+}
+
+std::istream& operator>>(std::istream& is, Data& dt) {
+    is >> dt.dia >> dt.mes >> dt.ano;
+
+    // Tratamendo da entrada, caso haja algum valor inválido
+    dt.setDia(dt.dia);
+    dt.setMes(dt.mes);
+    dt.setAno(dt.ano);
+
+    return is;
 }
