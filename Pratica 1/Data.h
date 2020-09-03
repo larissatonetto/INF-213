@@ -9,9 +9,9 @@ public:
     Data(int d = 1, int m = 1, int a = 2018);
     Data(const Data &dt);
 
-    void setDia(const int &d);
-    void setMes(const int &m);
-    void setAno(const int &a);
+    void setDia(int d);
+    void setMes(int m);
+    void setAno(int a);
 
     const int getDia() const;
     const int getMes() const;

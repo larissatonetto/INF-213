@@ -14,19 +14,19 @@ Data::Data(const Data &dt) {
     ano = dt.ano;
 }
 
-void Data::setDia(const int &d) {
+void Data::setDia(int d) {
     if (d < 1) dia = 1;
     else if (d > 30) dia = 30;
     else dia = d;
 }
 
-void Data::setMes(const int &m) {
+void Data::setMes(int m) {
     if (m < 1) mes = 1;
     else if (m > 12) mes = 12;
     else mes = m;
 }
 
-void Data::setAno(const int &a) {
+void Data::setAno(int a) {
     if (a < 2018) ano = 2018;
     else if (a > 2020) ano = 2020;
     else ano = a;
@@ -67,7 +67,7 @@ const int Data::difDias(const Data& dma) const {
 }
 
 const void Data::imprime() const {
-    std::cout << dia << " " << mes << " " << ano << "\n";
+    std::cout << dia << " " << mes << " " << ano;
 }
 
 std::ostream& operator<<(std::ostream& os, const Data& dt) {

@@ -67,7 +67,7 @@ const int Horario::difSegundos(const Horario& hms) const {
 }
 
 const void Horario::imprime() const {
-    std::cout << hora << " " << minuto << " " << segundo << "\n";
+    std::cout << hora << " " << minuto << " " << segundo;
 }
 
 std::ostream& operator<<(std::ostream& os, const Horario& hr) {

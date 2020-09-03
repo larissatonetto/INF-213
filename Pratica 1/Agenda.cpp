@@ -54,6 +54,7 @@ void Agenda::inserirItem(const ItemAgenda &it) {
 
 const void Agenda::compromissosData(const Data &d) const {
     for (int i = 1; i <= cont; i++) {
+        // Usando difDias para verificar se a data é igual
         if (d.difDias(itens[i].getData()) == 0) {
             std::cout << itens[i].getHorario() << " " << itens[i].getDesc() << std::endl;
         }
