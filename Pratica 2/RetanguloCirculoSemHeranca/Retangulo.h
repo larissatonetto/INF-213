@@ -9,7 +9,7 @@ private:
     double largura, altura;
 
 public:
-    Retangulo(double, double, double, double, int, int, int);
+    Retangulo(double = 0, double = 0, double = 0, double = 0, int = 0, int = 0, int = 0);
 
     double getLargura() const;
     void setLargura(double);

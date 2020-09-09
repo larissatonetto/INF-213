@@ -8,7 +8,7 @@ private:
 
 public:
     FigBase();
-    FigBase(double, double, int, int, int);
+    FigBase(double = 0, double = 0, int = 0, int = 0, int = 0);
 
     double getX() const;
     void setX(double);

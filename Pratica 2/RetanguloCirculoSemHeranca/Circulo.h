@@ -9,7 +9,7 @@ private:
     double raio;
 
 public:
-    Circulo(double, double, double, int, int, int);
+    Circulo(double = 0, double = 0, double = 0, int = 0, int = 0, int = 0);
 
     double getRaio() const;
     void setRaio(double);

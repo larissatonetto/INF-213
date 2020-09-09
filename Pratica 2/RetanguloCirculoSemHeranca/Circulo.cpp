@@ -6,8 +6,9 @@ using std::endl;
 
 const float PI = 3.141592653589;
 
-Circulo::Circulo(double x = 0, double y = 0, double r = 0, 
-                     int esp = 0, int c = 0, int t = 0): FigBase(x, y, esp, c, t) {
+Circulo::Circulo(double x, double y, double r, 
+                 int esp, int c, int t)
+                 : FigBase(x, y, esp, c, t) {
     setRaio(r);
 }
 

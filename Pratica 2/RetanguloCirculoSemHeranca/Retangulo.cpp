@@ -4,9 +4,10 @@
 using std::cout;
 using std::endl;
 
-Retangulo::Retangulo(double x = 0, double y = 0, 
-                     double larg = 0, double alt = 0,
-                     int esp = 0, int c = 0, int t = 0): FigBase(x, y, esp, c, t) {
+Retangulo::Retangulo(double x, double y, 
+                     double larg, double alt,
+                     int esp, int c, int t)
+                     : FigBase(x, y, esp, c, t) {
     setLargura(larg);
     setAltura(alt);
 }

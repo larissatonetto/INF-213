@@ -5,7 +5,7 @@ using namespace std;
 
 FigBase::FigBase() {}
 
-FigBase::FigBase(double x = 0, double y = 0, int esp = 0, int c = 0, int t = 0) {
+FigBase::FigBase(double x, double y, int esp, int c, int t) {
     setX(x);
     setY(y);
     setEspessura(esp);
