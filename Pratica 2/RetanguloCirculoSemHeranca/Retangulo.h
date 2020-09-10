@@ -2,7 +2,10 @@
 #ifndef __Retangulo_h
 #define __Retangulo_h
 
+#include <iostream>
 #include "FigBase.h"
+using std::ostream;
+using std::istream;
 
 class Retangulo : public FigBase {
 private:
@@ -22,6 +25,9 @@ public:
 
     void imprime() const;
 
+    // Leitura e escrita
+    friend ostream& operator<<(ostream&, const Retangulo&);
+    friend istream& operator>>(istream&, Retangulo&);
 };
 
 #endif

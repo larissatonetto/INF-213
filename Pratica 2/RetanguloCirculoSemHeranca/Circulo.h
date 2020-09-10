@@ -2,7 +2,10 @@
 #ifndef __Circulo_h
 #define __Circulo_h
 
+#include <iostream>
 #include "FigBase.h"
+using std::ostream;
+using std::istream;
 
 class Circulo : public FigBase {
 private:
@@ -19,6 +22,9 @@ public:
 
     void imprime() const;
 
+    // Leitura e escrita
+    friend ostream& operator<<(ostream&, const Circulo&);
+    friend istream& operator>>(istream&, Circulo&);
 };
 
 #endif

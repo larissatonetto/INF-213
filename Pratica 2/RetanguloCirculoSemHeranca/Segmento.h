@@ -1,13 +1,16 @@
 #ifndef SEGMENTO_H
 #define SEGMENTO_H
 
+#include <iostream>
 #include "FigBase.h"
+using std::ostream;
+using std::istream;
 
 class Segmento : public FigBase {
 private:
     double x2, y2;
 public:
-    Segmento(double = 0, double = 0, double = 0, double = 0, int = 0, int = 0, int = 0);
+    Segmento(double = 1, double = 1, double = 1, double = 1, int = 1, int = 1, int = 1);
 
     double getX2() const;
     void setX2(double);
@@ -20,6 +23,10 @@ public:
     float perimetro() const;
 
     void imprime() const;
+
+    // Leitura e escrita
+    friend ostream& operator<<(ostream&, const Segmento&);
+    friend istream& operator>>(istream&, Segmento&);
 };
 
 #endif
