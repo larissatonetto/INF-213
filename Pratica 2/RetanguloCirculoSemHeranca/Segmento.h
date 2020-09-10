@@ -23,6 +23,7 @@ public:
     float perimetro() const;
 
     void imprime() const;
+    void le();
 
     // Leitura e escrita
     friend ostream& operator<<(ostream&, const Segmento&);

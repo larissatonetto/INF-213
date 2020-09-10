@@ -26,6 +26,7 @@ public:
     void setTipo(int);
 
     void imprime() const;
+    void le();
 };
 
 #endif

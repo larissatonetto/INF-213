@@ -2,6 +2,7 @@
 #include "Retangulo.h"
 #include <iostream>
 using std::cout;
+using std::cin;
 using std::endl;
 using std::ostream;
 using std::istream;
@@ -42,31 +43,28 @@ void Retangulo::imprime() const {
     cout << "--- [Retangulo] ---" << endl;
     FigBase::imprime();
     cout << " largura = " << getLargura() << " altura = " << getAltura() << endl;  
-    cout << " area = " << area() << " perimetro = " << perimetro() << endl; 
+    cout << " area = " << area() << " perimetro = " << perimetro() << endl;
+}
+
+void Retangulo::le() {
+    // Ordem de leitura: x -> y -> espessura -> cor -> tipo
+    // -> largura -> altura
+    double tempLarg, tempAlt;
+
+    FigBase::le();
+    cin >> tempLarg >> tempAlt;
+    setLargura(tempLarg);
+    setAltura(tempAlt);
 }
 
 ostream& operator<<(ostream& os, const Retangulo& rt) {
-    /*os << "--- [Retangulo] ---" << endl;
-    rt.FigBase::imprime();
-    os << " largura = " << rt.getLargura() << " altura = " << rt.getAltura() << endl;  
-    os << " area = " << rt.area() << " perimetro = " << rt.perimetro() << endl;*/
     rt.imprime();
 
     return os;
 }
 
 istream& operator>>(istream& is, Retangulo& rt) {
-    double xTemp, yTemp, largTemp, altTemp;
-    int espTemp, cTemp, tTemp;
-
-    is >> xTemp >> yTemp >> largTemp >> altTemp >> espTemp >> cTemp >> tTemp;
-    rt.setX(xTemp);
-    rt.setY(yTemp);
-    rt.setLargura(largTemp);
-    rt.setAltura(altTemp);
-    rt.setEspessura(espTemp);
-    rt.setCor(cTemp);
-    rt.setTipo(tTemp);
+    rt.le();
 
     return is;
 }

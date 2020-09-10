@@ -2,6 +2,7 @@
 #include <math.h>
 #include "Segmento.h"
 using std::cout;
+using std::cin;
 using std::endl;
 using std::ostream;
 using std::istream;
@@ -45,28 +46,25 @@ void Segmento::imprime() const {
     cout << " area = " << area() << " perimetro = " << perimetro() << endl;
 }
 
+void Segmento::le() {
+    // Ordem de leitura: x -> y -> espessura -> cor -> tipo
+    // -> x2 -> y2
+    double tempX2, tempY2;
+
+    FigBase::le();
+    cin >> tempX2 >> tempY2;
+    setX2(tempX2);
+    setY2(tempY2);
+}
+
 ostream& operator<<(ostream& os, const Segmento& seg) {
-    /*os << "--- [Segmento] ---" << endl;
-    seg.FigBase::imprime();
-    os << " x2 = " << seg.getX2() << " y2 = " << seg.getY2() << endl;
-    os << " area = " << seg.area() << " perimetro = " << seg.perimetro() << endl;*/
     seg.imprime();
 
     return os;
 }
 
 istream& operator>>(istream& is, Segmento& seg) {
-    double xTemp, yTemp, x2Temp, y2Temp;
-    int espTemp, cTemp, tTemp;
-
-    is >> xTemp >> yTemp >> x2Temp >> y2Temp >> espTemp >> cTemp >> tTemp;
-    seg.setX(xTemp);
-    seg.setY(yTemp);
-    seg.setX2(x2Temp);
-    seg.setY2(y2Temp);
-    seg.setEspessura(espTemp);
-    seg.setCor(cTemp);
-    seg.setTipo(tTemp);
+    seg.le();
 
     return is;
 }

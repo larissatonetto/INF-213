@@ -1,7 +1,8 @@
 #include <iostream>
 #include "FigBase.h"
-
-using namespace std;
+using std::cin;
+using std::cout;
+using std::endl;
 
 FigBase::FigBase() {}
 
@@ -59,4 +60,17 @@ void FigBase::imprime() const {
     cout << "     Cor       = " << getCor() << endl;
     cout << "     Tipo      = " << getTipo() << endl;          
     cout << " x = " << getX() << " y = " << getY() << endl;
+}
+
+void FigBase:: le() {
+    // Ordem de leitura: x -> y -> espessura -> cor -> tipo
+    double tempX, tempY;
+    int tempEsp, tempC, tempT;
+
+    cin >> tempX >> tempY >> tempEsp >> tempC >> tempT;
+    setX(tempX);
+    setY(tempY);
+    setEspessura(tempEsp);
+    setCor(tempC);
+    setTipo(tempT);
 }
