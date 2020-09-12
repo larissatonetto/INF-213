@@ -4,8 +4,6 @@ using std::cin;
 using std::cout;
 using std::endl;
 
-FigBase::FigBase() {}
-
 FigBase::FigBase(double x, double y, int esp, int c, int t) {
     setX(x);
     setY(y);
