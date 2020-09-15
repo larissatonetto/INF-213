@@ -21,7 +21,7 @@ public:
     void setRaio(double);
     float area() const;
     float perimetro() const;
-    void imprime() const;
+    virtual void imprime() const;
 };
 
 #endif

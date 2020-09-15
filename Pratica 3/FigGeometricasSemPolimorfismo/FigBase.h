@@ -37,7 +37,7 @@ public:
     int getTipo() const;
     void setTipo(int);
 
-    void imprime() const;
+    virtual void imprime() const;
     void ler();   // funcao adicional (nao especificada no UML)
 
 };

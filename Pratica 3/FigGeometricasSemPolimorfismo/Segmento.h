@@ -22,7 +22,7 @@ public:
     void setY2(double);
     float area() const;
     float perimetro() const;
-    void imprime() const;
+    virtual void imprime() const;
 };
 
 #endif
