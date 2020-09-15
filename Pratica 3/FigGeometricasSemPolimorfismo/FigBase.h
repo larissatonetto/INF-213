@@ -37,6 +37,9 @@ public:
     int getTipo() const;
     void setTipo(int);
 
+    float area() const;
+    virtual float perimetro() const;
+
     virtual void imprime() const;
     void ler();   // funcao adicional (nao especificada no UML)
 

@@ -19,8 +19,8 @@ public:
     Circulo(double=0.0, double=0.0, double=0.0, int=1, int=1, int=1);
     double getRaio() const;
     void setRaio(double);
-    float area() const;
-    float perimetro() const;
+    virtual float area() const;
+    virtual float perimetro() const;
     virtual void imprime() const;
 };
 

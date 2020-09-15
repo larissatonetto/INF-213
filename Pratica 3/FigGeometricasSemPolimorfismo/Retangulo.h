@@ -21,8 +21,8 @@ public:
     void setLargura(double);
     double getAltura() const;
     void setAltura(double);
-    float area() const;
-    float perimetro() const;
+    virtual float area() const;
+    virtual float perimetro() const;
     virtual void imprime() const;
 };
 

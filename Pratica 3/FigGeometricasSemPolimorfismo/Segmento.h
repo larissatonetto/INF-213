@@ -20,8 +20,8 @@ public:
     void setX2(double);
     double getY2() const;
     void setY2(double);
-    float area() const;
-    float perimetro() const;
+    virtual float area() const;
+    virtual float perimetro() const;
     virtual void imprime() const;
 };
 
