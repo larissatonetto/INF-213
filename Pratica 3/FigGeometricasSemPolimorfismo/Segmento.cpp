@@ -38,29 +38,31 @@ float Segmento::perimetro() const {
 }
 
 void Segmento::imprime() const {
-
-     cout << *this << endl;
+    cout << "--- [Segmento] ---" << endl;
+    FigBase::imprime();
+    cout << " x2 = " << getX2() << " Y2 = " << getY2() << endl;
+    cout << " area = " << area() << " perimetro = " << perimetro() << endl;
 }
 
-
-ostream& operator<< (ostream &out, const Segmento &s) {
-    out << "--- [Segmento] ---" << endl;
-    s.FigBase::imprime();
-    out << " x2 = " << s.getX2() << " Y2 = " << s.getY2() << endl;
-    out << " area = " << s.area() << " perimetro = " << s.perimetro() << endl;
-
-   return cout;
-}
-
-istream& operator>> (istream &cin, Segmento &s) {
+void Segmento::ler() {
     double x2,y2;
 
     cout << "Forneca os dados do Segmento \n";
-    s.FigBase::ler();
+    FigBase::ler();
     cout << "x2 = ";
-    cin >> x2; s.setX2(x2);
+    cin >> x2; setX2(x2);
     cout << "y2 = ";
-    cin >> y2; s.setY2(y2);
+    cin >> y2; setY2(y2);
+}
+
+ostream& operator<< (ostream &out, const Segmento &s) {
+    s.imprime();
+
+   return out;
+}
+
+istream& operator>> (istream &cin, Segmento &s) {
+    s.ler();
 
     return cin;
 }

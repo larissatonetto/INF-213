@@ -22,6 +22,7 @@ public:
     virtual float area() const;
     virtual float perimetro() const;
     virtual void imprime() const;
+    virtual void ler();
 };
 
 #endif

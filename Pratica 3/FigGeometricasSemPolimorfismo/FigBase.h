@@ -8,9 +8,6 @@ using std::ostream;
 
 class FigBase {
 
-friend ostream& operator<< (ostream &, const FigBase &);
-friend istream& operator>> (istream &, FigBase &);
-
 private:
     double x, y;
 
@@ -37,12 +34,14 @@ public:
     int getTipo() const;
     void setTipo(int);
 
-    float area() const;
-    virtual float perimetro() const;
+    virtual float area() const = 0;
+    virtual float perimetro() const = 0;
 
     virtual void imprime() const;
-    void ler();   // funcao adicional (nao especificada no UML)
+    virtual void ler();   // funcao adicional (nao especificada no UML)
 
+    friend ostream& operator<< (ostream &, const FigBase &);
+    friend istream& operator>> (istream &, FigBase &);
 };
 
 #endif

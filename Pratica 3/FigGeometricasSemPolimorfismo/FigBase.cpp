@@ -62,8 +62,11 @@ float FigBase::perimetro() const {
 }
 
 void FigBase::imprime() const {
-
-    cout << *this << endl;
+    cout << " Atributos da linha: " << endl;
+    cout << "     Espessura = " << getEspessura() << endl;
+    cout << "     Cor       = " << getCor() << endl;
+    cout << "     Tipo      = " << getTipo() << endl;
+    cout << " x = " << getX() << " y = " << getY() << endl;
 }
 
 void FigBase::ler() {
@@ -84,11 +87,7 @@ void FigBase::ler() {
 }
 
 ostream& operator<< (ostream &out, const FigBase &f) {
-   out << " Atributos da linha: " << endl;
-   out << "     Espessura = " << f.getEspessura() << endl;
-   out << "     Cor       = " << f.getCor() << endl;
-   out << "     Tipo      = " << f.getTipo() << endl;
-   out << " x = " << f.getX() << " y = " << f.getY() << endl;
+   f.imprime();
 
    return out;
 }

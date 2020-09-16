@@ -36,29 +36,32 @@ float Retangulo::perimetro() const {
 }
 
 void Retangulo::imprime() const {
+    cout << "--- [Retangulo] ---" << endl;
+    FigBase::imprime();
+    cout << " largura=" << getLargura() << " altura=" << getAltura() << endl;
+    cout << " area = " << area() << " perimetro = " << perimetro() << endl;
 
-    cout << *this << endl;
+}
 
+void Retangulo::ler() {
+    double larg, alt;
+
+    cout << "Forneca os dados do retangulo \n";
+    FigBase::ler();
+    cout << "Largura = ";
+    cin >> larg; setLargura(larg);
+    cout << "Altura = ";
+    cin >> alt; setAltura(alt);
 }
 
 ostream& operator<< (ostream &out, const Retangulo &r) {
-    out << "--- [Retangulo] ---" << endl;
-    r.FigBase::imprime();
-    out << " largura=" << r.getLargura() << " altura=" << r.getAltura() << endl;
-    out << " area = " << r.area() << " perimetro = " << r.perimetro() << endl;
+    r.imprime();
 
-   return cout;
+   return out;
 }
 
 istream& operator>> (istream &cin, Retangulo &r) {
-    double larg,alt;
-
-    cout << "Forneca os dados do retangulo \n";
-    r.FigBase::ler();
-    cout << "Largura = ";
-    cin >> larg; r.setLargura(larg);
-    cout << "Altura = ";
-    cin >> alt; r.setAltura(alt);
+    r.ler();
 
     return cin;
 }
