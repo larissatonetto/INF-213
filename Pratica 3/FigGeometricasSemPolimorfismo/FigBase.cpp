@@ -53,6 +53,12 @@ void FigBase::setTipo(int t) {
     tipo = (t < 1 || t > 3) ? 1 : t;;
 }
 
+double FigBase::getRaio() const {
+    return 0;
+}
+
+void FigBase::setRaio(double) {}
+
 float FigBase::area() const {
     return 0;
 }
