@@ -28,10 +28,13 @@ int main() {
        cout << *(figuras[i]);
     }
 
+    cout << "\n\n";
+
     for (int i = 0; i < 5; i++) {
         if (typeid( *(figuras[i]) ).name() == typeid( c1 ).name()) {
-            // dynamic_cast<Circulo* >(figuras[i]);
-             figuras[i]->setRaio(( figuras[i]->getRaio() ) * 2);
+            ( dynamic_cast<Circulo* >(figuras[i]) )->
+              setRaio( (dynamic_cast<Circulo* >(figuras[i])->getRaio()) * 2 );
+              
             cout << *figuras[i];
         }
     }

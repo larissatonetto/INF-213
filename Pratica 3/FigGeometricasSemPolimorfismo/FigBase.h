@@ -34,8 +34,8 @@ public:
     int getTipo() const;
     void setTipo(int);
 
-    virtual double getRaio() const;
-    virtual void setRaio(double);
+    //virtual double getRaio() const;
+    //virtual void setRaio(double);
 
     virtual float area() const;
     virtual float perimetro() const;
