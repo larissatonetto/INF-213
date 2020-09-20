@@ -34,8 +34,8 @@ public:
     int getTipo() const;
     void setTipo(int);
 
-    virtual float area() const;
-    virtual float perimetro() const;
+    virtual float area() const = 0;
+    virtual float perimetro() const = 0;
 
     virtual void imprime() const;
     virtual void ler();   // funcao adicional (nao especificada no UML)

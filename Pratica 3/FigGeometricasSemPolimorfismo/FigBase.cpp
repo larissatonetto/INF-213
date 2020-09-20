@@ -53,14 +53,6 @@ void FigBase::setTipo(int t) {
     tipo = (t < 1 || t > 3) ? 1 : t;;
 }
 
-float FigBase::area() const {
-    return 0;
-}
-
-float FigBase::perimetro() const {
-    return 0;
-}
-
 void FigBase::imprime() const {
     cout << " Atributos da linha: " << endl;
     cout << "     Espessura = " << getEspessura() << endl;
