@@ -31,7 +31,7 @@ int main() {
     cout << "\n\n";
 
     for (int i = 0; i < 5; i++) {
-        if (typeid( *(figuras[i]) ).name() == typeid( c1 ).name()) {
+        if ( typeid( *(figuras[i]) ) == typeid( c1 ) ) {
             ( dynamic_cast<Circulo* >(figuras[i]) )->
               setRaio( (dynamic_cast<Circulo* >(figuras[i])->getRaio()) * 2 );
               
