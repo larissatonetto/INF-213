@@ -8,11 +8,14 @@ using namespace std;
 #include "Segmento.h"
       
 int main() {
+    Retangulo r(13, 7, 2, 4, 1, 1, 1);
+    Circulo c(5, 2, 4, 2, 2, 2);
+    Segmento s(3, 7, 8, 5, 3, 3, 3);
     FigBase *figuras[3];
 
-    figuras[0] = new Retangulo(13, 7, 2, 4, 1, 1, 1);
-    figuras[1] = new Circulo(5, 2, 4, 2, 2, 2);
-    figuras[2] = new Segmento(3, 7, 8, 5, 3, 3, 3);
+    figuras[0] = &r;
+    figuras[1] = &c;
+    figuras[2] = &s;
 
     int i;
     for (i=0; i < 3; i++) {
@@ -21,7 +24,7 @@ int main() {
         cout << "Area = " << figuras[i]->area() << endl;
         cout << endl;
      }
-    
+
     return 0;
     
 } // fim de main
