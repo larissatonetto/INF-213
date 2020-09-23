@@ -1,0 +1,173 @@
+#ifndef CONJUNTO1_H
+#define CONJUNTO1_H
+
+#include <iostream>
+using namespace std;
+
+template <class T>
+class Conjunto {
+private:
+    T* elementos;
+    int num_elementos;
+    int tam_array;
+
+public:
+    Conjunto(int = 10);
+    Conjunto(const Conjunto&);
+    ~Conjunto();
+
+    int getNum_elementos() const;
+    int getTam_array() const;
+    T getElementos() const;
+    
+
+    bool pertence(T) const;
+    bool insere(T);
+    int numelementos();
+
+    bool operator== (Conjunto);
+    Conjunto<T>& operator= (const Conjunto &);
+
+    friend ostream& operator<< <>(ostream &, const Conjunto &);
+    friend istream& operator>> <>(istream &, Conjunto &);
+};
+
+// Operadores -------------------------------------------------
+/*template <class T>
+ostream& operator<< (ostream &os, const Conjunto<T> &conj) {
+    os << "{";
+    for (int i = 0; i < conj.num_elementos-1; i++) {
+        os << conj.elementos[i] << ",";
+    }
+    os << conj.elementos[conj.num_elementos-1] << "}";
+
+   return os;
+}
+
+template <class T>
+istream& operator>> (istream &is, Conjunto<T> &conj) {
+   while (true) {
+       // Verificar EOF...
+       if (is.eof()) {
+           cout << "EOF\n";
+           return is;
+       } else if (conj.num_elementos == conj.tam_array){
+           return is;
+       } else {
+           is >> conj.elementos[conj.num_elementos];
+
+           conj.num_elementos++;
+           cout << "num_elementos = " << conj.num_elementos << endl;
+       }
+   }
+
+   return is;
+}*/
+
+template <class T>
+bool Conjunto<T>::operator== (Conjunto conj) {
+    if (num_elementos != conj.num_elementos) { return false; }
+
+    else {
+        for (int i = 0; i < num_elementos; i++) {
+            if (conj.elementos[i] != elementos[i])
+                return false;
+        }
+
+        return true;
+    }
+}
+
+template <class T>
+Conjunto<T>& Conjunto<T>::operator= (const Conjunto<T> &conj) {
+    if (&conj == this) { return *this; }
+
+    else {
+        delete[] elementos;
+        elementos = new T[conj.tam_array];
+        tam_array = conj.tam_array;
+        num_elementos = conj.num_elementos;
+
+        for (int i = 0; i < num_elementos; i++) {
+            // TODO: insere()...
+            elementos[i] = conj.elementos[i];
+        }
+    }
+}
+// ------------------------------------------------------------
+
+// Construtores e destrutor -----------------------------------
+template <class T>
+Conjunto<T>::Conjunto(int n) {
+    tam_array = n;
+    elementos = new T[tam_array];
+    num_elementos = 0;
+}
+
+template <class T>
+Conjunto<T>::Conjunto(const Conjunto& conj) {
+    tam_array = conj.tam_array;
+    elementos = new T[tam_array];
+    num_elementos = conj.num_elementos;
+
+    for (int i = 0; i < num_elementos; i++) {
+        elementos[i] = conj.elementos[i];
+    }
+}
+
+template <class T>
+Conjunto<T>::~Conjunto() {
+    delete[] elementos;
+}
+
+// ------------------------------------------------------------
+
+// Getters ----------------------------------------------------
+template <class T>
+int Conjunto<T>::getNum_elementos() const{
+     return num_elementos;
+ }
+
+template <class T>
+int Conjunto<T>::getTam_array() const {
+    return tam_array;
+}
+
+template <class T>
+T Conjunto<T>::getElementos() const {
+    return &elementos;
+}
+
+// ------------------------------------------------------------
+template <class T>
+bool Conjunto<T>::pertence(T placeholder) const {
+    for (int i = 0; i < num_elementos; i++) {
+        if (elementos[i] == placeholder) { return true; }
+    }
+
+    return false;
+}
+
+template <class T>
+bool Conjunto<T>::insere(T placeholder){
+    if (num_elementos < tam_array) {
+        cout << "Elemento " << placeholder << " inserido\n";  // Retirar depois
+
+        elementos[num_elementos] = placeholder;
+        return true;
+    } else {
+        cout << "Limite de elementos atingido\n";   // Retirar depois
+
+        return false;
+    }
+}
+
+template <class T>
+int Conjunto<T>::numelementos() {
+    return num_elementos;
+}
+
+#endif
+
+// TODO: Construtor de cópia deve chamar o operador de atribuição
+// TODO: operadores << e >>
