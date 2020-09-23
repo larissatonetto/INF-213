@@ -12,28 +12,30 @@ private:
     int tam_array;
 
 public:
-    Conjunto(int = 10);
-    Conjunto(const Conjunto&);
-    ~Conjunto();
+    Conjunto(int = 10);         // Funcionando
+    Conjunto(const Conjunto&);  // Funcionando
+    ~Conjunto();                // Funcionando
 
     int getNum_elementos() const;
     int getTam_array() const;
     T getElementos() const;
     
 
-    bool pertence(T) const;
-    bool insere(T);
-    int numelementos();
+    bool pertence(T) const;     // Funcionando
+    bool insere(T);             // Funcionando
+    int numelementos();         // Funcionando
 
-    bool operator== (Conjunto);
-    Conjunto<T>& operator= (const Conjunto &);
+    bool operator== (const Conjunto &);         // Funcionando
+    Conjunto<T>& operator= (const Conjunto &);  // Funcionando
 
-    friend ostream& operator<< <>(ostream &, const Conjunto &);
-    friend istream& operator>> <>(istream &, Conjunto &);
+    // friend ostream& operator<< <>(ostream &, const Conjunto &);
+    // friend istream& operator>> <>(istream &, Conjunto &);
+
+    void imprimeTamanho() const;
 };
 
 // Operadores -------------------------------------------------
-/*template <class T>
+template <class T>
 ostream& operator<< (ostream &os, const Conjunto<T> &conj) {
     os << "{";
     for (int i = 0; i < conj.num_elementos-1; i++) {
@@ -62,10 +64,10 @@ istream& operator>> (istream &is, Conjunto<T> &conj) {
    }
 
    return is;
-}*/
+}
 
 template <class T>
-bool Conjunto<T>::operator== (Conjunto conj) {
+bool Conjunto<T>::operator== (const Conjunto& conj) {
     if (num_elementos != conj.num_elementos) { return false; }
 
     else {
@@ -122,8 +124,8 @@ Conjunto<T>::~Conjunto() {
 
 // ------------------------------------------------------------
 
-// Getters ----------------------------------------------------
-template <class T>
+// Getters (desnecessários?) ----------------------------------------------------
+/*template <class T>
 int Conjunto<T>::getNum_elementos() const{
      return num_elementos;
  }
@@ -136,15 +138,17 @@ int Conjunto<T>::getTam_array() const {
 template <class T>
 T Conjunto<T>::getElementos() const {
     return &elementos;
-}
+}*/
 
 // ------------------------------------------------------------
+
 template <class T>
 bool Conjunto<T>::pertence(T placeholder) const {
     for (int i = 0; i < num_elementos; i++) {
-        if (elementos[i] == placeholder) { return true; }
+        if (elementos[i] == placeholder) { cout << "Pertence\n"; return true; }
     }
 
+    cout << "Não pertence\n";
     return false;
 }
 
@@ -154,6 +158,7 @@ bool Conjunto<T>::insere(T placeholder){
         cout << "Elemento " << placeholder << " inserido\n";  // Retirar depois
 
         elementos[num_elementos] = placeholder;
+        num_elementos++;
         return true;
     } else {
         cout << "Limite de elementos atingido\n";   // Retirar depois
@@ -165,6 +170,13 @@ bool Conjunto<T>::insere(T placeholder){
 template <class T>
 int Conjunto<T>::numelementos() {
     return num_elementos;
+}
+
+// Funções de teste =======================================
+template <class T>
+void Conjunto<T>::imprimeTamanho() const{
+    cout << "Tamanho do array: " << tam_array << " ";
+    cout << "Numero de elementos: " << num_elementos << endl;
 }
 
 #endif
