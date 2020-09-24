@@ -11,14 +11,13 @@ template <class T>
 ostream& operator<< (ostream &, const Conjunto<T> &);
 
 template <class T>
-istream& operator>> (istream &is, Conjunto<T> &conj);
+istream& operator>> (istream &, Conjunto<T> &);
 
 template <class T>
 class Conjunto {
-private:
-    T* elementos;
-    int num_elementos;
-    int tam_array;
+
+friend ostream& operator<< <>(ostream &, const Conjunto &);
+friend istream& operator>> <>(istream &, Conjunto &);
 
 public:
     Conjunto(int = 10);         // Funcionando
@@ -35,12 +34,15 @@ public:
     int numelementos();         // Funcionando
 
     bool operator== (const Conjunto &);         // Funcionando
-    Conjunto& operator= (const Conjunto &);  // Funcionando
+    Conjunto& operator= (const Conjunto &);     // Funcionando
 
-    friend ostream& operator<< <>(ostream &, const Conjunto &);
-    friend istream& operator>> <>(istream &, Conjunto &);
+    // friend ostream& operator<< <>(ostream &, const Conjunto &);
+    // friend istream& operator>> <>(istream &, Conjunto &);
 
-    void imprimeTamanho() const;
+private:
+    T* elementos;
+    int num_elementos;
+    int tam_array;
 };
 
 // Operadores -------------------------------------------------
@@ -58,24 +60,18 @@ ostream& operator<< (ostream &os, const Conjunto<T> &conj) {
 template <class T>
 istream& operator>> (istream &is, Conjunto<T> &conj) {
    while (true) {
-       // Verificar EOF...
        if (is.eof()) {
-           cout << "EOF\n";
+           conj.num_elementos--;
            return is;
        } else if (conj.num_elementos == conj.tam_array){
            return is;
        } else {
-           /*is >> conj.elementos[conj.num_elementos];
+           is >> conj.elementos[conj.num_elementos];
 
            conj.num_elementos++;
-           cout << "num_elementos = " << conj.num_elementos << endl;*/
        }
    }
 
-
-    // for (int i = 0; i < conj.tam_array; i++) {
-        // is >> conj.elementos[i];
-    // }
     return is;
 }
 
@@ -120,7 +116,8 @@ Conjunto<T>::Conjunto(int n) {
 }
 
 template <class T>
-Conjunto<T>::Conjunto(const Conjunto<T>& conj) {
+Conjunto<T>::Conjunto(const Conjunto<T> &conj) {
+    cout << "Construtor de copia\n";
     tam_array = conj.tam_array;
     elementos = new T[tam_array];
     num_elementos = conj.num_elementos;
@@ -137,45 +134,24 @@ Conjunto<T>::~Conjunto() {
 
 // ------------------------------------------------------------
 
-// Getters (desnecessários?) ----------------------------------------------------
-/*template <class T>
-int Conjunto<T>::getNum_elementos() const{
-     return num_elementos;
- }
-
 template <class T>
-int Conjunto<T>::getTam_array() const {
-    return tam_array;
-}
-
-template <class T>
-T Conjunto<T>::getElementos() const {
-    return &elementos;
-}*/
-
-// ------------------------------------------------------------
-
-template <class T>
-bool Conjunto<T>::pertence(T placeholder) const {
+bool Conjunto<T>::pertence(T tipo) const {
     for (int i = 0; i < num_elementos; i++) {
-        if (elementos[i] == placeholder) { cout << "Pertence\n"; return true; }
+        if (elementos[i] == tipo) { cout << "Pertence\n"; return true; }
     }
 
-    cout << "Não pertence\n";
+    // cout << "Não pertence\n";
     return false;
 }
 
 template <class T>
-bool Conjunto<T>::insere(T placeholder){
+bool Conjunto<T>::insere(T tipo){
     if (num_elementos < tam_array) {
-        cout << "Elemento " << placeholder << " inserido\n";  // Retirar depois
-
-        elementos[num_elementos] = placeholder;
+        elementos[num_elementos] = tipo;
         num_elementos++;
+
         return true;
     } else {
-        cout << "Limite de elementos atingido\n";   // Retirar depois
-
         return false;
     }
 }
@@ -185,14 +161,4 @@ int Conjunto<T>::numelementos() {
     return num_elementos;
 }
 
-// Funções de teste =======================================
-template <class T>
-void Conjunto<T>::imprimeTamanho() const{
-    cout << "Tamanho do array: " << tam_array << " ";
-    cout << "Numero de elementos: " << num_elementos << endl;
-}
-
 #endif
-
-// TODO: Construtor de cópia deve chamar o operador de atribuição
-// TODO: operadores << e >>
