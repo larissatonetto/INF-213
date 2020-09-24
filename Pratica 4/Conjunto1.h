@@ -5,6 +5,15 @@
 using namespace std;
 
 template <class T>
+class Conjunto;
+
+template <class T>
+ostream& operator<< (ostream &, const Conjunto<T> &);
+
+template <class T>
+istream& operator>> (istream &is, Conjunto<T> &conj);
+
+template <class T>
 class Conjunto {
 private:
     T* elementos;
@@ -26,10 +35,10 @@ public:
     int numelementos();         // Funcionando
 
     bool operator== (const Conjunto &);         // Funcionando
-    Conjunto<T>& operator= (const Conjunto &);  // Funcionando
+    Conjunto& operator= (const Conjunto &);  // Funcionando
 
-    // friend ostream& operator<< <>(ostream &, const Conjunto &);
-    // friend istream& operator>> <>(istream &, Conjunto &);
+    friend ostream& operator<< <>(ostream &, const Conjunto &);
+    friend istream& operator>> <>(istream &, Conjunto &);
 
     void imprimeTamanho() const;
 };
@@ -56,14 +65,18 @@ istream& operator>> (istream &is, Conjunto<T> &conj) {
        } else if (conj.num_elementos == conj.tam_array){
            return is;
        } else {
-           is >> conj.elementos[conj.num_elementos];
+           /*is >> conj.elementos[conj.num_elementos];
 
            conj.num_elementos++;
-           cout << "num_elementos = " << conj.num_elementos << endl;
+           cout << "num_elementos = " << conj.num_elementos << endl;*/
        }
    }
 
-   return is;
+
+    // for (int i = 0; i < conj.tam_array; i++) {
+        // is >> conj.elementos[i];
+    // }
+    return is;
 }
 
 template <class T>
@@ -107,7 +120,7 @@ Conjunto<T>::Conjunto(int n) {
 }
 
 template <class T>
-Conjunto<T>::Conjunto(const Conjunto& conj) {
+Conjunto<T>::Conjunto(const Conjunto<T>& conj) {
     tam_array = conj.tam_array;
     elementos = new T[tam_array];
     num_elementos = conj.num_elementos;
