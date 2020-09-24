@@ -36,9 +36,6 @@ public:
     bool operator== (const Conjunto &);         // Funcionando
     Conjunto& operator= (const Conjunto &);     // Funcionando
 
-    // friend ostream& operator<< <>(ostream &, const Conjunto &);
-    // friend istream& operator>> <>(istream &, Conjunto &);
-
 private:
     T* elementos;
     int num_elementos;
@@ -94,6 +91,7 @@ Conjunto<T>& Conjunto<T>::operator= (const Conjunto<T> &conj) {
     if (&conj == this) { return *this; }
 
     else {
+        // elementos = NULL;
         delete[] elementos;
         elementos = new T[conj.tam_array];
         tam_array = conj.tam_array;
@@ -125,6 +123,7 @@ Conjunto<T>::Conjunto(const Conjunto<T> &conj) {
     for (int i = 0; i < num_elementos; i++) {
         elementos[i] = conj.elementos[i];
     }
+
 }
 
 template <class T>
@@ -139,8 +138,7 @@ bool Conjunto<T>::pertence(T tipo) const {
     for (int i = 0; i < num_elementos; i++) {
         if (elementos[i] == tipo) { cout << "Pertence\n"; return true; }
     }
-
-    // cout << "Não pertence\n";
+g
     return false;
 }
 
