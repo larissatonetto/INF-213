@@ -91,14 +91,12 @@ Conjunto<T>& Conjunto<T>::operator= (const Conjunto<T> &conj) {
     if (&conj == this) { return *this; }
 
     else {
-        // elementos = NULL;
         delete[] elementos;
         elementos = new T[conj.tam_array];
         tam_array = conj.tam_array;
         num_elementos = conj.num_elementos;
 
         for (int i = 0; i < num_elementos; i++) {
-            // TODO: insere()...
             elementos[i] = conj.elementos[i];
         }
     }
@@ -115,9 +113,8 @@ Conjunto<T>::Conjunto(int n) {
 
 template <class T>
 Conjunto<T>::Conjunto(const Conjunto<T> &conj) {
-    cout << "Construtor de copia\n";
+    elementos = new T[conj.tam_array];
     tam_array = conj.tam_array;
-    elementos = new T[tam_array];
     num_elementos = conj.num_elementos;
 
     for (int i = 0; i < num_elementos; i++) {
@@ -138,7 +135,7 @@ bool Conjunto<T>::pertence(T tipo) const {
     for (int i = 0; i < num_elementos; i++) {
         if (elementos[i] == tipo) { cout << "Pertence\n"; return true; }
     }
-g
+
     return false;
 }
 
