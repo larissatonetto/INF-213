@@ -54,19 +54,28 @@ ostream& operator<< (ostream &os, const Conjunto<T> &conj) {
    return os;
 }
 
+// TODO: Não deve permitir valores duplicados
 template <class T>
 istream& operator>> (istream &is, Conjunto<T> &conj) {
    while (true) {
-       if (is.eof()) {
+        if (is.eof()) {
            conj.num_elementos--;
            return is;
        } else if (conj.num_elementos == conj.tam_array){
            return is;
        } else {
-           is >> conj.elementos[conj.num_elementos];
+            T temp;
+            is >> temp;
+            if (conj.pertence(temp)) {      // TODO: EOF está chamando essa parte
+               //continue;
+            }
+           
+            else {
+                conj.elementos[conj.num_elementos] = temp;
 
-           conj.num_elementos++;
-       }
+                conj.num_elementos++;
+            }
+        }
    }
 
     return is;
@@ -141,6 +150,10 @@ bool Conjunto<T>::pertence(T tipo) const {
 
 template <class T>
 bool Conjunto<T>::insere(T tipo){
+    if (pertence(tipo)) {
+        return false;
+    }
+    
     if (num_elementos < tam_array) {
         elementos[num_elementos] = tipo;
         num_elementos++;
