@@ -112,11 +112,8 @@ Conjunto<T>& Conjunto<T>::operator= (const Conjunto<T> &conj) {
 
 template <class T>
 Conjunto<T> Conjunto<T>::operator+ (const Conjunto<T> &other) const {
-    Conjunto<T> soma;
-
-    soma.tam_array = other.tam_array + this->tam_array;
-    // soma.elementos = new T[soma.tam_array];
-    soma.num_elementos = 0;
+    int tam = other.tam_array + this->tam_array;
+    Conjunto<T> soma(tam);
 
     for (int i = 0; i < this->num_elementos; i++) { soma.insere(this->elementos[i]); }
     for (int i = 0; i < other.num_elementos; i++) { soma.insere(other.elementos[i]); }
@@ -125,8 +122,52 @@ Conjunto<T> Conjunto<T>::operator+ (const Conjunto<T> &other) const {
 }
 
 template <class T>
+Conjunto<T> Conjunto<T>::operator* (const Conjunto<T> &other) const {
+    // Conjunto<T> menor = (other.tam_array > this->tam_array) ? *this : other;
+    int tam = (other.tam_array > this->tam_array) ? this->tam_array : other.tam_array;
+    Conjunto<T> inter(tam);
+
+    // cout << "Menor: " << menor << endl;
+    
+    // Verificar o numero de elementos do menor, não o tamanho
+    /*for (int i = 0; i < menor.num_elementos; i++) {
+        if (other.tam_array < this->tam_array) {
+            cout << "Comparacao 1\n";
+            if (this->pertence( other.elementos[i] )) {
+                inter.insere(other.elementos[i]);
+            }
+        } else {
+            cout << "Comparacao 2\n";
+            if (other.pertence( this->elementos[i] )) {
+                inter.insere( this->elementos[i] );
+            }
+        }
+    }*/
+
+    // Gambiarra
+    while (true) {
+        if (other.num_elementos <= this->num_elementos) {
+            for (int i = 0; i < other.num_elementos; i++) {
+                if (this->pertence( other.elementos[i] )) { inter.insere(other.elementos[i]); }
+            }
+
+            return inter;
+        } else {
+            for (int i = 0; i < this->num_elementos; i++) {
+                if (other.pertence( this->elementos[i] )) { inter.insere(this->elementos[i]); }
+            }
+
+            return inter;
+        }
+    }
+
+    return inter;
+}
+
+template <class T>
 Conjunto<T> Conjunto<T>::operator- (const Conjunto<T> &other) const {
-    Conjunto<T> sub;
+    Conjunto<T> sub(this->tam_array);
+
 
     return sub;
 }
@@ -176,7 +217,7 @@ bool Conjunto<T>::insere(T tipo){
     
     if (num_elementos < tam_array) {
         elementos[num_elementos] = tipo;
-        cout << "Elemento " << tipo << " adicionado\n";
+        // cout << "Elemento " << tipo << " adicionado\n";
         num_elementos++;
 
         return true;
