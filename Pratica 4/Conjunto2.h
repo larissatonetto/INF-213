@@ -49,15 +49,22 @@ private:
 template <class T>
 ostream& operator<< (ostream &os, const Conjunto<T> &conj) {
     os << "{";
-    for (int i = 0; i < conj.num_elementos-1; i++) {
-        os << conj.elementos[i] << ",";
+
+    if (conj.num_elementos == 0) {
+        os << "}";
+        return os;
+    } else {
+        for (int i = 0; i < conj.num_elementos-1; i++) {
+            os << conj.elementos[i] << ",";
+        }
+        os << conj.elementos[conj.num_elementos-1] << "}";
     }
-    os << conj.elementos[conj.num_elementos-1] << "}";
 
    return os;
 }
 
 // TODO: Não deve permitir valores duplicados
+// Erro pode ser aqui
 template <class T>
 istream& operator>> (istream &is, Conjunto<T> &conj) {
     T temp;
@@ -65,7 +72,7 @@ istream& operator>> (istream &is, Conjunto<T> &conj) {
         if (conj.num_elementos == conj.tam_array){      // Talvez mover para o while
            return is;
         } else {
-            if (conj.pertence(temp)) {      // TODO: EOF está chamando essa parte
+            if (conj.pertence(temp)) {
                //continue;
             }
            
@@ -113,52 +120,36 @@ Conjunto<T>& Conjunto<T>::operator= (const Conjunto<T> &conj) {
 template <class T>
 Conjunto<T> Conjunto<T>::operator+ (const Conjunto<T> &other) const {
     int tam = other.tam_array + this->tam_array;
-    Conjunto<T> soma(tam);
+    Conjunto<T> uniao(tam);
 
-    for (int i = 0; i < this->num_elementos; i++) { soma.insere(this->elementos[i]); }
-    for (int i = 0; i < other.num_elementos; i++) { soma.insere(other.elementos[i]); }
+    for (int i = 0; i < this->num_elementos; i++) { uniao.insere(this->elementos[i]); }
+    for (int i = 0; i < other.num_elementos; i++) { uniao.insere(other.elementos[i]); }
 
-    return soma;
+    return uniao;
 }
 
 template <class T>
 Conjunto<T> Conjunto<T>::operator* (const Conjunto<T> &other) const {
-    // Conjunto<T> menor = (other.tam_array > this->tam_array) ? *this : other;
     int tam = (other.tam_array > this->tam_array) ? this->tam_array : other.tam_array;
     Conjunto<T> inter(tam);
 
-    // cout << "Menor: " << menor << endl;
-    
-    // Verificar o numero de elementos do menor, não o tamanho
-    /*for (int i = 0; i < menor.num_elementos; i++) {
-        if (other.tam_array < this->tam_array) {
-            cout << "Comparacao 1\n";
-            if (this->pertence( other.elementos[i] )) {
-                inter.insere(other.elementos[i]);
-            }
-        } else {
-            cout << "Comparacao 2\n";
-            if (other.pertence( this->elementos[i] )) {
-                inter.insere( this->elementos[i] );
-            }
-        }
-    }*/
-
     // Gambiarra
     while (true) {
-        if (other.num_elementos <= this->num_elementos) {
+        /*if (other.num_elementos <= this->num_elementos) {   // Trocar os dois
             for (int i = 0; i < other.num_elementos; i++) {
                 if (this->pertence( other.elementos[i] )) { inter.insere(other.elementos[i]); }
             }
 
             return inter;
-        } else {
+        } else {*/
+
+            // Parte comentada, caso resolva deve ser apagada
             for (int i = 0; i < this->num_elementos; i++) {
                 if (other.pertence( this->elementos[i] )) { inter.insere(this->elementos[i]); }
             }
 
             return inter;
-        }
+        // }
     }
 
     return inter;
@@ -166,13 +157,13 @@ Conjunto<T> Conjunto<T>::operator* (const Conjunto<T> &other) const {
 
 template <class T>
 Conjunto<T> Conjunto<T>::operator- (const Conjunto<T> &other) const {
-    Conjunto<T> sub(this->tam_array);
+    Conjunto<T> dif(this->tam_array);
 
     for (int i = 0; i < this->num_elementos; i++) {
-        if (!other.pertence( this->elementos[i] )) { sub.insere(this->elementos[i]); }
+        if (!other.pertence( this->elementos[i] )) { dif.insere(this->elementos[i]); }
     }
 
-    return sub;
+    return dif;
 }
 // ------------------------------------------------------------
 

@@ -26,7 +26,7 @@ public:
 
     int getNum_elementos() const;
     int getTam_array() const;
-    T getElementos() const;
+    T* getElementos() const;
     
 
     bool pertence(T) const;     // Funcionando
@@ -46,6 +46,12 @@ private:
 template <class T>
 ostream& operator<< (ostream &os, const Conjunto<T> &conj) {
     os << "{";
+
+    if (conj.num_elementos == 0) {
+        os << "}";
+        return os;
+    }
+
     for (int i = 0; i < conj.num_elementos-1; i++) {
         os << conj.elementos[i] << ",";
     }
@@ -57,16 +63,13 @@ ostream& operator<< (ostream &os, const Conjunto<T> &conj) {
 // TODO: Não deve permitir valores duplicados
 template <class T>
 istream& operator>> (istream &is, Conjunto<T> &conj) {
-   while (true) {
-        if (is.eof()) {
-           conj.num_elementos--;
+    T temp;
+    while (is >> temp) {
+        if (conj.num_elementos == conj.tam_array){      // Talvez mover para o while
            return is;
-       } else if (conj.num_elementos == conj.tam_array){
-           return is;
-       } else {
-            T temp;
-            is >> temp;
-            if (conj.pertence(temp)) {      // TODO: EOF está chamando essa parte
+        } else {
+            conj.insere(temp);
+            /*if (conj.pertence(temp)) {      // TODO: EOF está chamando essa parte
                //continue;
             }
            
@@ -74,7 +77,7 @@ istream& operator>> (istream &is, Conjunto<T> &conj) {
                 conj.elementos[conj.num_elementos] = temp;
 
                 conj.num_elementos++;
-            }
+            }*/
         }
    }
 
@@ -83,11 +86,13 @@ istream& operator>> (istream &is, Conjunto<T> &conj) {
 
 template <class T>
 bool Conjunto<T>::operator== (const Conjunto& conj) {
-    if (num_elementos != conj.num_elementos) { return false; }
+    if (this->num_elementos != conj.num_elementos) { return false; }
+
+    else if (this->num_elementos == 0 && conj.num_elementos == 0) { return true; }
 
     else {
-        for (int i = 0; i < num_elementos; i++) {
-            if (conj.elementos[i] != elementos[i])
+        for (int i = 0; i < this->num_elementos; i++) {
+            if (conj.elementos[i] != this->elementos[i])
                 return false;
         }
 
@@ -142,7 +147,7 @@ Conjunto<T>::~Conjunto() {
 template <class T>
 bool Conjunto<T>::pertence(T tipo) const {
     for (int i = 0; i < num_elementos; i++) {
-        if (elementos[i] == tipo) { cout << "Pertence\n"; return true; }
+        if (elementos[i] == tipo) { return true; }
     }
 
     return false;
@@ -167,6 +172,21 @@ bool Conjunto<T>::insere(T tipo){
 template <class T>
 int Conjunto<T>::numelementos() {
     return num_elementos;
+}
+
+template <class T>
+int Conjunto<T>::getTam_array() const {
+    return tam_array;
+}
+
+template <class T>
+int Conjunto<T>::getNum_elementos() const {
+    return num_elementos;
+}
+
+template <class T>
+T* Conjunto<T>::getElementos() const {
+    return elementos;
 }
 
 #endif
