@@ -168,6 +168,9 @@ template <class T>
 Conjunto<T> Conjunto<T>::operator- (const Conjunto<T> &other) const {
     Conjunto<T> sub(this->tam_array);
 
+    for (int i = 0; i < this->num_elementos; i++) {
+        if (!other.pertence( this->elementos[i] )) { sub.insere(this->elementos[i]); }
+    }
 
     return sub;
 }
