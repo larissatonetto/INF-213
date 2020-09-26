@@ -20,21 +20,16 @@ friend ostream& operator<< <>(ostream &, const Conjunto &);
 friend istream& operator>> <>(istream &, Conjunto &);
 
 public:
-    Conjunto(int = 10);         // Funcionando
-    Conjunto(const Conjunto&);  // Funcionando
-    ~Conjunto();                // Funcionando
+    Conjunto(int = 10);
+    Conjunto(const Conjunto&);
+    ~Conjunto();
 
-    int getNum_elementos() const;
-    int getTam_array() const;
-    T* getElementos() const;
-    
+    bool pertence(T) const;
+    bool insere(T);
+    int numelementos() const;
 
-    bool pertence(T) const;     // Funcionando
-    bool insere(T);             // Funcionando
-    int numelementos();         // Funcionando
-
-    bool operator== (const Conjunto &);         // Funcionando
-    Conjunto& operator= (const Conjunto &);     // Funcionando
+    bool operator== (const Conjunto &);
+    Conjunto& operator= (const Conjunto &);
     Conjunto operator+ (const Conjunto &) const;
     Conjunto operator* (const Conjunto &) const;
     Conjunto operator- (const Conjunto &) const;
@@ -47,40 +42,30 @@ private:
 
 // Operadores -------------------------------------------------
 template <class T>
-ostream& operator<< (ostream &os, const Conjunto<T> &conj) {
+ostream& operator<< (ostream &os, const Conjunto<T> &other) {
     os << "{";
 
-    if (conj.num_elementos == 0) {
+    if (other.num_elementos == 0) {
         os << "}";
         return os;
     } else {
-        for (int i = 0; i < conj.num_elementos-1; i++) {
-            os << conj.elementos[i] << ",";
+        for (int i = 0; i < other.num_elementos-1; i++) {
+            os << other.elementos[i] << ",";
         }
-        os << conj.elementos[conj.num_elementos-1] << "}";
+        os << other.elementos[other.num_elementos-1] << "}";
     }
 
    return os;
 }
 
-// TODO: Não deve permitir valores duplicados
-// Erro pode ser aqui
 template <class T>
-istream& operator>> (istream &is, Conjunto<T> &conj) {
+istream& operator>> (istream &is, Conjunto<T> &other) {
     T temp;
     while (is >> temp) {
-        if (conj.num_elementos == conj.tam_array){      // Talvez mover para o while
+        if (other.num_elementos == other.tam_array) {
            return is;
         } else {
-            if (conj.pertence(temp)) {
-               //continue;
-            }
-           
-            else {
-                conj.elementos[conj.num_elementos] = temp;
-
-                conj.num_elementos++;
-            }
+            other.insere(temp);
         }
    }
 
@@ -88,13 +73,14 @@ istream& operator>> (istream &is, Conjunto<T> &conj) {
 }
 
 template <class T>
-bool Conjunto<T>::operator== (const Conjunto& conj) {
-    if (num_elementos != conj.num_elementos) { return false; }
+bool Conjunto<T>::operator== (const Conjunto& other) {
+    if (this->num_elementos != other.num_elementos) { return false; }
+
+    else if (this->num_elementos == 0 && other.num_elementos == 0) { return true; }
 
     else {
-        for (int i = 0; i < num_elementos; i++) {
-            if (conj.elementos[i] != elementos[i])
-                return false;
+        for (int i = 0; i < this->num_elementos; i++) {
+            if (!other.pertence( this->elementos[i] )) { return false; }
         }
 
         return true;
@@ -102,17 +88,17 @@ bool Conjunto<T>::operator== (const Conjunto& conj) {
 }
 
 template <class T>
-Conjunto<T>& Conjunto<T>::operator= (const Conjunto<T> &conj) {
-    if (&conj == this) { return *this; }
+Conjunto<T>& Conjunto<T>::operator= (const Conjunto<T> &other) {
+    if (&other == this) { return *this; }
 
     else {
         delete[] elementos;
-        elementos = new T[conj.tam_array];
-        tam_array = conj.tam_array;
-        num_elementos = conj.num_elementos;
+        elementos = new T[other.tam_array];
+        tam_array = other.tam_array;
+        num_elementos = other.num_elementos;
 
         for (int i = 0; i < num_elementos; i++) {
-            elementos[i] = conj.elementos[i];
+            elementos[i] = other.elementos[i];
         }
     }
 }
@@ -133,24 +119,11 @@ Conjunto<T> Conjunto<T>::operator* (const Conjunto<T> &other) const {
     int tam = (other.tam_array > this->tam_array) ? this->tam_array : other.tam_array;
     Conjunto<T> inter(tam);
 
-    // Gambiarra
-    while (true) {
-        /*if (other.num_elementos <= this->num_elementos) {   // Trocar os dois
-            for (int i = 0; i < other.num_elementos; i++) {
-                if (this->pertence( other.elementos[i] )) { inter.insere(other.elementos[i]); }
-            }
-
-            return inter;
-        } else {*/
-
-            // Parte comentada, caso resolva deve ser apagada
-            for (int i = 0; i < this->num_elementos; i++) {
-                if (other.pertence( this->elementos[i] )) { inter.insere(this->elementos[i]); }
-            }
-
-            return inter;
-        // }
+    for (int i = 0; i < this->num_elementos; i++) {
+        if (other.pertence( this->elementos[i] )) { inter.insere(this->elementos[i]); }
     }
+
+        return inter;
 
     return inter;
 }
@@ -176,15 +149,9 @@ Conjunto<T>::Conjunto(int n) {
 }
 
 template <class T>
-Conjunto<T>::Conjunto(const Conjunto<T> &conj) {
-    elementos = new T[conj.tam_array];
-    tam_array = conj.tam_array;
-    num_elementos = conj.num_elementos;
-
-    for (int i = 0; i < num_elementos; i++) {
-        elementos[i] = conj.elementos[i];
-    }
-
+Conjunto<T>::Conjunto(const Conjunto<T> &other) {
+    elementos = NULL;
+    (*this) = other;
 }
 
 template <class T>
@@ -207,11 +174,8 @@ template <class T>
 bool Conjunto<T>::insere(T tipo){
     if (pertence(tipo)) {
         return false;
-    }
-    
-    if (num_elementos < tam_array) {
+    } else if (num_elementos < tam_array) {
         elementos[num_elementos] = tipo;
-        // cout << "Elemento " << tipo << " adicionado\n";
         num_elementos++;
 
         return true;
@@ -221,23 +185,8 @@ bool Conjunto<T>::insere(T tipo){
 }
 
 template <class T>
-int Conjunto<T>::numelementos() {
+int Conjunto<T>::numelementos() const {
     return num_elementos;
-}
-
-template <class T>
-int Conjunto<T>::getTam_array() const {
-    return tam_array;
-}
-
-template <class T>
-int Conjunto<T>::getNum_elementos() const {
-    return num_elementos;
-}
-
-template <class T>
-T* Conjunto<T>::getElementos() const {
-    return elementos;
 }
 
 #endif
