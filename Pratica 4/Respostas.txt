@@ -1,0 +1,41 @@
+1) n = número de elementos de A, m = número de elementos de B
+pertence(): O(n)
+insere(): O(n)
+numElementos(): O(1)
++:O(n²+m²)
+*:O(n²m)  Assumindo que A é o menor array 
+-:O(n²m)
+
+2) Não. A função insere() no operador + será chamada em todos os elementos,
+logo, não importa a ordenação dos conjuntos.
+
+3)
+n = 10:
+real    0m0,005s
+
+n = 100:
+real    0m0,007s
+
+n = 1000:
+real    0m0,006s
+
+n = 5000:
+real    0m0,008s
+
+n = 10000:
+real    0m0,009s
+
+n = 20000:
+real    0m0,013s
+
+n = 40000:
+real    0m0,016s
+
+O tempo aumenta linearmente
+
+4) Não houve diferença no tempo
+
+5) O tempo diminuiu pela metade
+
+
+
