@@ -48,10 +48,10 @@ public:
 	void resize(int newSize);
 	void insert(const T&,int pos);
 	void clear();
+	void eraseMatchingElements(const T&);
 
 	void empty() const {return size() == 0;};
 	int size() const {return dataSize;};
-
 
 private:
 	T* data; //declare o membro de dados data, que devera armazenar os elementos da lista
@@ -117,6 +117,22 @@ void MyVec<T>::clear() {
 	create();
 }
 
+template <class T>
+void MyVec<T>::eraseMatchingElements(const T &elem) {
+	T *temp = new T[dataSize];
+	int cont = 0;;
+
+	for (int i = 0; i < dataSize; i++) {
+		if	(data[i] != elem) {
+			temp[cont] = data[i];
+			cont++;
+		}
+	}
+
+	delete[] data;
+	dataSize = cont;
+	data = temp;
+}
 
 template<class T>
 void MyVec<T>::resizeCapacity(int newCapacity) {
