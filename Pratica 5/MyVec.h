@@ -48,7 +48,8 @@ public:
 	void resize(int newSize);
 	void insert(const T&,int pos);
 	void clear();
-	void eraseMatchingElements(const T&);
+	int eraseMatchingElements(const T&);
+	void sortedInsert(const T&);
 
 	void empty() const {return size() == 0;};
 	int size() const {return dataSize;};
@@ -118,20 +119,34 @@ void MyVec<T>::clear() {
 }
 
 template <class T>
-void MyVec<T>::eraseMatchingElements(const T &elem) {
-	T *temp = new T[dataSize];
-	int cont = 0;;
+int MyVec<T>::eraseMatchingElements(const T &elem) {
+	T temp;
+	int cont, del = 0, ultimo = dataSize-1;
+	
+	if (size() == 0) return 0;
 
-	for (int i = 0; i < dataSize; i++) {
-		if	(data[i] != elem) {
-			temp[cont] = data[i];
-			cont++;
-		}
+	// Move o iterador para o último elemento que não será removido
+	while (data[ultimo-del] == elem) {
+	del++;
+
 	}
 
-	delete[] data;
-	dataSize = cont;
-	data = temp;
+	return 0;
+}
+
+template <class T>
+void MyVec<T>::sortedInsert(const T &elem) {
+	if (dataSize == 0) {
+		push_back(elem);
+		return;
+	}
+
+	for (int i = 0; i < dataSize; i++) {
+		if (data[i] >= elem) {
+			insert(elem, i);
+			return;
+		}
+	}
 }
 
 template<class T>
