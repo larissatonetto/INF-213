@@ -131,9 +131,30 @@ int MyVec<T>::eraseMatchingElements(const T &elem) {
 		del++;
 		ultimo--;
 
+		// std::cout << "del no while\n";
+
 		// Se apagou todos os elementos do array, retorna
 		if ((ultimo) == -1) return del;
 	}
+	dataSize = dataSize - del;
+
+	int i = 0;
+	while (i < dataSize-1) {
+	// for (int i = 0; i < dataSize-1; i++) {
+		if (data[i] == elem) {
+
+			// std::cout << "data[" << i << "] = " << elem << "\n";
+
+			// Remove o elemento i e move os restantes para trás
+			for (int j = i; j < dataSize-1; j++) {
+				data[j]= data[j+1];
+			}
+			del++;
+			// std::cout << "del\n";
+		} else i++;
+	}
+
+	dataSize = dataSize - del;
 
 	return del;
 }
