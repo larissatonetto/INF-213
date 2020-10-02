@@ -120,18 +120,22 @@ void MyVec<T>::clear() {
 
 template <class T>
 int MyVec<T>::eraseMatchingElements(const T &elem) {
+	// Verificar várias vezes, caso hajam vários elementos iguais a serem removidos
 	T temp;
 	int cont, del = 0, ultimo = dataSize-1;
 	
 	if (size() == 0) return 0;
 
 	// Move o iterador para o último elemento que não será removido
-	while (data[ultimo-del] == elem) {
-	del++;
+	while (data[ultimo] == elem) {
+		del++;
+		ultimo--;
 
+		// Se apagou todos os elementos do array, retorna
+		if ((ultimo) == -1) return del;
 	}
 
-	return 0;
+	return del;
 }
 
 template <class T>
