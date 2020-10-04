@@ -109,7 +109,6 @@ void MyVec<T>::insert(const T&elem,int pos) {
 		data[i] = data[i-1];
 	data[pos] = elem;
 	dataSize++;
-	std::cout << elem <<" inserido\n";
 }
 
 
@@ -121,7 +120,6 @@ void MyVec<T>::clear() {
 
 template <class T>
 int MyVec<T>::eraseMatchingElements(const T &elem) {
-	// Verificar várias vezes, caso hajam vários elementos iguais a serem removidos
 	int del = 0, ultimo = dataSize-1;
 	
 	if (size() == 0) return 0;
@@ -130,14 +128,14 @@ int MyVec<T>::eraseMatchingElements(const T &elem) {
 	while (data[ultimo] == elem) {
 		del++;
 		ultimo--;
+		dataSize--;
 
 		// std::cout << "del no while\n";
 
 		// Se apagou todos os elementos do array, retorna
 		if ((ultimo) == -1) return del;
 	}
-	dataSize = dataSize - del;
-	std::cout << "dataSize-\n";
+	// dataSize = dataSize - del;
 
 	int i = 0;
 	while (i < dataSize-1) {
@@ -151,11 +149,12 @@ int MyVec<T>::eraseMatchingElements(const T &elem) {
 				data[j]= data[j+1];
 			}
 			del++;
+			dataSize--;
 			// std::cout << "del\n";
 		} else i++;
 	}
 
-	dataSize = dataSize - del;
+	// dataSize = dataSize - del;
 
 	return del;
 }
