@@ -69,7 +69,7 @@ void MyVec<T>::push_back(const T&elem) {
 	//Implemente esta funcao! (nao reutilize a funcao "insere")
 
 	if (dataCapacity == dataSize) {
-		if (dataCapacity == 0) resizeCapacity(1);
+		if (this->size() == 0) resizeCapacity(1);
 		else resizeCapacity(2*dataCapacity);
 	}
 
@@ -120,47 +120,27 @@ void MyVec<T>::clear() {
 
 template <class T>
 int MyVec<T>::eraseMatchingElements(const T &elem) {
-	int del = 0, ultimo = dataSize-1;
+	int del = 0;
 	
-	if (size() == 0) return 0;
-
-	// Move o iterador para o último elemento que não será removido
-	while (data[ultimo] == elem) {
-		del++;
-		ultimo--;
-		dataSize--;
-
-		// std::cout << "del no while\n";
-
-		// Se apagou todos os elementos do array, retorna
-		if ((ultimo) == -1) return del;
-	}
-	// dataSize = dataSize - del;
+	if (size() == 0) return del;
 
 	int i = 0;
-	while (i < dataSize-1) {
-	// for (int i = 0; i < dataSize-1; i++) {
+	while (i < dataSize) {
 		if (data[i] == elem) {
-
-			// std::cout << "data[" << i << "] = " << elem << "\n";
-
 			// Remove o elemento i e move os restantes para trás
 			for (int j = i; j < dataSize-1; j++) {
-				data[j]= data[j+1];
+				data[j] = data[j+1];
 			}
 			del++;
 			dataSize--;
-			// std::cout << "del\n";
 		} else i++;
 	}
-
-	// dataSize = dataSize - del;
 
 	return del;
 }
 
 template <class T>
-void MyVec<T>::sortedInsert(const T &elem) {		// OK
+void MyVec<T>::sortedInsert(const T &elem) {
 	if (dataSize == 0) {
 		push_back(elem);
 		return;
@@ -248,10 +228,10 @@ MyVec<T>::MyVec(const MyVec &other) {		// OK
 template<class T>
 MyVec<T> & MyVec<T>::operator=(const MyVec &other) {
 	if(this==&other) return *this; 
-	destroy(); //Exercicio: por que precisamos disso?	// Caso não apagasse aqui, a memória alocada anteriormente seria perdida
+	destroy(); //Exercicio: por que precisamos disso?   |   Caso não apagasse aqui, a memória alocada anteriormente seria perdida
 	dataCapacity = other.dataCapacity;
 	dataSize = other.dataSize;
-	//data = other.data; //por que nao podemos fazer isso?
+	//data = other.data; //por que nao podemos fazer isso?   |   A memória ainda não foi alocada
 	data = new T[dataCapacity];
 	for(int i=0;i<dataSize;i++) data[i] = other.data[i];
 	return *this;
