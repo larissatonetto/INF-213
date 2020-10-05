@@ -119,7 +119,7 @@ void MyVec<T>::clear() {
 }
 
 // Pior caso: todos os números exceto o último são removidos
-// O(n^2)
+// O((n-1)^2)
 // Para melhorar, seria necessário um jeito mais eficiente de apagar elementos iguais consecutivos
 template <class T>
 int MyVec<T>::eraseMatchingElements(const T &elem) {
