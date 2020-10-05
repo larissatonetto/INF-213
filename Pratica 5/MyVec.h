@@ -68,12 +68,12 @@ template<class T>
 void MyVec<T>::push_back(const T&elem) {
 	//Implemente esta funcao! (nao reutilize a funcao "insere")
 
-	if (dataCapacity == dataSize) {
+	if (dataCapacity == this->size()) {
 		if (this->size() == 0) resizeCapacity(1);
 		else resizeCapacity(2*dataCapacity);
 	}
 
-	data[dataSize] = elem;
+	data[this->size()] = elem;
 	dataSize++;
 }
 
@@ -118,17 +118,29 @@ void MyVec<T>::clear() {
 	create();
 }
 
+// Pior caso: todos os números exceto o último são removidos
+// O(n^2)
+// Para melhorar, seria necessário um jeito mais eficiente de apagar elementos iguais consecutivos
 template <class T>
 int MyVec<T>::eraseMatchingElements(const T &elem) {
-	int del = 0;
-	
+	int del = 0, ultimo = this->size()-1;
+
 	if (size() == 0) return del;
 
+	while (data[ultimo] == elem) {
+		del++;
+		ultimo--;
+		dataSize--;
+
+		// Se apagou todos os elementos, retorna
+		if ((ultimo) == -1) return del;
+	}
+
 	int i = 0;
-	while (i < dataSize) {
+	while (i < this->size()) {
 		if (data[i] == elem) {
-			// Remove o elemento i e move os restantes para trás
-			for (int j = i; j < dataSize-1; j++) {
+			// Remove o elemento na posição i e move os restantes para trás
+			for (int j = i; j < (this->size()-1); j++) {
 				data[j] = data[j+1];
 			}
 			del++;
@@ -141,12 +153,12 @@ int MyVec<T>::eraseMatchingElements(const T &elem) {
 
 template <class T>
 void MyVec<T>::sortedInsert(const T &elem) {
-	if (dataSize == 0) {
+	if (this->size() == 0) {
 		push_back(elem);
 		return;
 	}
 
-	for (int i = 0; i < dataSize; i++) {
+	for (int i = 0; i < this->size(); i++) {
 		if (data[i] >= elem) {
 			insert(elem, i);
 			return;
