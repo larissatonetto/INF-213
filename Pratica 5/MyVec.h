@@ -68,12 +68,12 @@ template<class T>
 void MyVec<T>::push_back(const T&elem) {
 	//Implemente esta funcao! (nao reutilize a funcao "insere")
 
-	if (dataCapacity == dataSize) {
-		if (dataCapacity == 0) resizeCapacity(1);
+	if (dataCapacity == this->size()) {
+		if (this->size() == 0) resizeCapacity(1);
 		else resizeCapacity(2*dataCapacity);
 	}
 
-	data[dataSize] = elem;
+	data[this->size()] = elem;
 	dataSize++;
 }
 
@@ -109,7 +109,6 @@ void MyVec<T>::insert(const T&elem,int pos) {
 		data[i] = data[i-1];
 	data[pos] = elem;
 	dataSize++;
-	std::cout << elem <<" inserido\n";
 }
 
 
@@ -119,55 +118,47 @@ void MyVec<T>::clear() {
 	create();
 }
 
+// Pior caso: todos os números exceto o último são removidos
+// O((n-1)^2)
+// Para melhorar, seria necessário um jeito mais eficiente de apagar elementos iguais consecutivos
 template <class T>
 int MyVec<T>::eraseMatchingElements(const T &elem) {
-	// Verificar várias vezes, caso hajam vários elementos iguais a serem removidos
-	int del = 0, ultimo = dataSize-1;
-	
-	if (size() == 0) return 0;
+	int del = 0, ultimo = this->size()-1;
 
-	// Move o iterador para o último elemento que não será removido
+	if (size() == 0) return del;
+
 	while (data[ultimo] == elem) {
 		del++;
 		ultimo--;
+		dataSize--;
 
-		// std::cout << "del no while\n";
-
-		// Se apagou todos os elementos do array, retorna
+		// Se apagou todos os elementos, retorna
 		if ((ultimo) == -1) return del;
 	}
-	dataSize = dataSize - del;
-	std::cout << "dataSize-\n";
 
 	int i = 0;
-	while (i < dataSize-1) {
-	// for (int i = 0; i < dataSize-1; i++) {
+	while (i < this->size()) {
 		if (data[i] == elem) {
-
-			// std::cout << "data[" << i << "] = " << elem << "\n";
-
-			// Remove o elemento i e move os restantes para trás
-			for (int j = i; j < dataSize-1; j++) {
-				data[j]= data[j+1];
+			// Remove o elemento na posição i e move os restantes para trás
+			for (int j = i; j < (this->size()-1); j++) {
+				data[j] = data[j+1];
 			}
 			del++;
-			// std::cout << "del\n";
+			dataSize--;
 		} else i++;
 	}
-
-	dataSize = dataSize - del;
 
 	return del;
 }
 
 template <class T>
-void MyVec<T>::sortedInsert(const T &elem) {		// OK
-	if (dataSize == 0) {
+void MyVec<T>::sortedInsert(const T &elem) {
+	if (this->size() == 0) {
 		push_back(elem);
 		return;
 	}
 
-	for (int i = 0; i < dataSize; i++) {
+	for (int i = 0; i < this->size(); i++) {
 		if (data[i] >= elem) {
 			insert(elem, i);
 			return;
@@ -249,10 +240,10 @@ MyVec<T>::MyVec(const MyVec &other) {		// OK
 template<class T>
 MyVec<T> & MyVec<T>::operator=(const MyVec &other) {
 	if(this==&other) return *this; 
-	destroy(); //Exercicio: por que precisamos disso?	// Caso não apagasse aqui, a memória alocada anteriormente seria perdida
+	destroy(); //Exercicio: por que precisamos disso?   |   Caso não apagasse aqui, a memória alocada anteriormente seria perdida
 	dataCapacity = other.dataCapacity;
 	dataSize = other.dataSize;
-	//data = other.data; //por que nao podemos fazer isso?
+	//data = other.data; //por que nao podemos fazer isso?   |   A memória ainda não foi alocada
 	data = new T[dataCapacity];
 	for(int i=0;i<dataSize;i++) data[i] = other.data[i];
 	return *this;
