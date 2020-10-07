@@ -60,6 +60,9 @@ public:
 	void push_front(const T&);
 	void insert(const T&,iterator nodeBefore); //insere o primeiro argumento APOS o nodo apontado pelo segundo elemento
 																					//isso sera melhorado no futuro (quando estudarmos iteradores)
+	int eraseMatchingElements(const T&);
+	void reverse();
+															
 	iterator erase(iterator elem); //remove o elemento apontado por Elem
 														//retorna o (apontador) para o elemento apos o removido
 
@@ -87,17 +90,47 @@ private:
 
 	void create();
 	void destroy();
+	void destroy(iterator it);		// Função auxiliar
 };
 
+//------------------------------------------------
+template<class T>
+void MyList<T>::destroy(MyList<T>::iterator it) {
+	if(it==NULL) return;
+
+	destroy(it->next);
+	delete it;
+}
+//------------------------------------------------
 
 template<class T>
 void MyList<T>::destroy() { 
 	//Termine esta funcao...
+
+	// Não recursiva
+	MyList<T>::iterator it;
+	// Fazer um while e avançar o iterador até o último item da lista
+	// O iterador é retornado ao começo a cada iteração
+	/*while(dataSize > 0) {
+		it = this->begin();
+		for (int i = 0; i < dataSize-1; i++) {
+			it = this->next(it);
+		}
+		delete it;
+		dataSize--;
+	}*/
+
+	// Recursiva
+	dataSize = 0;
+	destroy(dataFirst);
 }
 
 template<class T>
 void MyList<T>::create() {
 	//Termine esta funcao...
+
+	dataSize = 0;
+	dataFirst = dataLast = NULL;
 }
 
 template<class T>
@@ -154,10 +187,18 @@ void MyList<T>::push_back(const T&elem) {
 template<class T>
 void MyList<T>::push_front(const T&elem) {
 	//Termine esta funcao
+
+	if (dataFirst == NULL) {
+		dataFirst = dataLast = new Node<T>(elem);
+		dataSize++;
+	} else {
+		// O elemento apontará para o atual dataFirst
+		Node<T> *front = new Node<T>(elem);
+		front->next = dataFirst;
+		dataFirst = front;
+		dataSize++;
+	}
 }
-
-
-
 
 //insere o elemento na posicao APOS a posicao nodeBefore
 template<class T>
@@ -176,6 +217,23 @@ void MyList<T>::insert(const T&elem, iterator nodeBefore) {
 	dataSize++;
 }
 
+template <class T>
+int MyList<T>::eraseMatchingElements(const T& elem) {
+	MyList<T>::iterator it = this->begin();
+	// Node<T>* curr = dataFirst;
+	int del = 0;
+
+	for (int i = 0; i < dataSize; i++) {
+		if (deref(it) == elem) {
+			del++;
+			it = erase(it);
+		} else  {
+			it = next(it);
+		}
+	}
+
+	return del;
+}
 
 template<class T>
 void MyList<T>::clear() {
