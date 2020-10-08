@@ -91,12 +91,13 @@ private:
 	void create();
 	void destroy();
 	void destroy(iterator it);		// Função auxiliar
+	void reverse(Node<T>*);			// Função auxiliar
 };
 
 //------------------------------------------------
 template<class T>
 void MyList<T>::destroy(MyList<T>::iterator it) {
-	if(it==NULL) return;
+	if(it == NULL) return;
 
 	destroy(it->next);
 	delete it;
@@ -108,10 +109,10 @@ void MyList<T>::destroy() {
 	//Termine esta funcao...
 
 	// Não recursiva
-	MyList<T>::iterator it;
 	// Fazer um while e avançar o iterador até o último item da lista
 	// O iterador é retornado ao começo a cada iteração
-	/*while(dataSize > 0) {
+	/*MyList<T>::iterator it;
+	while(dataSize > 0) {
 		it = this->begin();
 		for (int i = 0; i < dataSize-1; i++) {
 			it = this->next(it);
@@ -220,7 +221,6 @@ void MyList<T>::insert(const T&elem, iterator nodeBefore) {
 template <class T>
 int MyList<T>::eraseMatchingElements(const T& elem) {
 	MyList<T>::iterator it = this->begin();
-	// Node<T>* curr = dataFirst;
 	int del = 0;
 
 	for (int i = 0; i < dataSize; i++) {
@@ -233,6 +233,23 @@ int MyList<T>::eraseMatchingElements(const T& elem) {
 	}
 
 	return del;
+}
+
+template <class T>
+void MyList<T>::reverse() {
+	reverse(dataFirst);
+}
+
+template <class T>
+void MyList<T>::reverse(Node<T>* curr) {
+	if (curr->next == NULL || curr == NULL) {
+		dataFirst = curr;
+		return;
+	}
+	reverse(curr->next);
+	Node<T>* prox = curr->next;
+	prox->next = curr;
+	curr->next = NULL;
 }
 
 template<class T>
