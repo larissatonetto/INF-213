@@ -237,19 +237,22 @@ int MyList<T>::eraseMatchingElements(const T& elem) {
 
 template <class T>
 void MyList<T>::reverse() {
+	if (dataSize == 0) return;
+
 	reverse(dataFirst);
 }
 
 template <class T>
 void MyList<T>::reverse(Node<T>* curr) {
-	if (curr->next == NULL || curr == 0) {
+	if (curr->next == NULL) {
 		dataFirst = curr;
 		return;
 	}
 	reverse(curr->next);
+
 	Node<T>* prev = curr->next;
-	dataLast = curr;
 	prev->next = curr;
+	dataLast = curr;
 	dataLast->next = NULL;
 }
 
