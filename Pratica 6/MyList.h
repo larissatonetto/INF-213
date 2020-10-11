@@ -223,7 +223,7 @@ int MyList<T>::eraseMatchingElements(const T& elem) {
 	MyList<T>::iterator it = this->begin();
 	int del = 0;
 
-	for (int i = 0; i < dataSize; i++) {
+	while(it!=NULL) {
 		if (deref(it) == elem) {
 			del++;
 			it = erase(it);
@@ -244,16 +244,22 @@ void MyList<T>::reverse() {
 
 template <class T>
 void MyList<T>::reverse(Node<T>* curr) {
-	if (curr->next == NULL) {
-		dataFirst = curr;
-		return;
-	}
-	reverse(curr->next);
+	if (curr->next == NULL) return;
 
+	reverse(curr->next);
 	Node<T>* prev = curr->next;
 	prev->next = curr;
-	dataLast = curr;
-	dataLast->next = NULL;
+
+	if (curr == dataFirst) {
+		Node<T>* firstPtr = dataFirst;
+		firstPtr->next = dataFirst->next;
+
+		dataFirst = dataLast;
+		dataFirst->next = dataLast->next;
+
+		dataLast = firstPtr;
+		dataLast->next = NULL;
+	}
 }
 
 template<class T>
