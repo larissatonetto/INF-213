@@ -193,7 +193,6 @@ void MyList<T>::push_front(const T&elem) {
 		dataFirst = dataLast = new Node<T>(elem);
 		dataSize++;
 	} else {
-		// O elemento apontará para o atual dataFirst
 		Node<T> *front = new Node<T>(elem);
 		front->next = dataFirst;
 		dataFirst = front;
@@ -252,7 +251,6 @@ void MyList<T>::reverse(Node<T>* curr) {
 
 	if (curr == dataFirst) {
 		Node<T>* firstPtr = dataFirst;
-		firstPtr->next = dataFirst->next;
 
 		dataFirst = dataLast;
 		dataFirst->next = dataLast->next;
