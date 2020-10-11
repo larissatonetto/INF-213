@@ -242,14 +242,15 @@ void MyList<T>::reverse() {
 
 template <class T>
 void MyList<T>::reverse(Node<T>* curr) {
-	if (curr->next == NULL || curr == NULL) {
+	if (curr->next == NULL || curr == 0) {
 		dataFirst = curr;
 		return;
 	}
 	reverse(curr->next);
-	Node<T>* prox = curr->next;
-	prox->next = curr;
-	curr->next = NULL;
+	Node<T>* prev = curr->next;
+	dataLast = curr;
+	prev->next = curr;
+	dataLast->next = NULL;
 }
 
 template<class T>
