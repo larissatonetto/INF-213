@@ -24,7 +24,7 @@ void convertToTraditional();
 void print();
 
 private:
-void destroy();
+void destroy(bool);
 
 protected:
 // Start é int pois guarda a posição em que cada linha começa
@@ -65,14 +65,14 @@ MyMatrix<T>::MyMatrix(int rows, int *arr, bool isRagged) {
 
 template<class T>
 MyMatrix<T>::~MyMatrix() {
-    destroy();
+    destroy(isRagged());
 }
 
 // --------------------------------------------------------------------------------
 
 template <class T>
-void MyMatrix<T>::destroy() {
-    if (isRagged()) {
+void MyMatrix<T>::destroy(bool isRagged) {
+    if (isRagged) {
         delete[] start;
         delete[] ragged;
 
@@ -142,18 +142,6 @@ bool MyMatrix<T>::isRagged() {
 template <class T>
 void MyMatrix<T>::convertToRagged() {
     int cont = 0;
-    // Passar diretamente para start ao invés de criar um array intermediário
-    /*int tempStart[rows+1];
-    tempStart[0] = 0;
-    int cont = 0;
-
-    // Convertendo o array tam para start
-    for (int i = 1; i <= rows; i++) {
-        cont+=tam[i-1];
-        tempStart[i] = cont;
-    }
-    this->start = tempStart;*/
-
 
     start = new int[rows+1];
     start[0] = 0;
@@ -174,9 +162,38 @@ void MyMatrix<T>::convertToRagged() {
             }
         }
     }
-    destroy();
+    destroy(false);
     matriz = NULL;
     tam = NULL;
+}
+
+template <class T>
+void MyMatrix<T>::convertToTraditional() {
+    int cont = 0;
+
+    // Inicializando tam...
+    tam = new int[rows];
+    for (int i = 0; i < rows; i++) {
+        tam[i] = start[i+1] - start[i];
+    }
+
+    // Inicializando matriz...
+    matriz = new T*[start[rows]];
+    for (int i = 0; i < rows; i++) matriz[i] = new T[tam[i]];
+
+    while(cont != getNumElems()) {
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < tam[i]; j++) {
+                matriz[i][j] = ragged[cont];
+                cont++;
+            }
+        }
+    }
+
+    destroy(true);
+    start = NULL;
+    ragged = NULL;
+    
 }
 
 template <class T>
