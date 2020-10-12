@@ -9,14 +9,15 @@ MyMatrix(const MyMatrix&);
 ~MyMatrix();
 
 const T& get(int, int);
-int getNumRows();               // OK
-int getNumElems();              // OK
-int getNumCols(int);            // OK
-void set(int, int, const T&);   // OK
+int getNumRows();
+int getNumElems();
+int getNumCols(int);
+void set(int, int, const T&);
 
-T resizeRow();
+void resizeRow(int, int);
+void resizeNumRols(int);
 
-bool isRagged();                // OK
+bool isRagged();
 
 void convertToRagged();
 void convertToTraditional();
@@ -132,6 +133,23 @@ void MyMatrix<T>::set(int linha, int col, const T &elem) {
     }
 }
 
+template <class T>
+void MyMatrix<T>::resizeRow(int linha, int numCols) {
+    // Copiar os elementos existentes na linha
+    // Os elementos extras devem ser iniciados com valor padrão (iniciar todos antes de copiar os valores antigos)
+
+    T temp[getNumCols(linha)];
+    for (int i = 0; i < getNumCols(linha); i++) temp[i] = get(linha,i);
+    for (int i = 0; i < getNumCols(linha); i++) cout << get(linha,i) << " ";
+    cout << endl;
+    
+    if (isRagged()) {
+
+    } else {
+
+    }
+}
+
 // --------------------------------------------------------------------------------
 
 template <class T>
@@ -146,7 +164,7 @@ void MyMatrix<T>::convertToRagged() {
     start = new int[rows+1];
     start[0] = 0;
     for (int i = 1; i <= rows; i++) {
-        cont+=tam[i-1];
+        cont+= tam[i-1];
         start[i] = cont;
     }
 
@@ -156,7 +174,7 @@ void MyMatrix<T>::convertToRagged() {
     int i = 0;
     while(i != getNumElems()) {
         for (int j = 0; j < rows; j++) {
-            for (int k = 0; k < tam[j]; k++) {
+            for (int k = 0; k < getNumCols(j); k++) {
                 ragged[i] = matriz[j][k];
                 i++;
             }
@@ -174,7 +192,7 @@ void MyMatrix<T>::convertToTraditional() {
     // Inicializando tam...
     tam = new int[rows];
     for (int i = 0; i < rows; i++) {
-        tam[i] = start[i+1] - start[i];
+        tam[i] = getNumCols(i);
     }
 
     // Inicializando matriz...
@@ -183,7 +201,7 @@ void MyMatrix<T>::convertToTraditional() {
 
     while(cont != getNumElems()) {
         for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < tam[i]; j++) {
+            for (int j = 0; j < getNumCols(i); j++) {
                 matriz[i][j] = ragged[cont];
                 cont++;
             }
@@ -205,9 +223,9 @@ void MyMatrix<T>::print() {
     if (isRagged()) {
         
         for (int i = 0; i < rows; i++) {
-            cout << (start[i+1]-start[i]) << ": ";
-            for (int j = 0; j < start[i+1]-start[i]; j++) {
-                cout << ragged[(start[i] + j)] << " ";
+            cout << getNumCols(i) << ": ";
+            for (int j = 0; j < getNumCols(i); j++) {
+                cout << get(i,j) << " ";
             }
             cout << "\n";
         }
@@ -217,7 +235,7 @@ void MyMatrix<T>::print() {
         for (int i = 0; i < rows; i++) {
             cout << tam[i] << ": ";
             for (int j = 0; j < tam[i]; j++) {
-                cout << matriz[i][j] << " ";
+                cout << get(i,j) << " ";
             }
             cout << "\n";
         }
