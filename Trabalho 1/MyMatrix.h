@@ -156,21 +156,35 @@ void MyMatrix<T>::resizeRow(int linha, int newCols) {
             start[i] = start[i]+difSize;
         }
 
-        for (int i = 0; i <= rows; i++) cout << tempStart[i] << " ";
-        cout << endl;
-        for (int i = 0; i <= rows; i++) cout << start[i] << " ";
-        cout << endl;
+        // for (int i = 0; i <= rows; i++) cout << tempStart[i] << " ";
+        // cout << endl;
+        // for (int i = 0; i <= rows; i++) cout << start[i] << " ";
+        // cout << endl;
 
         delete[] ragged;
         ragged = new T[size];
-        for (int i = 0; i < size; i++) ragged[i] = T();
+        for (int i = 0; i < size; i++) ragged[i] = T();     // Funcioanndo até aqui
 
         // Tentar pular o iterador sobre os novos elementos ao copiar o array antigo
         // i+= ?
-        for (int i = 0; i <= linha; i++) ragged[i] = tempRagged[i];
+        // TODO: Descobrir onde parar de ler
+
+        // cout << tempStart[linha+1] << "\n";
+
+        // Pular os elementos adicionados, continuar depois
+        int cont = 0;
+        while(cont < tempStart[linha+1]) {
+            ragged[cont] = tempRagged[cont];
+            cont++;
+        }
+        int contNew = cont+2;
+        while(cont < tempStart[rows]) {
+            ragged[contNew] = tempRagged[cont];
+            cont++;
+            contNew++;
+        }
         
     } else {
-        size+= newCols-getNumCols(linha);
         delete[] matriz[linha];
         matriz[linha] = new T[newCols];
         tam[linha] = newCols;
