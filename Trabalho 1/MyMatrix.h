@@ -23,6 +23,9 @@ void convertToTraditional();
 
 void print();
 
+private:
+void destroy();
+
 protected:
 // Start é int pois guarda a posição em que cada linha começa
 int rows, size, *tam, *start;
@@ -39,15 +42,22 @@ MyMatrix<T>::MyMatrix(int rows, int *arr, bool isRagged) {
         // O tamanho do array ragged é igual ao último elemento de start
         tam = NULL;
         matriz = NULL;
-        start = arr;
+
+        // Inicializando start...
+        start = new int[rows+1];
+        for (int i = 0; i <= rows; i++) start[i] = arr[i];
 
         // Explicar isso
         ragged = new T[(start[rows])];
     } else {
         start = NULL;
         ragged = NULL;
-        tam = arr;
 
+        // Inicializando tam...
+        tam = new int[rows];
+        for (int i = 0; i < rows; i++) tam[i] = arr[i];
+
+        // Inicializando matriz...
         matriz = new T*[rows];
         for (int i = 0; i < rows; i++) matriz[i] = new T[tam[i]];
     }
@@ -55,6 +65,13 @@ MyMatrix<T>::MyMatrix(int rows, int *arr, bool isRagged) {
 
 template<class T>
 MyMatrix<T>::~MyMatrix() {
+    destroy();
+}
+
+// --------------------------------------------------------------------------------
+
+template <class T>
+void MyMatrix<T>::destroy() {
     if (isRagged()) {
         delete[] start;
         delete[] ragged;
@@ -62,10 +79,9 @@ MyMatrix<T>::~MyMatrix() {
     } else {
         for (int i = 0; i < rows; i++) delete[] matriz[i];
         delete[] matriz;
+        delete[] tam;
     }
 }
-
-// --------------------------------------------------------------------------------
 
 // Get e set ----------------------------------------------------------------------
 // O(1)
@@ -126,7 +142,7 @@ bool MyMatrix<T>::isRagged() {
 template <class T>
 void MyMatrix<T>::convertToRagged() {
     int cont = 0;
-    // Passar diretamente para start ao invès de criar um array intermediário
+    // Passar diretamente para start ao invés de criar um array intermediário
     /*int tempStart[rows+1];
     tempStart[0] = 0;
     int cont = 0;
@@ -158,9 +174,7 @@ void MyMatrix<T>::convertToRagged() {
             }
         }
     }
-
-    for (int i = 0; i < rows; i++) delete[] matriz[i];
-        delete[] matriz;
+    destroy();
     matriz = NULL;
     tam = NULL;
 }
@@ -172,12 +186,10 @@ void MyMatrix<T>::print() {
     cout << "Elems: " << getNumElems() << "\n";
 
     if (isRagged()) {
-        // cout << "start[0] = " << start[0] << " start[1] = " << start[1] << "\n";
         
         for (int i = 0; i < rows; i++) {
             cout << (start[i+1]-start[i]) << ": ";
             for (int j = 0; j < start[i+1]-start[i]; j++) {
-                // cout << "start[i] = " << start[i+1]-start[i] << "\n";
                 cout << ragged[(start[i] + j)] << " ";
             }
             cout << "\n";
