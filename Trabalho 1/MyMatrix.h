@@ -14,17 +14,18 @@ int getNumElems();
 int getNumCols(int);
 void set(int, int, const T&);
 
-void resizeRow(int, int);
-void resizeNumRols(int);
-
 bool isRagged();
 
+void resizeRow(int, int);
+void resizeNumRols(int);
 void convertToRagged();
 void convertToTraditional();
 
 void print();
 
 private:
+// Função auxiliar, recebe como argumento um bool indicando se
+// a matriz é ragged ou não
 void destroy(bool);
 
 protected:
@@ -44,9 +45,17 @@ MyMatrix<T>::MyMatrix(int rows, int *arr, bool isRagged) {
         tam = NULL;
         matriz = NULL;
 
-        // Inicializando start...
+        // Consertar implementação; deve ser feita uam conversão de arr para start
+        int cont = 0;
         start = new int[rows+1];
-        for (int i = 0; i <= rows; i++) start[i] = arr[i];
+        start[0] = 0;
+        for (int i = 1; i <= rows; i++) { 
+            cont+= arr[i-1];
+            start[i] = cont;
+        }
+
+        for (int i = 0; i <= rows; i++) cout << start[i] << " ";
+        cout << endl;
 
         // Explicar isso
         ragged = new T[(start[rows])];
@@ -134,19 +143,36 @@ void MyMatrix<T>::set(int linha, int col, const T &elem) {
 }
 
 template <class T>
-void MyMatrix<T>::resizeRow(int linha, int numCols) {
-    // Copiar os elementos existentes na linha
-    // Os elementos extras devem ser iniciados com valor padrão (iniciar todos antes de copiar os valores antigos)
-
+void MyMatrix<T>::resizeRow(int linha, int newCols) {
     T temp[getNumCols(linha)];
+    int tempCols = getNumCols(linha);
     for (int i = 0; i < getNumCols(linha); i++) temp[i] = get(linha,i);
-    for (int i = 0; i < getNumCols(linha); i++) cout << get(linha,i) << " ";
-    cout << endl;
     
     if (isRagged()) {
+        T tempRagged[start[rows]];
+        int tempStart[rows+1];
 
+        for (int i = 0; i < start[rows]; i++) tempRagged[i] = ragged[i];
+        for (int i = 0; i <= rows; i++) tempStart[i] = start[i];
+
+        // Todos os elementos de start a partir da linha serão aumentados em newCols
+        for (int i = linha; i <= rows; i++) start[i]+= newCols;
+
+        for (int i = 0; i <= rows; i++) cout << tempStart[i] << " ";
+        cout << endl;
+        for (int i = 0; i <= rows; i++) cout << start[i] << " ";
+        cout << endl;
+        // delete[] ragged;
+        
     } else {
+        delete[] matriz[linha];
+        matriz[linha] = new T[newCols];
+        tam[linha] = newCols;
 
+        // Inicializa os elementos padrão primeiro, depois copia os elementos
+        // já existentes de volta para a matriz
+        for (int i = 0; i < getNumCols(linha); i++) matriz[linha][i] = T();
+        for (int i = 0; i < tempCols; i++) matriz[linha][i] = temp[i];
     }
 }
 
