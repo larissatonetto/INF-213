@@ -45,7 +45,6 @@ MyMatrix<T>::MyMatrix(int rows, int *arr, bool isRagged) {
         tam = NULL;
         matriz = NULL;
 
-        // Consertar implementação; deve ser feita uam conversão de arr para start
         int cont = 0;
         start = new int[rows+1];
         start[0] = 0;
@@ -53,19 +52,19 @@ MyMatrix<T>::MyMatrix(int rows, int *arr, bool isRagged) {
             cont+= arr[i-1];
             start[i] = cont;
         }
-
-        for (int i = 0; i <= rows; i++) cout << start[i] << " ";
-        cout << endl;
-
-        // Explicar isso
-        ragged = new T[(start[rows])];
+        size = start[rows];
+        ragged = new T[size];
     } else {
         start = NULL;
         ragged = NULL;
+        int cont = 0;
 
         // Inicializando tam...
         tam = new int[rows];
         for (int i = 0; i < rows; i++) tam[i] = arr[i];
+
+        for (int i = 0; i < rows; i++) cont+= tam[i];
+        size = cont;
 
         // Inicializando matriz...
         matriz = new T*[rows];
@@ -110,15 +109,7 @@ int MyMatrix<T>::getNumRows() { return rows; }
 
 template <class T>
 int MyMatrix<T>::getNumElems() {
-    if (isRagged()) {
-        return start[rows];
-    } else {
-
-        // TODO: Método O(1)
-        int cont = 0;
-        for (int i = 0; i < rows; i++) cont+= tam[i];
-        return cont;
-    }
+    return size;
 }
 
 // O(1)
@@ -144,27 +135,42 @@ void MyMatrix<T>::set(int linha, int col, const T &elem) {
 
 template <class T>
 void MyMatrix<T>::resizeRow(int linha, int newCols) {
-    T temp[getNumCols(linha)];
-    int tempCols = getNumCols(linha);
+    if (newCols == getNumCols(linha)) return;
+
+    int difSize = newCols-getNumCols(linha);
+    size+= difSize;
+    T temp[getNumCols(linha)];              // Guarda a linha antes de alterar o número de colunas
+    int tempCols = getNumCols(linha);       // Guarda quantas colunas a linha tinha
     for (int i = 0; i < getNumCols(linha); i++) temp[i] = get(linha,i);
     
     if (isRagged()) {
-        T tempRagged[start[rows]];
-        int tempStart[rows+1];
+        T tempRagged[start[rows]];          // Gaurda o array antes de alterar a linha
+        int tempStart[rows+1];              // Guarda start antes de alterar
 
         for (int i = 0; i < start[rows]; i++) tempRagged[i] = ragged[i];
         for (int i = 0; i <= rows; i++) tempStart[i] = start[i];
 
         // Todos os elementos de start a partir da linha serão aumentados em newCols
-        for (int i = linha; i <= rows; i++) start[i]+= newCols;
+        // Se eu aumentei a linha i, então as linhas i+n começaram depois
+        for (int i = linha+1; i <= rows; i++) {
+            start[i] = start[i]+difSize;
+        }
 
         for (int i = 0; i <= rows; i++) cout << tempStart[i] << " ";
         cout << endl;
         for (int i = 0; i <= rows; i++) cout << start[i] << " ";
         cout << endl;
-        // delete[] ragged;
+
+        delete[] ragged;
+        ragged = new T[size];
+        for (int i = 0; i < size; i++) ragged[i] = T();
+
+        // Tentar pular o iterador sobre os novos elementos ao copiar o array antigo
+        // i+= ?
+        for (int i = 0; i <= linha; i++) ragged[i] = tempRagged[i];
         
     } else {
+        size+= newCols-getNumCols(linha);
         delete[] matriz[linha];
         matriz[linha] = new T[newCols];
         tam[linha] = newCols;
