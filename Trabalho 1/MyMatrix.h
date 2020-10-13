@@ -135,63 +135,63 @@ void MyMatrix<T>::set(int linha, int col, const T &elem) {
 
 template <class T>
 void MyMatrix<T>::resizeRow(int linha, int newCols) {
+    // Se o número de colunas for menor, será necessário subtrair dos
+    // elementos de start ao invés de somar
     if (newCols == getNumCols(linha)) return;
 
-    int difSize = newCols-getNumCols(linha);
+    int difSize = newCols-getNumCols(linha);    // Guarda a diferença de tamanho entre as quantidades de colunas
     size+= difSize;
-    T temp[getNumCols(linha)];              // Guarda a linha antes de alterar o número de colunas
-    int tempCols = getNumCols(linha);       // Guarda quantas colunas a linha tinha
+
+    T temp[getNumCols(linha)];                  // Guarda a linha antes de alterar o número de colunas
+    int tempCols = getNumCols(linha);           // Guarda quantas colunas a linha tinha
     for (int i = 0; i < getNumCols(linha); i++) temp[i] = get(linha,i);
     
     if (isRagged()) {
-        T tempRagged[start[rows]];          // Gaurda o array antes de alterar a linha
-        int tempStart[rows+1];              // Guarda start antes de alterar
+        T tempRagged[start[rows]];              // Guarda o array antes de alterar a linha
+        int tempStart[rows+1];                  // Guarda start antes de alterar a linha
 
         for (int i = 0; i < start[rows]; i++) tempRagged[i] = ragged[i];
         for (int i = 0; i <= rows; i++) tempStart[i] = start[i];
 
-        // Todos os elementos de start a partir da linha serão aumentados em newCols
-        // Se eu aumentei a linha i, então as linhas i+n começaram depois
+        // Todos os elementos de start depois da linha serão aumentados em newCols
+        // Se aumentar a linha i, então as linhas i+n começaram depois
         for (int i = linha+1; i <= rows; i++) {
             start[i] = start[i]+difSize;
         }
 
-        // for (int i = 0; i <= rows; i++) cout << tempStart[i] << " ";
-        // cout << endl;
-        // for (int i = 0; i <= rows; i++) cout << start[i] << " ";
-        // cout << endl;
-
         delete[] ragged;
         ragged = new T[size];
-        for (int i = 0; i < size; i++) ragged[i] = T();     // Funcioanndo até aqui
 
-        // Tentar pular o iterador sobre os novos elementos ao copiar o array antigo
-        // i+= ?
-        // TODO: Descobrir onde parar de ler
+        if (difSize < 0) {
 
-        // cout << tempStart[linha+1] << "\n";
+        } else {
+            for (int i = 0; i < size; i++) ragged[i] = T();
 
-        // Pular os elementos adicionados, continuar depois
-        int cont = 0;
-        while(cont < tempStart[linha+1]) {
-            ragged[cont] = tempRagged[cont];
-            cont++;
+            // Pular os elementos adicionados, continuar depois
+            int cont = 0;
+            while(cont < tempStart[linha+1]) {
+                ragged[cont] = tempRagged[cont];
+                cont++;
+            }
+            int contNew = cont+2;
+            while(cont < tempStart[rows]) {
+                ragged[contNew] = tempRagged[cont];
+                cont++;
+                contNew++;
         }
-        int contNew = cont+2;
-        while(cont < tempStart[rows]) {
-            ragged[contNew] = tempRagged[cont];
-            cont++;
-            contNew++;
         }
+
         
     } else {
         delete[] matriz[linha];
-        matriz[linha] = new T[newCols];
-        tam[linha] = newCols;
+        matriz[linha] = new T[newCols];     // Realocando o array com o novo número de colunas
+        tam[linha] = newCols;               // Mudando o número de colunas
 
-        // Inicializa os elementos padrão primeiro, depois copia os elementos
-        // já existentes de volta para a matriz
-        for (int i = 0; i < getNumCols(linha); i++) matriz[linha][i] = T();
+        if (newCols > tempCols) {
+            // Inicializa os elementos padrão primeiro, depois copia os elementos
+            // já existentes de volta para a matriz
+            for (int i = 0; i < getNumCols(linha); i++) matriz[linha][i] = T();
+        }
         for (int i = 0; i < tempCols; i++) matriz[linha][i] = temp[i];
     }
 }
