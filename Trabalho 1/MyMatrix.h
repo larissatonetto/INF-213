@@ -17,7 +17,7 @@ void set(int, int, const T&);
 bool isRagged();
 
 void resizeRow(int, int);
-void resizeNumRols(int);
+void resizeNumRows(int);
 void convertToRagged();
 void convertToTraditional();
 
@@ -195,6 +195,58 @@ void MyMatrix<T>::resizeRow(int linha, int newCols) {
         } else {
             for (int i = 0; i < getNumCols(i); i++) matriz[linha][i] = temp[i];
         }
+    }
+}
+
+template <class T>
+void MyMatrix<T>::resizeNumRows(int newRows) {
+    if (newRows == rows) return;
+
+    int oldRows = rows;
+    rows = newRows;
+
+    if (isRagged()) {
+
+    } else {
+        // Transferindo tam para um array temporário para que os dados
+        // não sejam perdidos ao desalocar a memória
+        int tempTam[rows];
+        if (rows > oldRows) {
+            for (int i = 0; i < oldRows; i++) tempTam[i] = tam[i];
+            // As linhas extras são inicializadas com tamanho 0
+            for (int i = oldRows; i < rows; i++) tempTam[i] = 0;
+        } else {
+            for (int i = 0; i < rows; i++) tempTam[i] = tam[i];
+        }
+
+        // Copiando a matriz antiga, oldRows é usado aqui
+        T **tempMatriz = new T*[oldRows];
+        for (int i = 0; i < oldRows; i++) tempMatriz[i] = new T[tam[i]];
+        for (int i = 0; i < oldRows; i++) {
+            for (int j = 0; j < getNumCols(i); j++) {
+                tempMatriz[i][j] = matriz[i][j];
+            }
+        }
+        
+        // Destruir tam e matriz antes de alocar com o novo número de linhas
+        for (int i = 0; i < oldRows; i++) delete[] matriz[i];
+        delete[] matriz;
+        delete[] tam;
+
+        tam = new int[rows];
+        for (int i = 0; i < rows; i++) tam[i] = tempTam[i];
+
+        matriz = new T*[rows];
+        for (int i = 0; i < rows; i++) matriz[i] = new T[tam[i]];
+
+        int cont = 0;
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < getNumCols(i); j++) {
+                matriz[i][j] = tempMatriz[i][j];
+            }
+        }
+        for (int i = 0; i < rows; i++) delete[] tempMatriz[i];
+        delete[] tempMatriz;
     }
 }
 
