@@ -239,13 +239,17 @@ void MyMatrix<T>::resizeNumRows(int newRows) {
         matriz = new T*[rows];
         for (int i = 0; i < rows; i++) matriz[i] = new T[tam[i]];
 
-        int cont = 0;
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < getNumCols(i); j++) {
-                matriz[i][j] = tempMatriz[i][j];
+        // ------------------------------------------------------------------------
+        if (rows < oldRows) {
+            for (int i = 0; i < rows; i++) {
+                for (int j = 0; j < getNumCols(i); j++) {
+                    matriz[i][j] = tempMatriz[i][j];
+                }
             }
         }
-        for (int i = 0; i < rows; i++) delete[] tempMatriz[i];
+
+        // ------------------------------------------------------------------------
+        for (int i = 0; i < oldRows; i++) delete[] tempMatriz[i];
         delete[] tempMatriz;
     }
 }
