@@ -178,7 +178,7 @@ void MyMatrix<T>::resizeRow(int linha, int newCols) {
                 ragged[contNew] = tempRagged[cont];
                 cont++;
                 contNew++;
-        }
+            }
         }
 
         
@@ -187,12 +187,14 @@ void MyMatrix<T>::resizeRow(int linha, int newCols) {
         matriz[linha] = new T[newCols];     // Realocando o array com o novo número de colunas
         tam[linha] = newCols;               // Mudando o número de colunas
 
-        if (newCols > tempCols) {
+        if (difSize > 0) {
             // Inicializa os elementos padrão primeiro, depois copia os elementos
             // já existentes de volta para a matriz
             for (int i = 0; i < getNumCols(linha); i++) matriz[linha][i] = T();
+            for (int i = 0; i < tempCols; i++) matriz[linha][i] = temp[i];
+        } else {
+            for (int i = 0; i < getNumCols(i); i++) matriz[linha][i] = temp[i];
         }
-        for (int i = 0; i < tempCols; i++) matriz[linha][i] = temp[i];
     }
 }
 
