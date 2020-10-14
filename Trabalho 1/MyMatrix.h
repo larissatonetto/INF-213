@@ -219,7 +219,14 @@ void MyMatrix<T>::resizeNumRows(int newRows) {
             for (int i = 0; i <= rows; i++) tempStart[i] = start[i];
         }
 
-        T tempRagged[tempStart[rows]];
+        T tempRagged[getNumElems()];
+        for (int i = 0; i < getNumElems(); i++) tempRagged[i] = ragged[i];
+
+        destroy(true);
+        start = new int[rows+1];
+        for (int i = 0; i <= rows; i++) start[i] = tempStart[i];
+        ragged = new T[getNumElems()];
+        for (int i = 0; i < getNumElems(); i++) ragged[i] = tempRagged[i];
 
     } else {
         // Transferindo tam para um array temporário para que os dados
@@ -261,7 +268,6 @@ void MyMatrix<T>::resizeNumRows(int newRows) {
         matriz = new T*[rows];
         for (int i = 0; i < rows; i++) matriz[i] = new T[tam[i]];
 
-        // ------------------------------------------------------------------------
         if (rows < oldRows) {
             for (int i = 0; i < rows; i++) {
                 for (int j = 0; j < getNumCols(i); j++) {
@@ -276,7 +282,6 @@ void MyMatrix<T>::resizeNumRows(int newRows) {
             }
         }
 
-        // ------------------------------------------------------------------------
         for (int i = 0; i < rows; i++) delete[] tempMatriz[i];
         delete[] tempMatriz;
     }
@@ -302,7 +307,6 @@ void MyMatrix<T>::convertToRagged() {
 
     ragged = new T[(start[rows])];
 
-    // No convertToTraditional() utilizar um contador global para todos os elementos da matriz
     int i = 0;
     while(i != getNumElems()) {
         for (int j = 0; j < rows; j++) {
@@ -312,6 +316,7 @@ void MyMatrix<T>::convertToRagged() {
             }
         }
     }
+
     destroy(false);
     matriz = NULL;
     tam = NULL;
@@ -342,17 +347,24 @@ void MyMatrix<T>::convertToTraditional() {
 
     destroy(true);
     start = NULL;
-    ragged = NULL;
-    
+    ragged = NULL;  
 }
 
 template <class T>
 void MyMatrix<T>::print() {
-
+    // Não precisa verificar o modo?
     cout << "Rows: " << getNumRows() << "\n";
     cout << "Elems: " << getNumElems() << "\n";
 
-    if (isRagged()) {
+    for (int i = 0; i < getNumRows(); i++) {
+        cout << getNumCols(i) << ": ";
+        for (int j = 0; j < getNumCols(i); j++) {
+            cout << get(i,j) << " ";
+        }
+        cout << "\n";
+    }
+
+    /*if (isRagged()) {
         
         for (int i = 0; i < rows; i++) {
             cout << getNumCols(i) << ": ";
@@ -371,5 +383,5 @@ void MyMatrix<T>::print() {
             }
             cout << "\n";
         }
-    }
+    }*/
 }
