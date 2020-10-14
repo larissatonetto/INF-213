@@ -209,6 +209,17 @@ void MyMatrix<T>::resizeNumRows(int newRows) {
     }
 
     if (isRagged()) {
+        int tempStart[rows+1];
+        if (rows > oldRows) {
+            for (int i = 0; i <= oldRows; i++) tempStart[i] = start[i];
+            // Como as novas linhas não possuem nenhuma coluna, o valor
+            // de start será o mesmo para todas as linhas adicionais
+            for (int i = oldRows; i <= rows; i++) tempStart[i] = start[oldRows];
+        } else {
+            for (int i = 0; i <= rows; i++) tempStart[i] = start[i];
+        }
+
+        T tempRagged[tempStart[rows]];
 
     } else {
         // Transferindo tam para um array temporário para que os dados
