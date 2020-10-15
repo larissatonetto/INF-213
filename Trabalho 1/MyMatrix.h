@@ -35,15 +35,15 @@ private:
 void destroy(bool);
 
 protected:
-// Start é int pois guarda a posição em que cada linha começa
 int rows, size, *tam, *start;
 T *ragged, **matriz;
 };
 
-// Construtores -------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------
+
 template <class T>
-MyMatrix<T>::MyMatrix(int rows, int *arr, bool isRagged) {
-    this->rows = rows;
+MyMatrix<T>::MyMatrix(int numRows, int *arr, bool isRagged) : rows(numRows) {
+    // this->rows = rows;
 
     if (isRagged) {
         // O array start é maior do que o número de linhas
@@ -53,11 +53,17 @@ MyMatrix<T>::MyMatrix(int rows, int *arr, bool isRagged) {
 
         int cont = 0;
         start = new int[rows+1];
+        // start[0] sempre será 0, independente da matriz
         start[0] = 0;
+
+
         for (int i = 1; i <= rows; i++) { 
             cont+= arr[i-1];
             start[i] = cont;
         }
+
+        // O número de elementos é igual ao elemento guardado na última
+        // posição de start
         size = start[rows];
         ragged = new T[size];
     } else {
@@ -65,14 +71,13 @@ MyMatrix<T>::MyMatrix(int rows, int *arr, bool isRagged) {
         ragged = NULL;
         int cont = 0;
 
-        // Inicializando tam...
         tam = new int[rows];
         for (int i = 0; i < rows; i++) tam[i] = arr[i];
 
+        // Iterando na matriz para descobrir o número de elementos
         for (int i = 0; i < rows; i++) cont+= tam[i];
         size = cont;
 
-        // Inicializando matriz...
         matriz = new T*[rows];
         for (int i = 0; i < rows; i++) matriz[i] = new T[tam[i]];
     }
@@ -126,8 +131,6 @@ MyMatrix<T> &MyMatrix<T>::operator= (const MyMatrix<T> &mat) {
     return *this;
 }
 
-// --------------------------------------------------------------------------------
-
 template <class T>
 void MyMatrix<T>::destroy(bool isRagged) {
     if (isRagged) {
@@ -141,7 +144,6 @@ void MyMatrix<T>::destroy(bool isRagged) {
     }
 }
 
-// Get e set ----------------------------------------------------------------------
 // O(1)
 template <class T>
 const T& MyMatrix<T>::get(int linha, int col) const {
