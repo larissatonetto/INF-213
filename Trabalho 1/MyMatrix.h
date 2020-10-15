@@ -200,8 +200,9 @@ void MyMatrix<T>::resizeRow(int linha, int newCols) {
         delete[] matriz[linha];
         matriz[linha] = new T[newCols];     // Realocando o array com o novo número de colunas
         tam[linha] = newCols;               // Mudando o número de colunas
+        cout << "Checkpoint 1\n\n";
 
-        // if (newCols == 0) return;
+        if (newCols == 0) return;
 
         if (difSize > 0) {
             // Inicializa os elementos padrão primeiro, depois copia os elementos
@@ -209,7 +210,11 @@ void MyMatrix<T>::resizeRow(int linha, int newCols) {
             for (int i = 0; i < getNumCols(linha); i++) matriz[linha][i] = T();
             for (int i = 0; i < tempCols; i++) matriz[linha][i] = temp[i];
         } else {
-            for (int i = 0; i < getNumCols(i); i++) matriz[linha][i] = temp[i];
+            cout << "Checkpoint 2\n\n";
+            for (int i = 0; i < getNumCols(i); i++)  {
+                cout << "Copiando " << temp[i] << "\n";
+                matriz[linha][i] = temp[i];
+            }
         }
     }
 }
