@@ -1,3 +1,6 @@
+#ifndef MYMATRIX_H
+#define MYMATRIX_H
+
 #include <iostream>
 using namespace std;
 
@@ -8,20 +11,20 @@ MyMatrix(int, int *, bool);
 MyMatrix(const MyMatrix&);
 ~MyMatrix();
 
-const T& get(int, int);
-int getNumRows();
-int getNumElems();
-int getNumCols(int);
+const T& get(int, int) const;
+int getNumRows() const;
+int getNumElems() const;
+int getNumCols(int) const;
 void set(int, int, const T&);
 
-bool isRagged();
+bool isRagged() const ;
 
 void resizeRow(int, int);
 void resizeNumRows(int);
 void convertToRagged();
 void convertToTraditional();
 
-void print();
+void print() const;
 
 private:
 // Função auxiliar, recebe como argumento um bool indicando se
@@ -95,7 +98,7 @@ void MyMatrix<T>::destroy(bool isRagged) {
 // Get e set ----------------------------------------------------------------------
 // O(1)
 template <class T>
-const T& MyMatrix<T>::get(int linha, int col) {
+const T& MyMatrix<T>::get(int linha, int col) const {
     if (isRagged()) {
         return ragged[(start[linha] + col)];
 
@@ -105,16 +108,16 @@ const T& MyMatrix<T>::get(int linha, int col) {
 }
 
 template <class T>
-int MyMatrix<T>::getNumRows() { return rows; }
+int MyMatrix<T>::getNumRows() const { return rows; }
 
 template <class T>
-int MyMatrix<T>::getNumElems() {
+int MyMatrix<T>::getNumElems() const {
     return size;
 }
 
 // O(1)
 template <class T>
-int MyMatrix<T>::getNumCols(int linha) {
+int MyMatrix<T>::getNumCols(int linha) const {
     if (isRagged()) {
         return (start[linha+1] - start[linha]);
 
@@ -147,7 +150,7 @@ void MyMatrix<T>::resizeRow(int linha, int newCols) {
     for (int i = 0; i < getNumCols(linha); i++) temp[i] = get(linha,i);
     
     if (isRagged()) {
-        T tempRagged[start[rows]];              // Guarda o array antes de alterar a linha
+        T tempRagged[start[rows]];              // Guarda a matriz do tipo ragged antes de alterar a linha
         int tempStart[rows+1];                  // Guarda start antes de alterar a linha
 
         for (int i = 0; i < start[rows]; i++) tempRagged[i] = ragged[i];
@@ -163,6 +166,17 @@ void MyMatrix<T>::resizeRow(int linha, int newCols) {
         ragged = new T[size];
 
         if (difSize < 0) {
+            int cont = 0;
+            while(cont < tempStart[linha+1]) {
+                ragged[cont] = tempRagged[cont];
+                cont++;
+            }
+            int contNew = cont+difSize;
+            while(contNew < tempStart[rows]) {
+                ragged[cont] = tempRagged[contNew];
+                cont++;
+                contNew++;
+            }
 
         } else {
             for (int i = 0; i < size; i++) ragged[i] = T();
@@ -173,7 +187,7 @@ void MyMatrix<T>::resizeRow(int linha, int newCols) {
                 ragged[cont] = tempRagged[cont];
                 cont++;
             }
-            int contNew = cont+2;
+            int contNew = cont+difSize;
             while(cont < tempStart[rows]) {
                 ragged[contNew] = tempRagged[cont];
                 cont++;
@@ -186,6 +200,8 @@ void MyMatrix<T>::resizeRow(int linha, int newCols) {
         delete[] matriz[linha];
         matriz[linha] = new T[newCols];     // Realocando o array com o novo número de colunas
         tam[linha] = newCols;               // Mudando o número de colunas
+
+        // if (newCols == 0) return;
 
         if (difSize > 0) {
             // Inicializa os elementos padrão primeiro, depois copia os elementos
@@ -290,7 +306,7 @@ void MyMatrix<T>::resizeNumRows(int newRows) {
 // --------------------------------------------------------------------------------
 
 template <class T>
-bool MyMatrix<T>::isRagged() {
+bool MyMatrix<T>::isRagged() const {
     return (matriz == NULL);
 }
 
@@ -324,8 +340,6 @@ void MyMatrix<T>::convertToRagged() {
 
 template <class T>
 void MyMatrix<T>::convertToTraditional() {
-    int cont = 0;
-
     // Inicializando tam...
     tam = new int[rows];
     for (int i = 0; i < rows; i++) {
@@ -336,6 +350,8 @@ void MyMatrix<T>::convertToTraditional() {
     matriz = new T*[start[rows]];
     for (int i = 0; i < rows; i++) matriz[i] = new T[tam[i]];
 
+    // cont guarda quantos elementos já foram adicionados à matriz convertida
+    int cont = 0;
     while(cont != getNumElems()) {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < getNumCols(i); j++) {
@@ -351,37 +367,23 @@ void MyMatrix<T>::convertToTraditional() {
 }
 
 template <class T>
-void MyMatrix<T>::print() {
-    // Não precisa verificar o modo?
+void MyMatrix<T>::print() const {
     cout << "Rows: " << getNumRows() << "\n";
     cout << "Elems: " << getNumElems() << "\n";
 
     for (int i = 0; i < getNumRows(); i++) {
-        cout << getNumCols(i) << ": ";
+        cout << getNumCols(i) << ":";
+        if (getNumCols(i) == 0) {
+            cout << "\n";
+            continue;
+        }
+
         for (int j = 0; j < getNumCols(i); j++) {
-            cout << get(i,j) << " ";
+            if (j == 0) cout << " " << get(i,j);
+            else cout << " " << get(i,j);
         }
         cout << "\n";
     }
-
-    /*if (isRagged()) {
-        
-        for (int i = 0; i < rows; i++) {
-            cout << getNumCols(i) << ": ";
-            for (int j = 0; j < getNumCols(i); j++) {
-                cout << get(i,j) << " ";
-            }
-            cout << "\n";
-        }
-
-    } else {
-
-        for (int i = 0; i < rows; i++) {
-            cout << tam[i] << ": ";
-            for (int j = 0; j < tam[i]; j++) {
-                cout << get(i,j) << " ";
-            }
-            cout << "\n";
-        }
-    }*/
 }
+
+#endif
