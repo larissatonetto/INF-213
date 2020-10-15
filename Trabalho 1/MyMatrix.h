@@ -6,6 +6,7 @@ using namespace std;
 
 template <class T>
 class MyMatrix {
+
 public:
 MyMatrix(int, int *, bool);
 MyMatrix(const MyMatrix&);
@@ -25,6 +26,8 @@ void convertToRagged();
 void convertToTraditional();
 
 void print() const;
+
+MyMatrix &operator= (const MyMatrix&);
 
 private:
 // Função auxiliar, recebe como argumento um bool indicando se
@@ -75,9 +78,59 @@ MyMatrix<T>::MyMatrix(int rows, int *arr, bool isRagged) {
     }
 }
 
+template <class T>
+MyMatrix<T>::MyMatrix(const MyMatrix &mat) {
+    /*rows = mat.rows;
+    size = mat.size;
+
+    if (mat.isRagged()) {
+        start = new int[rows+1];
+        for (int i = 0; i <)
+    } else {
+
+    }*/
+}
+
 template<class T>
 MyMatrix<T>::~MyMatrix() {
     destroy(isRagged());
+}
+
+template <class T>
+MyMatrix<T> &MyMatrix<T>::operator= (const MyMatrix<T> &mat) {
+    if (this == &mat) return *this;
+
+    destroy(this->isRagged());
+
+    this->rows = mat.rows;
+    this->size = mat.size;
+
+    if (mat.isRagged()) {
+        this->tam = NULL;
+        this->matriz = NULL;
+
+        this->start = new int[rows+1];
+        for (int i = 0; i <= rows; i++) this->start[i] = mat.start[i];
+
+        this->ragged = new T[size];
+    } else {
+        this->start = NULL;
+        this->ragged = NULL;
+
+        this->tam = new int[rows];
+        for (int i = 0; i < rows; i++) this->tam[i] = mat.tam[i];
+
+        this->matriz = new T*[rows];
+        for (int i = 0; i < rows; i++) matriz[i] = new T[tam[i]];
+    }
+
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < getNumCols(i); j++) {
+            this->set(i,j,( mat.get(i,j) ));
+        }
+    }
+
+    return *this;
 }
 
 // --------------------------------------------------------------------------------
@@ -359,13 +412,11 @@ void MyMatrix<T>::convertToRagged() {
 
 template <class T>
 void MyMatrix<T>::convertToTraditional() {
-    // Inicializando tam...
     tam = new int[rows];
     for (int i = 0; i < rows; i++) {
         tam[i] = getNumCols(i);
     }
 
-    // Inicializando matriz...
     matriz = new T*[start[rows]];
     for (int i = 0; i < rows; i++) matriz[i] = new T[tam[i]];
 
