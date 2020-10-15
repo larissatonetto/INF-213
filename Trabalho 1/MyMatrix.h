@@ -80,15 +80,10 @@ MyMatrix<T>::MyMatrix(int rows, int *arr, bool isRagged) {
 
 template <class T>
 MyMatrix<T>::MyMatrix(const MyMatrix &mat) {
-    /*rows = mat.rows;
-    size = mat.size;
-
-    if (mat.isRagged()) {
-        start = new int[rows+1];
-        for (int i = 0; i <)
-    } else {
-
-    }*/
+    this->matriz = NULL;
+    this->start = NULL;
+    this->ragged = NULL;
+    *this = mat;
 }
 
 template<class T>
@@ -98,8 +93,6 @@ MyMatrix<T>::~MyMatrix() {
 
 template <class T>
 MyMatrix<T> &MyMatrix<T>::operator= (const MyMatrix<T> &mat) {
-    if (this == &mat) return *this;
-
     destroy(this->isRagged());
 
     this->rows = mat.rows;
