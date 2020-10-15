@@ -142,6 +142,7 @@ void MyMatrix<T>::resizeRow(int linha, int newCols) {
     // elementos de start ao invés de somar
     if (newCols == getNumCols(linha)) return;
 
+    int tempElems = getNumElems();
     int difSize = newCols-getNumCols(linha);    // Guarda a diferença de tamanho entre as quantidades de colunas
     size+= difSize;
 
@@ -150,10 +151,10 @@ void MyMatrix<T>::resizeRow(int linha, int newCols) {
     for (int i = 0; i < getNumCols(linha); i++) temp[i] = get(linha,i);
     
     if (isRagged()) {
-        T tempRagged[start[rows]];              // Guarda a matriz do tipo ragged antes de alterar a linha
+        T tempRagged[tempElems];              // Guarda a matriz do tipo ragged antes de alterar a linha
         int tempStart[rows+1];                  // Guarda start antes de alterar a linha
 
-        for (int i = 0; i < start[rows]; i++) tempRagged[i] = ragged[i];
+        for (int i = 0; i < tempElems; i++) tempRagged[i] = ragged[i];
         for (int i = 0; i <= rows; i++) tempStart[i] = start[i];
 
         // Todos os elementos de start depois da linha serão aumentados em newCols
@@ -167,13 +168,22 @@ void MyMatrix<T>::resizeRow(int linha, int newCols) {
 
         if (difSize < 0) {
             int cont = 0;
-            while(cont < tempStart[linha+1]) {
+            while(cont < tempStart[linha]) {
                 ragged[cont] = tempRagged[cont];
                 cont++;
             }
-            int contNew = cont+difSize;
+
+            // Para de copiar os as colunas quando o novo limite é atingido
+            for (int i = 0; i < getNumCols(linha); i++) { 
+                ragged[cont] = tempRagged[cont];
+                cont++;
+            }
+
+            // Pula os elementos das colunas extras
+            int contNew = cont-difSize;
             while(contNew < tempStart[rows]) {
                 ragged[cont] = tempRagged[contNew];
+
                 cont++;
                 contNew++;
             }
@@ -183,10 +193,17 @@ void MyMatrix<T>::resizeRow(int linha, int newCols) {
 
             // Pular os elementos adicionados, continuar depois
             int cont = 0;
+            // tempStart[linha+1] guarda a posição inicial do elemento
+            // da linha após a linha alterada
+            // Ex. se alterarmos o tamanho da linha 5, serão copiados todos
+            // os elementos até o final da linha 5
             while(cont < tempStart[linha+1]) {
                 ragged[cont] = tempRagged[cont];
                 cont++;
             }
+            // Se foram adicionadas difSize colunas, então a próxima linha
+            // começará em cont+difSize (final da linha antes de ser alterada
+            // a quantidade de colunas + quantas colunas foram adicionadas)
             int contNew = cont+difSize;
             while(cont < tempStart[rows]) {
                 ragged[contNew] = tempRagged[cont];
@@ -200,7 +217,6 @@ void MyMatrix<T>::resizeRow(int linha, int newCols) {
         delete[] matriz[linha];
         matriz[linha] = new T[newCols];     // Realocando o array com o novo número de colunas
         tam[linha] = newCols;               // Mudando o número de colunas
-        cout << "Checkpoint 1\n\n";
 
         if (newCols == 0) return;
 
@@ -210,9 +226,7 @@ void MyMatrix<T>::resizeRow(int linha, int newCols) {
             for (int i = 0; i < getNumCols(linha); i++) matriz[linha][i] = T();
             for (int i = 0; i < tempCols; i++) matriz[linha][i] = temp[i];
         } else {
-            cout << "Checkpoint 2\n\n";
-            for (int i = 0; i < getNumCols(i); i++)  {
-                cout << "Copiando " << temp[i] << "\n";
+            for (int i = 0; i < getNumCols(linha); i++)  {
                 matriz[linha][i] = temp[i];
             }
         }
