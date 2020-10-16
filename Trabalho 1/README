@@ -101,19 +101,19 @@ Soma: 493952
 
 2000x2000:
 Experimentos com matriz tradicional: 
-Tempo para criar matriz      : 0.008884
-Tempo para inicializar matriz: 0.063776
-Tempo para somar matriz      : 0.049005
-Tempo para dobrar o numero de colunas na primeira linha      : 0.000175
-Tempo para deletar matriz    : 0.000443
+Tempo para criar matriz      : 0.010855
+Tempo para inicializar matriz: 0.071113
+Tempo para somar matriz      : 0.046480
+Tempo para dobrar o numero de colunas na primeira linha      : 0.000150
+Tempo para deletar matriz    : 0.000347
 Soma: 1999658
 
 Experimentos com matriz no formato ragged: 
-Tempo para criar matriz      : 0.000113
-Tempo para inicializar matriz: 0.058273
-Tempo para somar matriz      : 0.020106
-Tempo para dobrar o numero de colunas na primeira linha      : 0.026702
-Tempo para deletar matriz    : 0.000396
+Tempo para criar matriz      : 0.000094
+Tempo para inicializar matriz: 0.068231
+Tempo para somar matriz      : 0.045263
+Tempo para dobrar o numero de colunas na primeira linha      : 0.030562
+Tempo para deletar matriz    : 0.000315
 Soma: 1999658
 
 
