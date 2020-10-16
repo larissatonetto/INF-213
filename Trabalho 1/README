@@ -45,7 +45,7 @@ Tempo para deletar matriz    : 0.000001
 Soma: 1230
 
 
-100x100
+100x100:
 Experimentos com matriz tradicional: 
 Tempo para criar matriz      : 0.000071
 Tempo para inicializar matriz: 0.000246
@@ -195,7 +195,7 @@ A matriz no formato tradicional demora mais para ser criada, pois é nessesário
 
 O tempo gasto para inicializar a matriz em ambos os formatos é parecido em todos os casos de teste
 
-O tempo gasto para somar a matriz é parecido em ambos os formatos é parecido em todos os casos de teste
+O tempo gasto para somar a matriz em ambos os formatos é parecido em todos os casos de teste
 
 O tempo gasto para dobrar o número de colunas no formato ragged é similar ao formato tradicional apenas em matrizes muito pequenas (< 20x20) ou com poucas linhas. O tempo gasto no formato tradicional varia de acordo com a quantidade de colunas que a linha possui, enquanto no formato ragged o tempo varia de acordo com a quantidade total de elementos. Assim, caso hajam muitas linhas e poucas colunas em cada uma, o formato tradicional é mais eficiente
 
