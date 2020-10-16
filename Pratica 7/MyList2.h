@@ -84,7 +84,8 @@ public:
 
 	//Exercicio: implementar as duas funcoes abaixo supondo que nao ha um membro de dados dataSize (o calculo do tamanho da lista seria dinamico)
 	void empty() const {return size() == 0;};
-	int size() const {return dataSize;}; // na STL List, a funcao size() calcula o tamanho da lista dinamicamente (exercicio: qual a ordem de complexidade?)
+	// int size() const {return dataSize}; // na STL List, a funcao size() calcula o tamanho da lista dinamicamente (exercicio: qual a ordem de complexidade?)
+	int size() const;
 
 private:
 	Node<T> *dataFirst, * dataLast;
@@ -93,6 +94,7 @@ private:
 	void create();
 	void destroy();
 	void destroy(iterator it);
+	void size(iterator, int &) const;
 };
 
 
@@ -312,5 +314,21 @@ std::ostream& operator<<(std::ostream &out, const MyList2<T2> &v) {
 	return out;
 }
 
+template <class T>
+void MyList2<T>::size(iterator curr, int &cont) const {
+	if (curr == NULL) return;
+
+	size(curr->prev, cont);
+	cont++;
+}
+
+template <class T>
+int MyList2<T>::size() const {
+	MyList2<T>::iterator it = this->dataLast;
+	int cont = 0;
+
+	size(it, cont);
+	return cont;
+}
 
 #endif
