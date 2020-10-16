@@ -177,6 +177,16 @@ void MyList2<T>::push_back(const T&elem) {
 template<class T>
 void MyList2<T>::push_front(const T&elem) {
 	//implemente esta funcao
+	if (dataFirst == NULL) {
+		dataFirst = dataLast = new Node<T>(elem);
+		dataSize++;
+	} else {
+		Node<T> *front = new Node<T>(elem);
+		front->next = dataFirst;
+		dataFirst->prev = front;
+		dataFirst = front;
+		dataSize++;
+	}
 }
 
 
@@ -188,6 +198,18 @@ void MyList2<T>::push_front(const T&elem) {
 template<class T>
 void MyList2<T>::insert(const T&elem, iterator where) {
 	//implemente esta funcao
+	if (where == begin()) {
+		push_front(elem);
+	} else if (where == end()){
+		push_back(elem);
+	} else {
+		Node<T> *newNode = new Node<T>(elem);
+		newNode->next = where;
+		newNode->prev = where->prev;
+		(where->prev)->next = newNode;
+		where->prev = newNode;
+		dataSize++;
+	}
 }
 
 
