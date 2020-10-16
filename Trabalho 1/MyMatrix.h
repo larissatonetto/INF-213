@@ -291,7 +291,7 @@ void MyMatrix<T>::resizeRow(int linha, int newCols) {
 
         
     } else {
-        T temp[getNumCols(linha)];                // Guarda a linha antes de alterar o número de colunas
+        T temp[getNumCols(linha)];          // Guarda a linha antes de alterar o número de colunas
         for (int i = 0; i < tempCols; i++) temp[i] = matriz[linha][i];
         delete[] matriz[linha];
         matriz[linha] = new T[newCols];     // Realocando o array com o novo número de colunas
@@ -319,7 +319,7 @@ void MyMatrix<T>::resizeRow(int linha, int newCols) {
 // desalocar matriz + O(R) para copiar preencher tam + O(R) para realocar matriz
 // + O(R*C) para preencher matriz +O(R) para desalocar tempMatriz
 // = O(R+(R*C)+R+R+R+(R*C)+R) = O(2(R*C)+5R) = O(R*C)
-// Complexidade do modo ragged: O() -- O(R+1) para copiar start para tempStart
+// Complexidade do modo ragged: O(T+R) -- O(R+1) para copiar start para tempStart
 // + O(T) para copiar os elementos para tempRagged + O(R+1) para copiar tempStart
 // de volta para start + O(T) para copiar os elementos de volta para ragged
 // = O(R+1+T+R+1+T) = O(2T+2R+2) = O(T+R)
@@ -455,7 +455,7 @@ void MyMatrix<T>::convertToRagged() {
     tam = NULL;
 }
 
-// O() -- O(R) para preencher tam + O(R) para alocar matriz + O(R*C) para preencher
+// O(R*C) -- O(R) para preencher tam + O(R) para alocar matriz + O(R*C) para preencher
 // matriz = O(R+R+(R*C)) = O((R*C)+2R) = O(R*C)
 template <class T>
 void MyMatrix<T>::convertToTraditional() {
@@ -477,6 +477,7 @@ void MyMatrix<T>::convertToTraditional() {
         }
     }
 
+// Destruindo start e ragged
     destroy(true);
     start = NULL;
     ragged = NULL;  

@@ -1,0 +1,208 @@
+Eu li as regras
+
+Larissa Laiola Tonetto 98885
+
+Detalhes do computador:
+Processador Intel Core i5-7200U 2.5GHz
+8 GB de RAM DDR4
+HD de 1000 GB, sendo 100 GB reservados ao Linux
+OS Linux Mint 19.2 Tina
+
+Resultados dos experimentos:
+10x10:
+Experimentos com matriz tradicional: 
+Tempo para criar matriz      : 0.000005
+Tempo para inicializar matriz: 0.000004
+Tempo para somar matriz      : 0.000003
+Tempo para dobrar o numero de colunas na primeira linha      : 0.000009
+Tempo para deletar matriz    : 0.000002
+Soma: 39
+
+Experimentos com matriz no formato ragged: 
+Tempo para criar matriz      : 0.000001
+Tempo para inicializar matriz: 0.000003
+Tempo para somar matriz      : 0.000004
+Tempo para dobrar o numero de colunas na primeira linha      : 0.000004
+Tempo para deletar matriz    : 0.000001
+Soma: 39
+
+
+50x50:
+Experimentos com matriz tradicional: 
+Tempo para criar matriz      : 0.000024
+Tempo para inicializar matriz: 0.000044
+Tempo para somar matriz      : 0.000042
+Tempo para dobrar o numero de colunas na primeira linha      : 0.000008
+Tempo para deletar matriz    : 0.000004
+Soma: 1230
+
+Experimentos com matriz no formato ragged: 
+Tempo para criar matriz      : 0.000009
+Tempo para inicializar matriz: 0.000052
+Tempo para somar matriz      : 0.000044
+Tempo para dobrar o numero de colunas na primeira linha      : 0.000051
+Tempo para deletar matriz    : 0.000001
+Soma: 1230
+
+
+100x100
+Experimentos com matriz tradicional: 
+Tempo para criar matriz      : 0.000071
+Tempo para inicializar matriz: 0.000246
+Tempo para somar matriz      : 0.000237
+Tempo para dobrar o numero de colunas na primeira linha      : 0.000015
+Tempo para deletar matriz    : 0.000012
+Soma: 5003
+
+Experimentos com matriz no formato ragged: 
+Tempo para criar matriz      : 0.000014
+Tempo para inicializar matriz: 0.000293
+Tempo para somar matriz      : 0.000286
+Tempo para dobrar o numero de colunas na primeira linha      : 0.000259
+Tempo para deletar matriz    : 0.000001
+Soma: 5003
+
+
+500x500:
+Experimentos com matriz tradicional: 
+Tempo para criar matriz      : 0.000901
+Tempo para inicializar matriz: 0.004400
+Tempo para somar matriz      : 0.003498
+Tempo para dobrar o numero de colunas na primeira linha      : 0.000019
+Tempo para deletar matriz    : 0.000100
+Soma: 125658
+
+Experimentos com matriz no formato ragged: 
+Tempo para criar matriz      : 0.000066
+Tempo para inicializar matriz: 0.004340
+Tempo para somar matriz      : 0.003684
+Tempo para dobrar o numero de colunas na primeira linha      : 0.006040
+Tempo para deletar matriz    : 0.000004
+Soma: 125658
+
+
+1000x1000:
+Experimentos com matriz tradicional: 
+Tempo para criar matriz      : 0.003466
+Tempo para inicializar matriz: 0.017623
+Tempo para somar matriz      : 0.015969
+Tempo para dobrar o numero de colunas na primeira linha      : 0.000134
+Tempo para deletar matriz    : 0.000252
+Soma: 493952
+
+Experimentos com matriz no formato ragged: 
+Tempo para criar matriz      : 0.000094
+Tempo para inicializar matriz: 0.019859
+Tempo para somar matriz      : 0.015277
+Tempo para dobrar o numero de colunas na primeira linha      : 0.020963
+Tempo para deletar matriz    : 0.000346
+Soma: 493952
+
+
+2000x2000:
+Experimentos com matriz tradicional: 
+Tempo para criar matriz      : 0.008884
+Tempo para inicializar matriz: 0.063776
+Tempo para somar matriz      : 0.049005
+Tempo para dobrar o numero de colunas na primeira linha      : 0.000175
+Tempo para deletar matriz    : 0.000443
+Soma: 1999658
+
+Experimentos com matriz no formato ragged: 
+Tempo para criar matriz      : 0.000113
+Tempo para inicializar matriz: 0.058273
+Tempo para somar matriz      : 0.020106
+Tempo para dobrar o numero de colunas na primeira linha      : 0.026702
+Tempo para deletar matriz    : 0.000396
+Soma: 1999658
+
+
+1x10000:
+Experimentos com matriz tradicional: 
+Tempo para criar matriz      : 0.000011
+Tempo para inicializar matriz: 0.000347
+Tempo para somar matriz      : 0.000264
+Tempo para dobrar o numero de colunas na primeira linha      : 0.000892
+Tempo para deletar matriz    : 0.000022
+Soma: 8973
+
+Experimentos com matriz no formato ragged: 
+Tempo para criar matriz      : 0.000002
+Tempo para inicializar matriz: 0.000298
+Tempo para somar matriz      : 0.000294
+Tempo para dobrar o numero de colunas na primeira linha      : 0.000465
+Tempo para deletar matriz    : 0.000001
+Soma: 8973
+
+
+1x1000000:
+Experimentos com matriz tradicional: 
+Tempo para criar matriz      : 0.000027
+Tempo para inicializar matriz: 0.009975
+Tempo para somar matriz      : 0.007940
+Tempo para dobrar o numero de colunas na primeira linha      : 0.032504
+Tempo para deletar matriz    : 0.000404
+Soma: 287579
+
+Experimentos com matriz no formato ragged: 
+Tempo para criar matriz      : 0.000026
+Tempo para inicializar matriz: 0.009609
+Tempo para somar matriz      : 0.008586
+Tempo para dobrar o numero de colunas na primeira linha      : 0.013395
+Tempo para deletar matriz    : 0.000003
+Soma: 287579
+
+
+10000x1:
+Experimentos com matriz tradicional: 
+Tempo para criar matriz      : 0.002150
+Tempo para inicializar matriz: 0.000798
+Tempo para somar matriz      : 0.000828
+Tempo para dobrar o numero de colunas na primeira linha      : 0.000011
+Tempo para deletar matriz    : 0.000685
+Soma: 4913
+
+Experimentos com matriz no formato ragged: 
+Tempo para criar matriz      : 0.000141
+Tempo para inicializar matriz: 0.000750
+Tempo para somar matriz      : 0.000695
+Tempo para dobrar o numero de colunas na primeira linha      : 0.000481
+Tempo para deletar matriz    : 0.000001
+Soma: 4913
+
+
+1000000x1:
+Experimentos com matriz tradicional: 
+Tempo para criar matriz      : 0.095961
+Tempo para inicializar matriz: 0.021023
+Tempo para somar matriz      : 0.021229
+Tempo para dobrar o numero de colunas na primeira linha      : 0.000005
+Tempo para deletar matriz    : 0.016284
+Soma: 499845
+
+Experimentos com matriz no formato ragged: 
+Tempo para criar matriz      : 0.009806
+Tempo para inicializar matriz: 0.020783
+Tempo para somar matriz      : 0.021498
+Tempo para dobrar o numero de colunas na primeira linha      : 0.015533
+Tempo para deletar matriz    : 0.000001
+Soma: 499845
+
+
+
+Observações:
+A matriz no formato tradicional demora mais para ser criada, pois é nessesário percorrer as linhas para alocar a memória. No entanto, em matrizes com uma quantidade menor de linhas, a diferença de tempo é menor
+
+O tempo gasto para inicializar a matriz em ambos os formatos é parecido em todos os casos de teste
+
+O tempo gasto para somar a matriz é parecido em ambos os formatos é parecido em todos os casos de teste
+
+O tempo gasto para dobrar o número de colunas no formato ragged é similar ao formato tradicional apenas em matrizes muito pequenas (< 20x20) ou com poucas linhas. O tempo gasto no formato tradicional varia de acordo com a quantidade de colunas que a linha possui, enquanto no formato ragged o tempo varia de acordo com a quantidade total de elementos. Assim, caso hajam muitas linhas e poucas colunas em cada uma, o formato tradicional é mais eficiente
+
+O tempo gasto para deletar a matriz no formato tradicional aumenta quanto maior for a quantidade de linhas, pois é necessário percorrer as linhas para destruí-las. Em matrizes quadradas maiores, o tempo gasto para destruir a matriz no formato ragged tende a ser maior do que o formato tradicional. Se a matriz tiver apenas uma linha, o tempo gasto para destruir no formato ragged é muito menor comparado ao mesmo formato com qualquer outra quantidade de linhas
+
+
+Fontes de consulta:
+https://www.learncpp.com/cpp-tutorial/9-14-overloading-the-assignment-operator/
+https://www.geeksforgeeks.org/c-new-and-delete-question-4/#:~:text=What%20happens%20when%20delete%20is%20used%20for%20a%20NULL%20pointer%3F&text=Explanation%3A%20Deleting%20a%20null%20pointer,null%20pointer%20before%20calling%20delete.
+https://stackoverflow.com/questions/36274522/c-invalid-delete-from-valgrind
