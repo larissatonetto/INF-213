@@ -30,24 +30,27 @@ void print() const;
 MyMatrix &operator= (const MyMatrix&);
 
 private:
-// Função auxiliar, recebe como argumento um bool indicando se
-// a matriz é ragged ou não
+// Função auxiliar para desalocar os arrays, recebe como argumento
+// um bool indicando se a matriz está no modo ragged ou não
 void destroy(bool);
+
+// Função auxiliar para alocar os arrays, recebe como argumento
+// um bool indicando se a matriz está no modo ragged ou não
+void create(bool);
 
 protected:
 int rows, size, *tam, *start;
 T *ragged, **matriz;
 };
 
-// ---------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------- 
 
 template <class T>
 MyMatrix<T>::MyMatrix(int numRows, int *arr, bool isRagged) : rows(numRows) {
-    // this->rows = rows;
-
     if (isRagged) {
-        // O array start é maior do que o número de linhas
-        // O tamanho do array ragged é igual ao último elemento de start
+        // O array start é maior do que o número de linhas, já que guarda também
+        // o número de elementos no final
+        // O tamanho do array ragged é igual ao número de elementos
         tam = NULL;
         matriz = NULL;
 
@@ -85,6 +88,8 @@ MyMatrix<T>::MyMatrix(int numRows, int *arr, bool isRagged) : rows(numRows) {
 
 template <class T>
 MyMatrix<T>::MyMatrix(const MyMatrix &mat) {
+    // O operador de atribuição irá chamar destroy(true), já que matriz = NULL
+    // ragged e start apontam para NULL para evitar erros no delete[]
     this->matriz = NULL;
     this->start = NULL;
     this->ragged = NULL;
@@ -106,19 +111,15 @@ MyMatrix<T> &MyMatrix<T>::operator= (const MyMatrix<T> &mat) {
     if (mat.isRagged()) {
         this->tam = NULL;
         this->matriz = NULL;
+        create(true);
 
-        this->start = new int[rows+1];
         for (int i = 0; i <= rows; i++) this->start[i] = mat.start[i];
-
-        this->ragged = new T[size];
     } else {
         this->start = NULL;
         this->ragged = NULL;
+        create(false);
 
-        this->tam = new int[rows];
         for (int i = 0; i < rows; i++) this->tam[i] = mat.tam[i];
-
-        this->matriz = new T*[rows];
         for (int i = 0; i < rows; i++) matriz[i] = new T[tam[i]];
     }
 
@@ -131,12 +132,25 @@ MyMatrix<T> &MyMatrix<T>::operator= (const MyMatrix<T> &mat) {
     return *this;
 }
 
+
+template <class T>
+void MyMatrix<T>::create(bool isRagged) {
+    if (isRagged) {
+        ragged = new T[size];
+        start = new int[rows+1];
+        start[0] = 0;
+    } else {
+        tam = new int[rows];
+        // Como ainda não temos os valores de tam, apenas parte da matriz é alocada aqui
+        matriz = new T*[rows];
+    }
+}
+
 template <class T>
 void MyMatrix<T>::destroy(bool isRagged) {
     if (isRagged) {
         delete[] start;
         delete[] ragged;
-
     } else {
         for (int i = 0; i < rows; i++) delete[] matriz[i];
         delete[] matriz;
@@ -144,7 +158,9 @@ void MyMatrix<T>::destroy(bool isRagged) {
     }
 }
 
-// O(1)
+// Funções públicas ---------------------------------------------------------------
+
+// O(1) em ambos os modos - basta retornar o elemento na posição indicada
 template <class T>
 const T& MyMatrix<T>::get(int linha, int col) const {
     if (isRagged()) {
@@ -155,18 +171,24 @@ const T& MyMatrix<T>::get(int linha, int col) const {
     }
 }
 
+// O(1) em ambos os modos - basta retornar rows
 template <class T>
 int MyMatrix<T>::getNumRows() const { return rows; }
 
+// O(1) em ambos os modos - basta retornar size
 template <class T>
 int MyMatrix<T>::getNumElems() const {
     return size;
 }
 
-// O(1)
+// O(1) em ambos os modos
+// No modo tradicional, retornar o valor de tam na coluna desejada
+// No modo ragged, subtrair duas posições consecutivas de start
 template <class T>
 int MyMatrix<T>::getNumCols(int linha) const {
     if (isRagged()) {
+        // No modo ragged, a quantidade de colunas de uma linha
+        // é a diferença entre o ponto de início da coluna e da próxima
         return (start[linha+1] - start[linha]);
 
     } else {
@@ -174,9 +196,13 @@ int MyMatrix<T>::getNumCols(int linha) const {
     }
 }
 
+// O(1) em ambos os casos, basta mudar o valor na posição indicada
 template <class T>
 void MyMatrix<T>::set(int linha, int col, const T &elem) {
     if (isRagged()) {
+        // O elemento i,j da matriz no modo ragged pode ser acessado
+        // a partir do ponto de início da linha i em start somado ao
+        // número j da coluna
         ragged[(start[linha] + col)] = elem;
 
     } else {
@@ -184,62 +210,41 @@ void MyMatrix<T>::set(int linha, int col, const T &elem) {
     }
 }
 
+// Complexidade do modo tradicional: O(C) -- O(C) para copiar os elementos da linha
+// + O(C) para preenchar a nova linha = O(2C) = O(C)
+// Complexidade do modo ragged: O(T+R) -- O(T) para copiar os elementos de ragged
+// + O(R+1) para copiar os elementos de start + O(R+1) para alterar os elementos de start
+// + O(T) para inserir os elementos padrão + O(T) para preencher a nova matriz
+// = O(T+R+1+R+1+T+T) = O(3T+2R+2) = O(T+R)
 template <class T>
 void MyMatrix<T>::resizeRow(int linha, int newCols) {
-    // Se o número de colunas for menor, será necessário subtrair dos
-    // elementos de start ao invés de somar
     if (newCols == getNumCols(linha)) return;
 
-    int tempElems = getNumElems();
-    int difSize = newCols-getNumCols(linha);    // Guarda a diferença de tamanho entre as quantidades de colunas
-    size+= difSize;
-
-    T temp[getNumCols(linha)];                  // Guarda a linha antes de alterar o número de colunas
-    int tempCols = getNumCols(linha);           // Guarda quantas colunas a linha tinha
-    for (int i = 0; i < getNumCols(linha); i++) temp[i] = get(linha,i);
+    int tempElems = getNumElems();            // Guarda quantos elementos a matriz tinha
+    int tempCols = getNumCols(linha);         // Guarda quantas colunas a linha tinha
+    int difSize = newCols-getNumCols(linha);  // Guarda a diferença de tamanho entre as quantidades de colunas
+    size+= difSize;                           // Atualizando o número de elementos da matriz
     
     if (isRagged()) {
-        T tempRagged[tempElems];              // Guarda a matriz do tipo ragged antes de alterar a linha
-        int tempStart[rows+1];                  // Guarda start antes de alterar a linha
-
+        T tempRagged[tempElems];              // Guarda a matriz antes de alterar o número de colunas
+        int tempStart[rows+1];                // Guarda start antes de alterar o número de colunas
         for (int i = 0; i < tempElems; i++) tempRagged[i] = ragged[i];
         for (int i = 0; i <= rows; i++) tempStart[i] = start[i];
 
-        // Todos os elementos de start depois da linha serão aumentados em newCols
-        // Se aumentar a linha i, então as linhas i+n começaram depois
+        // Todos os elementos de start depois da linha serão somados a difSize
+        // Se aumentar a linha i, então as linhas depois dela começarão depois
+        // Se diminuir, as linhas começarão antes
         for (int i = linha+1; i <= rows; i++) {
             start[i] = start[i]+difSize;
         }
 
+        // Realocando ragged com o novo número de elementos
         delete[] ragged;
         ragged = new T[size];
 
-        if (difSize < 0) {
-            int cont = 0;
-            while(cont < tempStart[linha]) {
-                ragged[cont] = tempRagged[cont];
-                cont++;
-            }
-
-            // Para de copiar os as colunas quando o novo limite é atingido
-            for (int i = 0; i < getNumCols(linha); i++) { 
-                ragged[cont] = tempRagged[cont];
-                cont++;
-            }
-
-            // Pula os elementos das colunas extras
-            int contNew = cont-difSize;
-            while(contNew < tempStart[rows]) {
-                ragged[cont] = tempRagged[contNew];
-
-                cont++;
-                contNew++;
-            }
-
-        } else {
+        if (difSize > 0) {
             for (int i = 0; i < size; i++) ragged[i] = T();
 
-            // Pular os elementos adicionados, continuar depois
             int cont = 0;
             // tempStart[linha+1] guarda a posição inicial do elemento
             // da linha após a linha alterada
@@ -253,8 +258,32 @@ void MyMatrix<T>::resizeRow(int linha, int newCols) {
             // começará em cont+difSize (final da linha antes de ser alterada
             // a quantidade de colunas + quantas colunas foram adicionadas)
             int contNew = cont+difSize;
-            while(cont < tempStart[rows]) {
+            while(cont < tempElems) {
                 ragged[contNew] = tempRagged[cont];
+                cont++;
+                contNew++;
+            }
+
+        } else {
+            int cont = 0;
+            while(cont < tempStart[linha]) {
+                ragged[cont] = tempRagged[cont];
+                cont++;
+            }
+
+            // Para de copiar os as colunas quando o novo limite é atingido
+            for (int i = 0; i < getNumCols(linha); i++) { 
+                ragged[cont] = tempRagged[cont];
+                cont++;
+            }
+
+            // Pula os elementos das colunas cortadas. Ex. se foram cortadas
+            // 2 colunas, contNew = 2, e serão ignorados os dois próximos
+            // elementos da matriz antiga ao copiar
+            int contNew = cont-difSize;
+            while(contNew < tempStart[rows]) {
+                ragged[cont] = tempRagged[contNew];
+
                 cont++;
                 contNew++;
             }
@@ -262,6 +291,8 @@ void MyMatrix<T>::resizeRow(int linha, int newCols) {
 
         
     } else {
+        T temp[getNumCols(linha)];                // Guarda a linha antes de alterar o número de colunas
+        for (int i = 0; i < tempCols; i++) temp[i] = matriz[linha][i];
         delete[] matriz[linha];
         matriz[linha] = new T[newCols];     // Realocando o array com o novo número de colunas
         tam[linha] = newCols;               // Mudando o número de colunas
@@ -269,10 +300,12 @@ void MyMatrix<T>::resizeRow(int linha, int newCols) {
         if (newCols == 0) return;
 
         if (difSize > 0) {
-            // Inicializa os elementos padrão primeiro, depois copia os elementos
-            // já existentes de volta para a matriz
-            for (int i = 0; i < getNumCols(linha); i++) matriz[linha][i] = T();
-            for (int i = 0; i < tempCols; i++) matriz[linha][i] = temp[i];
+            // Copia os elementos já existentes de volta para a matriz
+            // e adiciona os elementos padrão nas novas colunas
+            for (int i = 0; i < getNumCols(linha); i++) {
+                if (i < tempCols) matriz[linha][i] = temp[i];
+                else matriz[linha][i] = T();
+            }
         } else {
             for (int i = 0; i < getNumCols(linha); i++)  {
                 matriz[linha][i] = temp[i];
@@ -281,148 +314,166 @@ void MyMatrix<T>::resizeRow(int linha, int newCols) {
     }
 }
 
+// Complexidade do modo tradicional: O(R*C) -- O(R) para copiar tam para tempTam
+// + O(R*C) para varrer as colunas e copiar matriz para tempMatriz + O(R) para
+// desalocar matriz + O(R) para copiar preencher tam + O(R) para realocar matriz
+// + O(R*C) para preencher matriz +O(R) para desalocar tempMatriz
+// = O(R+(R*C)+R+R+R+(R*C)+R) = O(2(R*C)+5R) = O(R*C)
+// Complexidade do modo ragged: O() -- O(R+1) para copiar start para tempStart
+// + O(T) para copiar os elementos para tempRagged + O(R+1) para copiar tempStart
+// de volta para start + O(T) para copiar os elementos de volta para ragged
+// = O(R+1+T+R+1+T) = O(2T+2R+2) = O(T+R)
 template <class T>
 void MyMatrix<T>::resizeNumRows(int newRows) {
     if (newRows == rows) return;
 
-    int oldRows = rows;
-    rows = newRows;
-    if (rows < oldRows) {
-        for (int i = rows; i < oldRows; i++) size-= (getNumCols(i));
+    // Se o novo número de linhas for menor, subtrair do tamanho os elementos
+    // das linhas que serão retiradas
+    if (newRows < rows) {
+        for (int i = newRows; i < rows; i++) size-= (getNumCols(i));
     }
 
     if (isRagged()) {
-        int tempStart[rows+1];
-        if (rows > oldRows) {
-            for (int i = 0; i <= oldRows; i++) tempStart[i] = start[i];
-            // Como as novas linhas não possuem nenhuma coluna, o valor
-            // de start será o mesmo para todas as linhas adicionais
-            for (int i = oldRows; i <= rows; i++) tempStart[i] = start[oldRows];
-        } else {
+        int tempStart[newRows+1];
+        if (newRows > rows) {
             for (int i = 0; i <= rows; i++) tempStart[i] = start[i];
+            // Como as novas linhas não possuem nenhuma coluna, o valor de start
+            // será o mesmo para todas as linhas adicionais
+            for (int i = rows; i <= newRows; i++) tempStart[i] = start[rows];
+        } else {
+            for (int i = 0; i <= newRows; i++) tempStart[i] = start[i];
         }
 
         T tempRagged[getNumElems()];
         for (int i = 0; i < getNumElems(); i++) tempRagged[i] = ragged[i];
 
+        // O número antigo de linhas não é mais necessário, substituindo
+        rows = newRows;
+        // Realocando start e ragged
         destroy(true);
-        start = new int[rows+1];
+        create(true);
         for (int i = 0; i <= rows; i++) start[i] = tempStart[i];
-        ragged = new T[getNumElems()];
         for (int i = 0; i < getNumElems(); i++) ragged[i] = tempRagged[i];
 
     } else {
         // Transferindo tam para um array temporário para que os dados
-        // não sejam perdidos ao desalocar a memória
-        int tempTam[rows];
-        if (rows > oldRows) {
-            for (int i = 0; i < oldRows; i++) tempTam[i] = tam[i];
-            // As linhas extras são inicializadas com tamanho 0
-            for (int i = oldRows; i < rows; i++) tempTam[i] = 0;
-        } else {
+        // não sejam perdidos ao realocar a memória
+        int tempTam[newRows];
+        if (newRows > rows) {
             for (int i = 0; i < rows; i++) tempTam[i] = tam[i];
+            // As linhas extras são inicializadas com tamanho 0
+            for (int i = rows; i < newRows; i++) tempTam[i] = 0;
+        } else {
+            for (int i = 0; i < newRows; i++) tempTam[i] = tam[i];
         }
 
         // Copiando a matriz antiga
-        T **tempMatriz = new T*[rows];
-        for (int i = 0; i < rows; i++) tempMatriz[i] = new T[tempTam[i]];
+        T **tempMatriz = new T*[newRows];
+        for (int i = 0; i < newRows; i++) tempMatriz[i] = new T[tempTam[i]];
 
-        if (rows < oldRows) {
-            for (int i = 0; i < rows; i++) {
+        if (newRows < rows) {
+            for (int i = 0; i < newRows; i++) {
                 for (int j = 0; j < getNumCols(i); j++) {
                     tempMatriz[i][j] = matriz[i][j];
                 }
             }
         } else {
-            for (int i = 0; i < oldRows; i++) {
+            for (int i = 0; i < rows; i++) {
                 for (int j = 0; j < getNumCols(i); j++) {
                     tempMatriz[i][j] = matriz[i][j];
                 }
             }
         }
-        // Destruir tam e matriz antes de alocar com o novo número de linhas
-        for (int i = 0; i < oldRows; i++) delete[] matriz[i];
-        delete[] matriz;
-        delete[] tam;
+        
+        // Realocando tam e matriz
+        destroy(false);
+        // A função create() não é utilizada aqui pois ainda não atualizamos
+        // o valor de rows
+        tam = new int[newRows];
+        matriz = new T*[newRows];
+        for (int i = 0; i < newRows; i++) tam[i] = tempTam[i];
+        for (int i = 0; i < newRows; i++) matriz[i] = new T[tam[i]];
 
-        tam = new int[rows];
-        for (int i = 0; i < rows; i++) tam[i] = tempTam[i];
-
-        matriz = new T*[rows];
-        for (int i = 0; i < rows; i++) matriz[i] = new T[tam[i]];
-
-        if (rows < oldRows) {
-            for (int i = 0; i < rows; i++) {
+        if (newRows < rows) {
+            for (int i = 0; i < newRows; i++) {
                 for (int j = 0; j < getNumCols(i); j++) {
                     matriz[i][j] = tempMatriz[i][j];
                 }
             }
         } else {
-            for (int i = 0; i < oldRows; i++) {
+            for (int i = 0; i < rows; i++) {
                 for (int j = 0; j < getNumCols(i); j++) {
                     matriz[i][j] = tempMatriz[i][j];
                 }
             }
         }
 
-        for (int i = 0; i < rows; i++) delete[] tempMatriz[i];
+        for (int i = 0; i < newRows; i++) delete[] tempMatriz[i];
         delete[] tempMatriz;
+        rows = newRows;
     }
 }
 
 // --------------------------------------------------------------------------------
 
+// O(1) -- apenas verificar se matriz é NULL
 template <class T>
 bool MyMatrix<T>::isRagged() const {
     return (matriz == NULL);
 }
 
+// O(R*C) -- O(R+1) para preencher start + O(R*C) para copiar os elementos para ragged
+// + O(R) para desalocar matriz
+// = O(R+1+(R*C)+R) = O((R*C)+2R+1) = O(R*C)
 template <class T>
 void MyMatrix<T>::convertToRagged() {
-    int cont = 0;
+    if (isRagged()) return;
 
-    start = new int[rows+1];
-    start[0] = 0;
+    // Alocando start e ragged
+    create(true);
+    // cont guarda a soma dos elementos de todas as colunas
+    // A cada iteração, a soma atual de elementos é guardada em start[i]
+    // Por exemplo, se a coluna 0 tem 3 elementos, então cont = 3 e start[1] = 3
+    // i começa no 1 pois start[0] é sempre 0
+    int cont = 0;
     for (int i = 1; i <= rows; i++) {
         cont+= tam[i-1];
         start[i] = cont;
     }
 
-    ragged = new T[(start[rows])];
-
     int i = 0;
-    while(i != getNumElems()) {
-        for (int j = 0; j < rows; j++) {
-            for (int k = 0; k < getNumCols(j); k++) {
-                ragged[i] = matriz[j][k];
-                i++;
-            }
+    for (int j = 0; j < rows; j++) {
+        for (int k = 0; k < getNumCols(j); k++) {
+            ragged[i] = matriz[j][k];
+            i++;
         }
     }
 
+    // Destruindo matriz e tam
     destroy(false);
     matriz = NULL;
     tam = NULL;
 }
 
+// O() -- O(R) para preencher tam + O(R) para alocar matriz + O(R*C) para preencher
+// matriz = O(R+R+(R*C)) = O((R*C)+2R) = O(R*C)
 template <class T>
 void MyMatrix<T>::convertToTraditional() {
-    tam = new int[rows];
-    for (int i = 0; i < rows; i++) {
-        tam[i] = getNumCols(i);
-    }
+    if (!isRagged()) return;
 
-    matriz = new T*[start[rows]];
+    // matriz é alocada depois para que getNumCols() utilize o modo ragged
+    // getNumCols verifica se matriz é NULL ou não
+    tam = new int[rows];
+    for (int i = 0; i < rows; i++) tam[i] = getNumCols(i);
+    matriz = new T*[rows];
     for (int i = 0; i < rows; i++) matriz[i] = new T[tam[i]];
 
     // cont guarda quantos elementos já foram adicionados à matriz convertida
     int cont = 0;
-    while(cont != getNumElems()) {
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < getNumCols(i); j++) {
-                matriz[i][j] = ragged[cont];
-                cont++;
-            }
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < getNumCols(i); j++) {
+            matriz[i][j] = ragged[cont];
+            cont++;
         }
     }
 
@@ -431,6 +482,7 @@ void MyMatrix<T>::convertToTraditional() {
     ragged = NULL;  
 }
 
+// O(R*C) para varrer as colunas e imprimir os elementos
 template <class T>
 void MyMatrix<T>::print() const {
     cout << "Rows: " << getNumRows() << "\n";
@@ -442,7 +494,6 @@ void MyMatrix<T>::print() const {
             cout << "\n";
             continue;
         }
-
         for (int j = 0; j < getNumCols(i); j++) {
             if (j == 0) cout << " " << get(i,j);
             else cout << " " << get(i,j);
