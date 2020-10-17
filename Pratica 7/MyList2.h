@@ -88,6 +88,7 @@ public:
 	int size() const;
 	
 	int eraseMatchingElements(const T&);
+	void reverse();
 
 private:
 	Node<T> *dataFirst, * dataLast;
@@ -97,6 +98,7 @@ private:
 	void destroy();
 	void destroy(iterator it);
 	void size(iterator, int &) const;
+	void reverse(Node<T>*);
 };
 
 
@@ -348,6 +350,33 @@ int MyList2<T>::eraseMatchingElements(const T& elem) {
 	}
 
 	return del;
+}
+
+template <class T>
+void MyList2<T>::reverse(Node<T> *curr) {
+	if (curr->next == NULL) return;
+
+	reverse(curr->next);
+	(curr->next)->prev = (curr->next)->next;
+	(curr->next)->next = curr;
+
+	if (curr == dataFirst) {
+		Node<T>* firstPtr = dataFirst;
+		firstPtr->prev = dataFirst->prev;
+
+		dataFirst = dataLast;
+		dataFirst->next = dataLast->next;
+		dataFirst->prev = dataLast->prev;
+
+		dataLast = firstPtr;
+		dataLast->prev = firstPtr->prev;
+		dataLast->next = NULL;
+	}
+}
+
+template <class T>
+void MyList2<T>::reverse() {
+	reverse(dataFirst);
 }
 
 #endif
