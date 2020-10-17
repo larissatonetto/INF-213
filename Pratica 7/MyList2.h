@@ -89,6 +89,7 @@ public:
 	
 	int eraseMatchingElements(const T&);
 	void reverse();
+	bool compare(Node<T>*, Node<T>*);
 
 private:
 	Node<T> *dataFirst, * dataLast;
@@ -97,8 +98,9 @@ private:
 	void create();
 	void destroy();
 	void destroy(iterator it);
-	void size(iterator, int &) const;
+	void size(Node<T>*, int &) const;
 	void reverse(Node<T>*);
+	void compare(Node<T>*, Node<T>*, int &);
 };
 
 
@@ -150,7 +152,7 @@ MyList2<T>::MyList2(const MyList2 &other) {
 template<class T>
 MyList2<T> & MyList2<T>::operator=(const MyList2 &other) {
 	if(this==&other) return *this; 
-	clear(); //Exercicio: por que precisamos disso?
+	clear(); //Exercicio: por que precisamos disso? -- Para que não ocorra vazamento de memória, pois não é possível acessar a posição antiga na memória após alocar novamente
 
 	if(other.dataFirst == NULL) {
 		dataFirst = dataLast = NULL;
@@ -231,7 +233,7 @@ typename MyList2<T>::iterator MyList2<T>::erase(iterator elem) { //remove o elem
 													       //retorna o (apontador) para o elemento apos o removido
 	
 	dataSize--;
-	if(elem==dataFirst && elem==dataLast) { //exercicio: por que precisamos desse caso especial?
+	if(elem==dataFirst && elem==dataLast) { //exercicio: por que precisamos desse caso especial? -- Para que não ocorra acesso indevido (não há elem->prev e nem elem->next)
 		//so ha um elemento na lista
 		delete elem;
 		dataFirst = dataLast = NULL;		
@@ -319,7 +321,7 @@ std::ostream& operator<<(std::ostream &out, const MyList2<T2> &v) {
 }
 
 template <class T>
-void MyList2<T>::size(iterator curr, int &cont) const {
+void MyList2<T>::size(Node<T> *curr, int &cont) const {
 	if (curr == NULL) return;
 
 	size(curr->prev, cont);
@@ -328,7 +330,7 @@ void MyList2<T>::size(iterator curr, int &cont) const {
 
 template <class T>
 int MyList2<T>::size() const {
-	MyList2<T>::iterator it = this->dataLast;
+	Node<T> *it = dataLast;
 	int cont = 0;
 
 	size(it, cont);
@@ -362,21 +364,40 @@ void MyList2<T>::reverse(Node<T> *curr) {
 
 	if (curr == dataFirst) {
 		Node<T>* firstPtr = dataFirst;
-		firstPtr->prev = dataFirst->prev;
+		firstPtr->next = dataFirst->next;
 
 		dataFirst = dataLast;
 		dataFirst->next = dataLast->next;
-		dataFirst->prev = dataLast->prev;
+		dataFirst->prev = NULL;
 
 		dataLast = firstPtr;
-		dataLast->prev = firstPtr->prev;
+		dataLast->prev = firstPtr->next;
 		dataLast->next = NULL;
 	}
 }
 
 template <class T>
 void MyList2<T>::reverse() {
+	if (dataFirst == NULL) return;
+
 	reverse(dataFirst);
+}
+
+template <class T>
+void MyList2<T>::compare(Node<T> *curr, Node<T> *it, int &cont) {
+	if (curr == it) return;
+
+	compare(curr->next, it, cont);
+	cont++;
+}
+
+template <class T>
+bool MyList2<T>::compare(Node<T> *it1, Node<T> *it2) {
+	int cont1 = 0, cont2 = 0;
+	compare(dataFirst, it1, cont1);
+	compare(dataFirst, it2, cont2);
+
+	return (cont1 < cont2);
 }
 
 #endif
