@@ -191,15 +191,15 @@ Soma: 499845
 
 
 Observações:
-A matriz no formato tradicional demora mais para ser criada, pois é nessesário percorrer as linhas para alocar a memória. No entanto, em matrizes com uma quantidade menor de linhas, a diferença de tempo é menor
+O tempo gasto para criar a matriz no formato tradicional aumenta com a quantidade de linhas, pois é necessário percorrer as linhas para alocar a memória. No entanto, em matrizes com poucas de linhas e muitas colunas a diferença de tempo comparada ao formato ragged é menor
 
-O tempo gasto para inicializar a matriz em ambos os formatos é parecido em todos os casos de teste
+O tempo gasto para inicializar a matriz é similar nos dois formatos em todos os casos de teste
 
-O tempo gasto para somar a matriz em ambos os formatos é parecido em todos os casos de teste
+O tempo gasto para somar a matriz é similar nos dois formatos em todos os casos de teste
 
-O tempo gasto para dobrar o número de colunas no formato ragged é similar ao formato tradicional apenas em matrizes muito pequenas (< 20x20) ou com poucas linhas. O tempo gasto no formato tradicional varia de acordo com a quantidade de colunas que a linha possui, enquanto no formato ragged o tempo varia de acordo com a quantidade total de elementos. Assim, caso hajam muitas linhas e poucas colunas em cada uma, o formato tradicional é mais eficiente
+O tempo gasto para dobrar o número de colunas na primeira linha no formato ragged é similar ou menor do que o formato tradicional apenas em matrizes muito pequenas ou com um número muito pequeno de linhas. O tempo gasto no formato tradicional varia de acordo com a quantidade de colunas que a linha possui, enquanto no formato ragged o tempo varia de acordo com a quantidade total de elementos. Assim, em matrizes quadradas, ou com muitas linhas e poucas colunas, o formato tradicional é mais eficiente, visto que, quanto maior o número de elementos, mais lento é o formato ragged, enquanto que o formato tradicional depende apenas do número de colunas
 
-O tempo gasto para deletar a matriz no formato tradicional aumenta quanto maior for a quantidade de linhas, pois é necessário percorrer as linhas para destruí-las. Em matrizes quadradas maiores, o tempo gasto para destruir a matriz no formato ragged tende a ser maior do que o formato tradicional. Se a matriz tiver apenas uma linha, o tempo gasto para destruir no formato ragged é muito menor comparado ao mesmo formato com qualquer outra quantidade de linhas
+O tempo gasto para deletar a matriz no formato tradicional aumenta com a quantidade de linhas, pois é necessário percorrer as linhas para destruí-las. Em matrizes quadradas, o tempo gasto para deletar a matriz tende a ser parecido nos dois formatos
 
 
 Fontes de consulta:
