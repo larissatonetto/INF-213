@@ -191,7 +191,7 @@ Soma: 499845
 
 
 Observações:
-O tempo gasto para criar a matriz no formato tradicional aumenta com a quantidade de linhas, pois é necessário percorrer as linhas para alocar a memória. No entanto, em matrizes com poucas de linhas e muitas colunas a diferença de tempo comparada ao formato ragged é menor
+O tempo gasto para criar a matriz no formato tradicional aumenta com a quantidade de linhas, pois é necessário percorrer as linhas para alocar a memória. No entanto, em matrizes com poucas linhas e muitas colunas a diferença de tempo comparada ao formato ragged é menor
 
 O tempo gasto para inicializar a matriz é similar nos dois formatos em todos os casos de teste
 
