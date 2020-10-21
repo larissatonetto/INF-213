@@ -102,38 +102,6 @@ MyMatrix<T>::~MyMatrix() {
 }
 
 template <class T>
-MyMatrix<T> &MyMatrix<T>::operator= (const MyMatrix<T> &mat) {
-    destroy(this->isRagged());
-
-    this->rows = mat.rows;
-    this->size = mat.size;
-
-    if (mat.isRagged()) {
-        this->tam = NULL;
-        this->matriz = NULL;
-        create(true);
-
-        for (int i = 0; i <= rows; i++) this->start[i] = mat.start[i];
-    } else {
-        this->start = NULL;
-        this->ragged = NULL;
-        create(false);
-
-        for (int i = 0; i < rows; i++) this->tam[i] = mat.tam[i];
-        for (int i = 0; i < rows; i++) matriz[i] = new T[tam[i]];
-    }
-
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < getNumCols(i); j++) {
-            this->set(i,j,( mat.get(i,j) ));
-        }
-    }
-
-    return *this;
-}
-
-
-template <class T>
 void MyMatrix<T>::create(bool isRagged) {
     if (isRagged) {
         ragged = new T[size];
@@ -159,6 +127,43 @@ void MyMatrix<T>::destroy(bool isRagged) {
 }
 
 // Funções públicas ---------------------------------------------------------------
+
+// Complexidade do modo tradicional: O(R*C) -- O(N) para destruir a matriz antiga
+// + O(R) para preencher tam + O(R) para alocar matriz + O(R*C) para varrer as colunas
+// e copiar os elementos = O(N+R+R+(R*C)) = O(2R+N+(R*C)) = O(R*C)
+// | N = número de linhas que a matriz tinha
+// Complexidade do modo ragged: O(R*C) -- O(R+1) para preencher start + O(R*C) para varrer
+// as colunas e copiar os elementos = O(R+1+(R*C)) = O(R*C)
+template <class T>
+MyMatrix<T> &MyMatrix<T>::operator= (const MyMatrix<T> &mat) {
+    destroy(this->isRagged());
+
+    this->rows = mat.rows;
+    this->size = mat.size;
+
+    if (mat.isRagged()) {
+        this->tam = NULL;
+        this->matriz = NULL;
+
+        create(true);
+        for (int i = 0; i <= rows; i++) this->start[i] = mat.start[i];
+    } else {
+        this->start = NULL;
+        this->ragged = NULL;
+
+        create(false);
+        for (int i = 0; i < rows; i++) this->tam[i] = mat.tam[i];
+        for (int i = 0; i < rows; i++) matriz[i] = new T[tam[i]];
+    }
+
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; j < getNumCols(i); j++) {
+            this->set(i,j,( mat.get(i,j) ));
+        }
+    }
+
+    return *this;
+}
 
 // O(1) em ambos os modos - basta retornar o elemento na posição indicada
 template <class T>
@@ -210,12 +215,13 @@ void MyMatrix<T>::set(int linha, int col, const T &elem) {
     }
 }
 
-// Complexidade do modo tradicional: O(C) -- O(C) para copiar os elementos da linha
-// + O(C) para preenchar a nova linha = O(2C) = O(C)
-// Complexidade do modo ragged: O(T+R) -- O(T) para copiar os elementos de ragged
-// + O(R+1) para copiar os elementos de start + O(R+1) para alterar os elementos de start
-// + O(T) para inserir os elementos padrão + O(T) para preencher a nova matriz
-// = O(T+R+1+R+1+T+T) = O(3T+2R+2) = O(T+R)
+// Complexidade do modo tradicional: O(C+N) -- O(C) para copiar os elementos da linha
+// + O(N) para preenchar a nova linha = O(C+N) = O(C+N) | N = novo número de colunas
+// Complexidade do modo ragged: O(T+R+K) -- O(T) para copiar os elementos de ragged
+// + O(R+1) para copiar os elementos de start + O(R) para alterar os elementos de start
+// + O(K) para inserir os elementos padrão + O(T) para copiar os elementos antigos
+// para a nova matriz | K =  novo número de elementos após mudar o número de colunas
+//  = O(T+R+1+R+K+T) = O(2T+2R+K+1) = O(T+R+K)
 template <class T>
 void MyMatrix<T>::resizeRow(int linha, int newCols) {
     if (newCols == getNumCols(linha)) return;
@@ -314,15 +320,15 @@ void MyMatrix<T>::resizeRow(int linha, int newCols) {
     }
 }
 
-// Complexidade do modo tradicional: O(R*C) -- O(R) para copiar tam para tempTam
-// + O(R*C) para varrer as colunas e copiar matriz para tempMatriz + O(R) para
-// desalocar matriz + O(R) para copiar preencher tam + O(R) para realocar matriz
-// + O(R*C) para preencher matriz +O(R) para desalocar tempMatriz
-// = O(R+(R*C)+R+R+R+(R*C)+R) = O(2(R*C)+5R) = O(R*C)
-// Complexidade do modo ragged: O(T+R) -- O(R+1) para copiar start para tempStart
-// + O(T) para copiar os elementos para tempRagged + O(R+1) para copiar tempStart
+// Complexidade do modo tradicional: O(R*C) -- O(N) para preencher tempTam
+// + O(N) para alocar tempMatriz + O(R*C) para varrer as colunas e
+// copiar para tempMatriz + O(R) para desalocar matriz + O(N) para preencher tam
+// + O(N) para realocar matriz + O(R*C) para preencher matriz com os elementos antigos
+// + O(N) para desalocar tempMatriz = O(N+N+(R*C)+R+N+N+(R*C)+N) = O(5N+2(R*C)+R) = O(R*C)
+// Complexidade do modo ragged: O(N+T) -- O(N+1) para preencher tempStart
+// + O(T) para copiar os elementos para tempRagged + O(N+1) para copiar tempStart
 // de volta para start + O(T) para copiar os elementos de volta para ragged
-// = O(R+1+T+R+1+T) = O(2T+2R+2) = O(T+R)
+// = O(N+1+T+N+1+T) = O(2N+2T+2) = O(N+T) | N = novo número de linhas
 template <class T>
 void MyMatrix<T>::resizeNumRows(int newRows) {
     if (newRows == rows) return;
@@ -387,8 +393,7 @@ void MyMatrix<T>::resizeNumRows(int newRows) {
         
         // Realocando tam e matriz
         destroy(false);
-        // A função create() não é utilizada aqui pois ainda não atualizamos
-        // o valor de rows
+        // A função create() não é utilizada aqui pois o valor de rows não foi atualizado
         tam = new int[newRows];
         matriz = new T*[newRows];
         for (int i = 0; i < newRows; i++) tam[i] = tempTam[i];
@@ -413,8 +418,6 @@ void MyMatrix<T>::resizeNumRows(int newRows) {
         rows = newRows;
     }
 }
-
-// --------------------------------------------------------------------------------
 
 // O(1) -- apenas verificar se matriz é NULL
 template <class T>
