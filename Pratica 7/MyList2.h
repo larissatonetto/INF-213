@@ -100,7 +100,7 @@ private:
 	void destroy(iterator it);
 	void size(Node<T>*, int &) const;
 	void reverse(Node<T>*);
-	void compare(Node<T>*, Node<T>*, int &);
+	Node<T>* compare(Node<T>*, Node<T>*, Node<T>*);
 };
 
 
@@ -384,20 +384,17 @@ void MyList2<T>::reverse() {
 }
 
 template <class T>
-void MyList2<T>::compare(Node<T> *curr, Node<T> *it, int &cont) {
-	if (curr == it) return;
+Node<T>* MyList2<T>::compare(Node<T>* curr, Node<T> *it1, Node<T>* it2) {
+	if (curr == it1 || curr == it2) return curr;
 
-	compare(curr->next, it, cont);
-	cont++;
+	compare(curr->next, it1, it2);
 }
 
 template <class T>
 bool MyList2<T>::compare(Node<T> *it1, Node<T> *it2) {
-	int cont1 = 0, cont2 = 0;
-	compare(dataFirst, it1, cont1);
-	compare(dataFirst, it2, cont2);
+	Node<T> *nodePtr = compare(dataFirst, it1, it2);
 
-	return (cont1 < cont2);
+	return (nodePtr == it1 && nodePtr != it2);
 }
 
 #endif
