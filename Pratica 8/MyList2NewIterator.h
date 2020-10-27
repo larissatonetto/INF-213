@@ -53,7 +53,7 @@ public:
 	typedef MyList2Iterator<T> iterator; //define um iterador, um tipo utilizado para percorrer uma estrutura de dados e "apontar" para os items armazenados nela
 
 	template<class T2>
-	friend std::ostream& operator<<(std::ostream &, const MyList2<T2> &);
+	friend std::ostream& operator<<(std::ostream &, MyList2<T2> &);
 
 	//construtores/destrutures/etc
 	MyList2();
@@ -85,7 +85,7 @@ public:
 
 	//Exercicio: implementar as duas funcoes abaixo supondo que nao ha um membro de dados dataSize (o calculo do tamanho da lista seria dinamico)
 	// bool empty() const {return size() == 0;}
-	int size() const {return -1; /*etapa 2: implemente esta funcao sem usar o membro de dados dataSize*/ } // na STL List, a funcao size() calcula o tamanho da lista dinamicamente (exercicio: qual a ordem de complexidade?)
+	// int size() const {return -1; /*etapa 2: implemente esta funcao sem usar o membro de dados dataSize*/ } // na STL List, a funcao size() calcula o tamanho da lista dinamicamente (exercicio: qual a ordem de complexidade?)
 	bool empty();
 	int size();
 
@@ -96,6 +96,7 @@ private:
 	void create();
 	void destroy();
 	void destroy(Node<T> * it);
+	void reverse(MyList2<T> &);
 };
 
 
@@ -332,7 +333,7 @@ typename MyList2<T>::iterator MyList2<T>::erase(iterator elemIt) { //remove o el
 
 
 template<class T2>
-std::ostream& operator<<(std::ostream &out, const MyList2<T2> &v) {
+std::ostream& operator<<(std::ostream &out, MyList2<T2> &v) {
 	out << "Size: " << v.size() << "\n";
 	/* //usando iteradores para abstrairem a iteracao
 	MyList2<T2>::iterator it = v.begin();
