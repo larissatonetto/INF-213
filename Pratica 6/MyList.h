@@ -246,6 +246,7 @@ void MyList<T>::reverse(Node<T>* curr) {
 	if (curr->next == NULL) return;
 
 	reverse(curr->next);
+	std::cout << "curr->data = " << curr->data << "\n";
 	Node<T>* prev = curr->next;
 	prev->next = curr;
 
