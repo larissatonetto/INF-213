@@ -76,7 +76,7 @@ public:
 	iterator erase(iterator elem); //remove o elemento apontado por Elem
 														//retorna o (apontador) para o elemento apos o removido
 
-	iterator begin() {return iterator(dataFirst);} //Exercicio: e se tivermos uma lista constante, como itera-la para, por exemplo, imprimir os elementos?
+	iterator begin() {return iterator(dataFirst);} //Exercicio: e se tivermos uma lista constante, como itera-la para, por exemplo, imprimir os elementos?	| Imprimir o elemento apontado pelo iterador e avançar para o próximo até chegar no end()
 	iterator end() {return iterator(NULL);} //retorna um apontador para um nodo que estaria APOS o final da lista
 		
 	//por simplicidade, nao vamos criar iteradores constantes...
@@ -84,8 +84,10 @@ public:
 	void clear();
 
 	//Exercicio: implementar as duas funcoes abaixo supondo que nao ha um membro de dados dataSize (o calculo do tamanho da lista seria dinamico)
-	bool empty() const {return size() == 0;}
+	// bool empty() const {return size() == 0;}
 	int size() const {return -1; /*etapa 2: implemente esta funcao sem usar o membro de dados dataSize*/ } // na STL List, a funcao size() calcula o tamanho da lista dinamicamente (exercicio: qual a ordem de complexidade?)
+	bool empty();
+	int size();
 
 private:
 	Node<T> *dataFirst, * dataLast;
@@ -133,6 +135,7 @@ private:
 template<class T>
 MyList2Iterator<T> MyList2Iterator<T>::operator++() {
 	ptr = ptr->next;
+	
 	return *this;
 }
 
@@ -149,15 +152,19 @@ MyList2Iterator<T> MyList2Iterator<T>::operator--() {
 template<class T>
 MyList2Iterator<T> MyList2Iterator<T>::operator++(int) {
 	//Termine esta implementacao...
+	MyList2Iterator<T> it = *this;
+	ptr = ptr->next;
 
-
+	return it;
 }
 
 template<class T>
 MyList2Iterator<T> MyList2Iterator<T>::operator--(int) {
 	//Termine esta implementacao...	
+	MyList2Iterator<T> it = *this;
+	ptr = ptr->prev;
 
-
+	return it;
 }
 
 
@@ -330,7 +337,7 @@ std::ostream& operator<<(std::ostream &out, const MyList2<T2> &v) {
 	/* //usando iteradores para abstrairem a iteracao
 	MyList2<T2>::iterator it = v.begin();
 	while(it!=v.end()) {
-		 out << v.deref(it) << " ";
+		 out << v.Iteratorderef(it) << " ";
 		 it = v.next(it);
 	}
 	*/
@@ -345,5 +352,19 @@ std::ostream& operator<<(std::ostream &out, const MyList2<T2> &v) {
 	return out;
 }
 
+template <class T>
+int MyList2<T>::size() {
+	int cont = 0;
+	for(MyList2<T>::iterator it = begin();it != end(); it++) cont++;
+
+	return cont;
+}
+
+template <class T>
+bool MyList2<T>::empty() {
+	if (begin() == end()) return true;
+
+	return false;
+}
 
 #endif
