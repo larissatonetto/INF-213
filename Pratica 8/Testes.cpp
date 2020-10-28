@@ -6,6 +6,33 @@ using namespace std;
 //implemente aqui a funcao nao-membro reverse (etapa 4):
 template <class T>
 void reverse(MyList2<T> &lista) {
+  if (lista.begin() == NULL) return;
+
+  int auxSize = 1;
+  typename MyList2<T>::iterator it1 = lista.begin();
+  typename MyList2<T>::iterator it2 = lista.begin();
+  typename MyList2<T>::iterator itAux = lista.begin();
+  itAux++;
+  
+  while(itAux != lista.end()) {
+    it2++;
+    itAux++;
+    auxSize++;
+  }
+
+  typename MyList2<T>::iterator aux = lista.begin();
+
+  int cont1 = 0, cont2 = auxSize;
+  while (cont1 < cont2) {
+    *aux = *it2;
+    *it2 = *it1;
+    *it1 = *aux;
+
+    cont1++;
+    cont2--;
+    it1++;
+    it2--;
+  }
 
 }
 
@@ -183,3 +210,7 @@ int main() {
 }
 
 
+// Se it for NULL it-- aponta para dataLast da lista
+// it deve guardar ptr e lista
+
+// MyList é friend de iterator
