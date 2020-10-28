@@ -54,6 +54,7 @@ public:
 
 	template<class T2>
 	friend std::ostream& operator<<(std::ostream &, MyList2<T2> &);
+	friend class MyList2Iterator<T>;
 
 	//construtores/destrutures/etc
 	MyList2();
@@ -105,6 +106,9 @@ class MyList2Iterator {
 	friend class MyList2<T>;
 public:
 	MyList2Iterator(Node<T> *ptr_): ptr(ptr_) {}
+	MyList2Iterator(Node<T> *ptr_, MyList2<T> *lista): ptr(ptr_) {
+		listaPtr = lista;
+	}
 	T &operator*() {return ptr->data;}
 	const T &operator*() const {return ptr->data;} //versao constante do operador de derreferencia
 
@@ -129,6 +133,7 @@ public:
 
 private:
 	Node<T> *ptr;
+	MyList2<T> *listaPtr;
 };
 
 
@@ -142,9 +147,16 @@ MyList2Iterator<T> MyList2Iterator<T>::operator++() {
 
 template<class T>
 MyList2Iterator<T> MyList2Iterator<T>::operator--() {
-	ptr = ptr->prev;		
-	
-	return *this;
+	if (ptr == NULL) {
+		ptr = listaPtr->dataLast;
+		return *this;
+	}
+
+	else {
+		ptr = ptr->prev;		
+		
+		return *this;
+	}
 }
 
 //pos incremento/decremento
@@ -162,10 +174,17 @@ MyList2Iterator<T> MyList2Iterator<T>::operator++(int) {
 template<class T>
 MyList2Iterator<T> MyList2Iterator<T>::operator--(int) {
 	//Termine esta implementacao...	
-	MyList2Iterator<T> it = *this;
-	ptr = ptr->prev;
+	if (ptr == NULL) {
+		ptr = listaPtr->dataLast;
+		return *this;
+	}
 
-	return it;
+	else {
+		MyList2Iterator<T> it = *this;
+		ptr = ptr->prev;
+
+		return it;
+	}
 }
 
 
