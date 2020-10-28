@@ -20,13 +20,13 @@ void reverse(MyList2<T> &lista) {
     auxSize++;
   }
 
-  typename MyList2<T>::iterator aux = lista.begin();
+  T aux;
 
   int cont1 = 0, cont2 = auxSize;
   while (cont1 < cont2) {
-    *aux = *it2;
+    aux = *it2;
     *it2 = *it1;
-    *it1 = *aux;
+    *it1 = aux;
 
     cont1++;
     cont2--;
