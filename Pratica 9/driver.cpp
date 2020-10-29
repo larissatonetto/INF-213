@@ -1,4 +1,7 @@
 #include <iostream>
+#include <string>
+#include "MyQueue.h"
+#include "MyStack.h"
 
 using namespace std;
 
@@ -10,7 +13,28 @@ using namespace std;
 
 
 void etapa1() {
-	
+	MyQueue<int> fila;
+	MyStack<int> pilha;
+	int num;
+	for (int i = 0; i < 6; i++) {
+		cin >> num;
+		fila.push(num);
+		pilha.push(num);
+	}
+
+	for (int i = 0; i < 6; i++) {
+		cout << pilha.top() << " ";
+		pilha.pop();
+	}
+	cout << "\n";
+	for (int i = 0; i < 6; i++) {
+		cout << fila.front() << " ";
+		fila.pop();
+	}
+	cout << "\n";
+
+	// A pilha imprime os números de na ordem contrária a que eles foram adicionados (LIFO)
+	// A fila imprime os números na mesma ordem em que foram adicionados (FIFO)
 }
 
 //---------------------------------------
@@ -18,7 +42,38 @@ void etapa1() {
 // Insira aqui o codigo para a etapa 2....
 
 void etapa2() {
+	MyStack<char> pilha;
+	string linha;
+
+	cin.ignore();
+	getline(cin, linha);
+	for (int i = 0; i < linha.size(); i++) {
+		char c = linha[i];
+		
+		if (c == '(' || c == '[' || c == '{') pilha.push(c);
+		else if (c == ')') {
+			if (pilha.empty() || pilha.top() != '(') {
+				cout << "Inconsistente\n";
+				return;
+			}
+			else pilha.pop();
+		} else if (c == ']') {
+			if (pilha.empty() || pilha.top() != '[') {
+				cout << "Inconsistente\n";
+				return;
+			}
+			else pilha.pop();
+		} else if (c == '}') {
+			if (pilha.empty() || pilha.top() != '{') {
+				cout << "Inconsistente\n";
+				return;
+			}
+			else pilha.pop();
+		}
+	}
 	
+	if (!pilha.empty()) cout << "Inconsistente\n";
+	else cout << "Consistente\n";
 }
 
 //---------------------------------------
