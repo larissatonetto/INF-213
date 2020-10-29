@@ -21,7 +21,6 @@ void reverse(MyList2<T> &lista) {
   }
 
   T aux;
-
   int cont1 = 0, cont2 = auxSize;
   while (cont1 < cont2) {
     aux = *it2;
@@ -33,7 +32,6 @@ void reverse(MyList2<T> &lista) {
     it1++;
     it2--;
   }
-
 }
 
 
@@ -208,9 +206,3 @@ int main() {
     testaIteradores();
   }
 }
-
-
-// Se it for NULL it-- aponta para dataLast da lista
-// it deve guardar ptr e lista
-
-// MyList é friend de iterator

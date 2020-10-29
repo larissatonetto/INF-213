@@ -78,7 +78,7 @@ public:
 														//retorna o (apontador) para o elemento apos o removido
 
 	iterator begin() {return iterator(dataFirst);} //Exercicio: e se tivermos uma lista constante, como itera-la para, por exemplo, imprimir os elementos?	| Imprimir o elemento apontado pelo iterador e avançar para o próximo até chegar no end()
-	iterator end() {return iterator(NULL);} //retorna um apontador para um nodo que estaria APOS o final da lista
+	iterator end() {return iterator(NULL, this);} //retorna um apontador para um nodo que estaria APOS o final da lista
 		
 	//por simplicidade, nao vamos criar iteradores constantes...
 
