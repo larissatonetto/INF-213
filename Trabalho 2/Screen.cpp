@@ -29,7 +29,7 @@ int Screen::getHeight() {
 int Screen::get(int r, int c) {
     if (r > width || c > width) return WALL;
 
-    if (r > dataHeight[c]) return EMPTY;
+    if (r >= dataHeight[c]) return EMPTY;
 
     // Não há a necessidade de especificar qual valor será retornado
     return data[c][r];
@@ -39,10 +39,18 @@ int Screen::get(int r, int c) {
 // O pixel mais alto preenchido é sempre dataHeight[c]-1
 void Screen::set(int r, int c, int val) {
     if (dataHeight[c] <= r) {
+
+        // Copiar data[c] antigo antes de realocar
+        int auxData[dataHeight[c]], auxHeight = dataHeight[c];
+        for (int i = 0; i < dataHeight[c]; i++) auxData[i] = data[c][i];
+
         dataHeight[c] = r+1;
         delete[] data[c];
-        data[c] = new int[(dataHeight[c])];;
+        data[c] = new int[(dataHeight[c])]();           // Inicia o array com valor 0  
+        for (int i = 0; i < auxHeight; i++) data[c][i] = auxData[i];
     }
 
     data[c][r] = val;
 }
+
+// https://stackoverflow.com/questions/14955824/initializing-a-dynamic-array-to-0
