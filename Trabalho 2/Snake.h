@@ -8,7 +8,7 @@ public:
     Node(int r, int c) : x(c), y(r) {}
 
     int x, y, len;           // x = coluna, y = altura
-    Node *next;
+    Node *next, *prev;
 };
 
 class Snake {

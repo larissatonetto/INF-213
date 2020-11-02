@@ -55,3 +55,19 @@ void Snake::draw(Screen &s, int state) {
         aux = aux->next;
     }
 }
+
+void Snake::move(int dr, int dc, bool eating) {
+    if (eating) {
+        push_front(( dataFirst->y+dr ), ( dataFirst->x+dc ));
+        return;
+    } else {
+        Node *aux = dataFirst;
+        aux->y+= dr;
+        aux->x+= dc;
+        while (aux != NULL) {
+            aux->y+= dr;
+            aux->x+= dc;
+            aux = aux->next;
+        }
+    }
+}
