@@ -1,4 +1,5 @@
 #include "Screen.h"
+#include <iostream>
 
 Screen::Screen(int height, int width) {
     this->height = height;
@@ -12,6 +13,11 @@ Screen::Screen(int height, int width) {
 }
 
 Screen::~Screen() {
+    destroy();
+}
+
+void Screen::destroy() {
+    std::cout << "Destrutor de Screen\n";
     for (int i = 0; i < width; i++) delete[] data[i];
     delete[] data;
     delete[] dataHeight;

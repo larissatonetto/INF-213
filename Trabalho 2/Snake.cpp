@@ -9,10 +9,7 @@ Snake::Snake(int size) {
 }
 
 Snake::~Snake() {
-    if (dataFirst == NULL) {
-        return;
-    }
-    destroy(dataFirst);
+    destroy();
 }
 
 void Snake::destroy(Node *curr) {
@@ -22,6 +19,13 @@ void Snake::destroy(Node *curr) {
 
     destroy(curr->next);
     delete curr;
+}
+
+void Snake::destroy() {
+    if (dataFirst == NULL) return;
+
+    std::cout << "Destrutor de Snake\n";
+    destroy(dataFirst);
 }
 
 int Snake::getLength() {
@@ -55,6 +59,10 @@ void Snake::pop() {
     delete aux;
 }
 
+int Snake::head(char pos) {
+    return (pos == 'y' ? dataLast->y : dataLast->x);
+}
+
 void Snake::draw(Screen &s, int state) {
     Node *aux = dataFirst;
     for (int i = 0; i < getLength(); i++) {
@@ -65,6 +73,7 @@ void Snake::draw(Screen &s, int state) {
 
 void Snake::move(int dr, int dc, bool eating) {
     push_back(( dataLast->y+dr ), ( dataLast->x+dc ));
+    std::cout << "Head = " << dataLast->y << "," << dataLast->x << "\n";
     // Quando a cobra come um alimento seu último pixel não se move
     if (!eating) pop();
 }

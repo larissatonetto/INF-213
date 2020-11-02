@@ -8,6 +8,8 @@ public:
     Screen(int, int);
     ~Screen();
 
+    void destroy();
+
     int getWidth();
     int getHeight();
     int get(int, int);
