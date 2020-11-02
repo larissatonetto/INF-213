@@ -24,8 +24,9 @@ void Snake::destroy(Node *curr) {
     delete curr;
 }
 
-int Snake::size() {
+int Snake::getLength() {
     if (dataFirst == NULL) return 0;
+
     int cont = 0;
     Node *curr = dataFirst;
     while(curr != NULL) {
@@ -44,5 +45,13 @@ void Snake::push_front(int r, int c) {
         Node *newNode = new Node(r,c);
         newNode->next = dataFirst;
         dataFirst = newNode;
+    }
+}
+
+void Snake::draw(Screen &s, int state) {
+    Node *aux = dataFirst;
+    for (int i = 0; i < getLength(); i++) {
+        s.set((aux->y),(aux->x),state);
+        aux = aux->next;
     }
 }

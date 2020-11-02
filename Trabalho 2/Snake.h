@@ -17,11 +17,10 @@ public:
     ~Snake();
 
     int getLength();
-    int size();
 
     void push_front(int, int);
 
-    void draw(Screen, int);
+    void draw(Screen &, int);
     void move(int, int, bool);  // Novo dataFirst caso haja comida no espaço, o final da cobra não se move
 
 private:
