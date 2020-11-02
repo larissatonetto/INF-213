@@ -4,7 +4,7 @@
 Snake::Snake(int size) {
     dataFirst = dataLast = NULL;
     for (int i = 0; i < size; i++) {
-        push_front(0,i);
+        push_back(0,i);
     }
 }
 
@@ -37,14 +37,15 @@ int Snake::getLength() {
     return cont;
 }
 
-void Snake::push_front(int r, int c) {
+void Snake::push_back(int r, int c) {
     if (dataFirst == NULL) {
         dataFirst = dataLast = new Node(r,c);
         dataLast->next = NULL;
     } else {
         Node *newNode = new Node(r,c);
-        newNode->next = dataFirst;
-        dataFirst = newNode;
+        dataLast->next = newNode;
+        dataLast = newNode;
+        newNode->next = NULL;
     }
 }
 
@@ -58,16 +59,26 @@ void Snake::draw(Screen &s, int state) {
 
 void Snake::move(int dr, int dc, bool eating) {
     if (eating) {
-        push_front(( dataFirst->y+dr ), ( dataFirst->x+dc ));
+        push_back(( dataLast->y+dr ), ( dataLast->x+dc ));
         return;
     } else {
         Node *aux = dataFirst;
-        aux->y+= dr;
-        aux->x+= dc;
-        while (aux != NULL) {
-            aux->y+= dr;
-            aux->x+= dc;
+        while (aux != dataLast) {
+            aux->y = aux->next->y;
+            aux->x = aux->next->x;
             aux = aux->next;
         }
+        dataLast->y+= dr;
+        dataLast->x+= dc;
     }
+}
+
+void Snake::print() {
+    Node *aux = dataFirst;
+    std::cout << "Size: " << getLength() << "\n";
+    while(aux != NULL) {
+        std::cout << aux->y << "," << aux->x << " ";
+        aux = aux->next;
+    }
+    std::cout << "\n";
 }
