@@ -42,11 +42,17 @@ void Snake::push_back(int r, int c) {
         dataFirst = dataLast = new Node(r,c);
         dataLast->next = NULL;
     } else {
-        Node *newNode = new Node(r,c);
-        dataLast->next = newNode;
-        dataLast = newNode;
-        newNode->next = NULL;
+        Node *newLast = new Node(r,c);
+        dataLast->next = newLast;
+        dataLast = newLast;
+        newLast->next = NULL;
     }
+}
+
+void Snake::pop() {
+    Node *aux = dataFirst;
+    dataFirst = dataFirst->next;
+    delete aux;
 }
 
 void Snake::draw(Screen &s, int state) {
@@ -58,19 +64,9 @@ void Snake::draw(Screen &s, int state) {
 }
 
 void Snake::move(int dr, int dc, bool eating) {
-    if (eating) {
-        push_back(( dataLast->y+dr ), ( dataLast->x+dc ));
-        return;
-    } else {
-        Node *aux = dataFirst;
-        while (aux != dataLast) {
-            aux->y = aux->next->y;
-            aux->x = aux->next->x;
-            aux = aux->next;
-        }
-        dataLast->y+= dr;
-        dataLast->x+= dc;
-    }
+    push_back(( dataLast->y+dr ), ( dataLast->x+dc ));
+    // Quando a cobra come um alimento seu último pixel não se move
+    if (!eating) pop();
 }
 
 void Snake::print() {

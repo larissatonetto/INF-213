@@ -12,7 +12,7 @@ public:
     int getHeight();
     int get(int, int);
 
-    void set(int, int, int);
+    void set(int r, int c, int val);
 
 private:
     int width, height;

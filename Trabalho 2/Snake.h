@@ -19,6 +19,7 @@ public:
     int getLength();
 
     void push_back(int, int);
+    void pop();
 
     void draw(Screen &, int);
     void move(int, int, bool);  // Novo dataFirst caso haja comida no espaço, o final da cobra não se move
