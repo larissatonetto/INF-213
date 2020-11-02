@@ -16,18 +16,29 @@ Screen Game::getScreen() {
 }
 
 bool Game::step(int dr, int dc) {
-    if (lastStepY == (dr*-1) && lastStepY != 0) { std::cout << "Inválido\n";
-    } else if (lastStepX == (dc*-1) && lastStepX != 0) {    std::cout << "Inválido\n";
+    if (lastStepY == (dr*-1) && lastStepY != 0) {
+    } else if (lastStepX == (dc*-1) && lastStepX != 0) {
     } else {
         lastStepY = dr;
         lastStepX = dc;
-        if (screen->get(( snake->head('y')+dr ), ( snake->head('x')+dc )) == 2) {
+        // Se vai bater na parede
+        if (snake->head('y')+dr == screen->getHeight() ||
+            snake->head('x')+dc == screen->getWidth() ||
+            snake->head('y')+dr < 0 ||
+            snake->head('x')+dc < 0) {
+            std::cout << "Bateu\n";
+            return false;
+        // Se há comida no espaço
+        } else if (screen->get(( snake->head('y')+dr ), ( snake->head('x')+dc )) == 2) {
             snake->move(dr,dc,true);
+            std::cout << "Comida\n";
             return true;
-        } else if (screen->get(( snake->head('y')+dr ), ( snake->head('x')+dc ) == 1 || 3)) {
+        // Se vai bater nela mesma
+        } else if (screen->get(( snake->head('y')+dr ), ( snake->head('x')+dc ) == 1)) {
             std::cout << "Bateu\n";
             return false;
         } else {
+            std::cout << "Move\n";
             snake->move(dr,dc,false);
             return true;
         }
