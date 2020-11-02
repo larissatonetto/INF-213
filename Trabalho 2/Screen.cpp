@@ -23,16 +23,16 @@ void Screen::destroy() {
     delete[] dataHeight;
 }
 
-int Screen::getWidth() {
+int Screen::getWidth() const {
     return width;
 }
 
-int Screen::getHeight() {
+int Screen::getHeight() const  {
     return height;
 }
 
 // r = linha, c = coluna
-int Screen::get(int r, int c) {
+int Screen::get(int r, int c) const {
     if (r > width || c > width) return WALL;
 
     if (r >= dataHeight[c]) return EMPTY;

@@ -3,16 +3,16 @@
 
 class Screen {
 public:
-    const int EMPTY = 0, SNAKE = 1, FOOD = 2, WALL = 3;
+    const static int EMPTY = 0, SNAKE = 1, FOOD = 2, WALL = 3;
 
     Screen(int, int);
     ~Screen();
 
     void destroy();
 
-    int getWidth();
-    int getHeight();
-    int get(int, int);
+    int getWidth() const;
+    int getHeight() const;
+    int get(int, int) const;
 
     void set(int r, int c, int val);
 

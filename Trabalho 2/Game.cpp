@@ -4,6 +4,8 @@
 Game::Game(int height, int width, int size) {
     screen = new Screen(height, width);
     snake = new Snake(size);
+    // screen->set(0,0,1);
+    // snake->draw(screen,1);
 }
 
 Game::~Game() {
@@ -11,8 +13,17 @@ Game::~Game() {
     snake->destroy();
 }
 
-Screen Game::getScreen() {
+const Screen & Game::getScreen() {
     return *screen;         // ??????????
+}
+
+int Game::getNumFood() {
+    int cont = 0;
+    for (int i = 0; i < 10; i++) {
+        if (food[i].tempo != 0) cont++;
+    }
+
+    return cont;
 }
 
 bool Game::step(int dr, int dc) {
@@ -30,6 +41,7 @@ bool Game::step(int dr, int dc) {
             lastStepY = dr;
             lastStepX = dc;
             snake->move(dr,dc,true);
+            snake->draw(screen,1);
             return true;
         // Se vai bater nela mesma
         } else if (screen->get(( snake->head('y')+dr ), ( snake->head('x')+dc ) == 1)) {
@@ -42,21 +54,9 @@ bool Game::step(int dr, int dc) {
         }
     }
 
-    /*if (lastStepY == (dr*-1)) {
-        std::cout << "Movimento inválido Y\n";
-        std::cout << "lastY = " << lastStepY<< "\n";
-        std::cout << "dr = " << dr << "\n";
-    } else if (lastStepX == (dc*-1)) {
-        std::cout << "Movimento inválido X\n";
-        std::cout << "lastX = " << lastStepX << "\n";
-        std::cout << "dc = " << dc << "\n";
-    }
-
-    else {
-        snake->move(dr,dc,true);
-        lastStepY = dr;
-        lastStepX = dc;
-    }*/
-
     return true;
+}
+
+void Game::addFood(int r, int c, int t) {
+
 }

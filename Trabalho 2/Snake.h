@@ -18,13 +18,13 @@ public:
 
     void destroy();
 
-    int getLength();
+    int getLength() const;
 
     void push_back(int, int);
     void pop();
     int head(char); 
 
-    void draw(Screen &, int);
+    void draw(Screen *, int);
     void move(int, int, bool);  // Novo dataFirst caso haja comida no espaço, o final da cobra não se move
 
     void print();

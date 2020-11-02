@@ -7,8 +7,8 @@ class Food {
 public:
     Food(int r = 0, int c = 0, int t = 0) : posX(c), posY(r), tempo(t) {}
 
-private:
     int posX, posY, tempo;
+;
 };
 
 class Game {
@@ -16,7 +16,7 @@ public:
     Game(int, int, int);
     ~Game();
 
-    Screen getScreen();
+    const Screen & getScreen();
     int getNumFood();
 
     bool step(int, int);
