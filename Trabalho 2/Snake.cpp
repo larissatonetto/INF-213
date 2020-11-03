@@ -59,6 +59,7 @@ void Snake::pop() {
     delete aux;
 }
 
+// Retorna a posição da cabeça da cobra
 int Snake::head(char pos) {
     return (pos == 'y' ? dataLast->y : dataLast->x);
 }
@@ -67,7 +68,6 @@ void Snake::draw(Screen &s, int state) {
     Node *aux = dataFirst;
     for (int i = 0; i < getLength(); i++) {
         s.set((aux->y),(aux->x),state);
-        // std::cout << "set = " << s.get(aux->y, aux->x) << "\n";
         aux = aux->next;
     }
 }
@@ -76,14 +76,4 @@ void Snake::move(int dr, int dc, bool eating) {
     push_back(( dataLast->y+dr ), ( dataLast->x+dc ));
     // Quando a cobra come um alimento seu último pixel não se move
     if (!eating) pop();
-}
-
-void Snake::print() {
-    Node *aux = dataFirst;
-    std::cout << "Size: " << getLength() << "\n";
-    while(aux != NULL) {
-        std::cout << aux->y << "," << aux->x << " ";
-        aux = aux->next;
-    }
-    std::cout << "\n";
 }

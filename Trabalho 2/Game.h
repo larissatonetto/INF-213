@@ -22,8 +22,7 @@ public:
     bool step(int, int);
 
     void addFood(int, int, int);
-
-    void print();
+    void foodDown();
 
 private:
     Snake *snake;
@@ -32,8 +31,5 @@ private:
     int numFood = 0;
     int lastStepX = -2, lastStepY = -2;
 };
-
-// Se o tempo de vida é 0, pode sersubstituído
-// addFood usa screen.set dentro do método
 
 #endif
