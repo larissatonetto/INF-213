@@ -5,7 +5,7 @@ Game::Game(int height, int width, int size) {
     screen = new Screen(height, width);
     snake = new Snake(size);
     // screen->set(0,0,1);
-    // snake->draw(screen,1);
+    snake->draw(*screen,1);
 }
 
 Game::~Game() {
@@ -27,8 +27,14 @@ int Game::getNumFood() {
 }
 
 bool Game::step(int dr, int dc) {
+    snake->draw(*screen,0);
     if (lastStepY == (dr*-1) && lastStepY != 0) {
+        snake->move(lastStepY,lastStepX,true);
+        snake->draw(*screen,1);
+        return true;
     } else if (lastStepX == (dc*-1) && lastStepX != 0) {
+        snake->move(lastStepY,lastStepX,true);
+        snake->draw(*screen,1);
     } else {
         // Se vai bater na parede
         if (snake->head('y')+dr == screen->getHeight() ||
@@ -41,7 +47,7 @@ bool Game::step(int dr, int dc) {
             lastStepY = dr;
             lastStepX = dc;
             snake->move(dr,dc,true);
-            snake->draw(screen,1);
+            snake->draw(*screen,1);
             return true;
         // Se vai bater nela mesma
         } else if (screen->get(( snake->head('y')+dr ), ( snake->head('x')+dc ) == 1)) {
@@ -50,6 +56,7 @@ bool Game::step(int dr, int dc) {
             lastStepY = dr;
             lastStepX = dc;
             snake->move(dr,dc,false);
+            snake->draw(*screen,1);
             return true;
         }
     }
@@ -58,5 +65,26 @@ bool Game::step(int dr, int dc) {
 }
 
 void Game::addFood(int r, int c, int t) {
+    // Se chegar o limite de tempo, setar para 0 novamente
+    for (int i = 0; i < 10; i++) {
+        if (food[i].tempo <= 0) {
+            food[i].posY = r;
+            food[i].posX = c;
+            food[i].tempo = t;
+            
+            break;
+        }
+    }
+    screen->set(r,c,2);
+}
 
+void Game::print() {
+    for (int i = 0; i < screen->getHeight(); i++) {
+        for (int j = 0; j < screen->getWidth();j++) {
+            int ch = screen->get(screen->getHeight()-1-i,j);
+            std::cout << ch << " ";
+        }
+        std::cout << "\n";
+    }
+    std::cout << "\n\n--------------------------\n\n";
 }

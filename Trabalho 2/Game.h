@@ -23,6 +23,8 @@ public:
 
     void addFood(int, int, int);
 
+    void print();
+
 private:
     Snake *snake;
     Screen *screen;

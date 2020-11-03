@@ -17,7 +17,7 @@ Screen::~Screen() {
 }
 
 void Screen::destroy() {
-    std::cout << "Destrutor de Screen\n";
+    // std::cout << "Destrutor de Screen\n";
     for (int i = 0; i < width; i++) delete[] data[i];
     delete[] data;
     delete[] dataHeight;

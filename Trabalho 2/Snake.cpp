@@ -24,7 +24,7 @@ void Snake::destroy(Node *curr) {
 void Snake::destroy() {
     if (dataFirst == NULL) return;
 
-    std::cout << "Destrutor de Snake\n";
+    // std::cout << "Destrutor de Snake\n";
     destroy(dataFirst);
 }
 
@@ -63,10 +63,11 @@ int Snake::head(char pos) {
     return (pos == 'y' ? dataLast->y : dataLast->x);
 }
 
-void Snake::draw(Screen *s, int state) {
+void Snake::draw(Screen &s, int state) {
     Node *aux = dataFirst;
     for (int i = 0; i < getLength(); i++) {
-        s->set((aux->y),(aux->x),state);
+        s.set((aux->y),(aux->x),state);
+        // std::cout << "set = " << s.get(aux->y, aux->x) << "\n";
         aux = aux->next;
     }
 }
