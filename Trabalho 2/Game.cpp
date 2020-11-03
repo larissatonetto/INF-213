@@ -29,8 +29,8 @@ Game::~Game() {
 }
 
 Game& Game::operator= (const Game &other) {
-    if (snake != NULL) snake->destroy();
-    if (screen != NULL) screen->destroy();
+    snake->destroy();
+    screen->destroy();
 
     this->screen = new Screen();
     this->snake = new Snake();
@@ -58,21 +58,34 @@ int Game::getNumFood() {
 bool Game::step(int dr, int dc) {
     // lastStep é responsável pelo movimento
     // Verificar se lastStep deve ser atualizado (não houve inversão de direção)
-    if ((lastStepY != (dr*-1) || lastStepY == 0) || (lastStepX != (dc*-1) || lastStepX == 0)) {
+    /*if ((lastStepY != (dr*-1) || lastStepY == 0) || (lastStepX != (dc*-1) || lastStepX == 0)) {
         lastStepY = dr;
         lastStepX = dc;
-    }
-    /*if (dr != 0) {
-        if (lastStepY == dr || lastStepY == 0) {
-            lastStepY = dr;
-            lastStepX = dc;
-        }
-    } else if (dr != 0) {
-        if (lastStepX == dc || lastStepX == 0) {
-            lastStepY = dr;
-            lastStepX = dc;
-        }
     }*/
+    
+    if (dr == 1 && dc == 0) {
+        if (lastStepY != -1) {
+            lastStepY = 1;
+            lastStepX = 0;
+        } //else if (lastStepY == -1) std::cout << "Inversão\n";
+    } else if (dr == -1 && dc == 0) {
+        if (lastStepY != 1) {
+            lastStepY = -1;
+            lastStepX = 0;
+        } //else if (lastStepY == 1) std::cout << "Inversão\n";
+    } else if (dr == 0 && dc == 1) {
+        if (lastStepX != -1) {
+            lastStepY = 0;
+            lastStepX = 1;
+        } //else if (lastStepX == -1) std::cout << "Inversão\n";
+    } else if (dr == 0 && dc == -1) {
+        if (lastStepX != 1) {
+            lastStepY = 0;
+            lastStepX = -1;
+        } //else if (lastStepX == 1) std::cout << "Inversão\n";
+    }
+
+    std::cout << "last = " << lastStepY << "," << lastStepX << "\n";
 
     // A cobra é desenhada no início de step() para que possa verificar
     // se houve colisão com ela mesma

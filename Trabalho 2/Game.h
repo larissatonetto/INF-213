@@ -42,7 +42,7 @@ private:
     Screen *screen;
     Food food[10];
     int numFood = 0;
-    int lastStepX = -2, lastStepY = -2;
+    int lastStepX = 1, lastStepY = 0;
 };
 
 #endif
