@@ -7,6 +7,16 @@ class Food {
 public:
     Food(int r = 0, int c = 0, int t = 0) : posX(c), posY(r), tempo(t) {}
 
+    Food& operator=(const Food &other) {
+        for (int i = 0; i < 10; i++) {
+            this->posX = other.posX;
+            this->posY = other.posY;
+            this->tempo = other.tempo;
+        }
+
+        return *this;
+    }
+
     int posX, posY, tempo;
 ;
 };
@@ -14,6 +24,7 @@ public:
 class Game {
 public:
     Game(int, int, int);
+    Game(const Game&);
     ~Game();
 
     const Screen & getScreen();
@@ -23,6 +34,8 @@ public:
 
     void addFood(int, int, int);
     void foodDown();
+
+    Game& operator= (const Game&);
 
 private:
     Snake *snake;
