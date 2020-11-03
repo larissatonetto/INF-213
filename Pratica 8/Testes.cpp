@@ -8,7 +8,7 @@ template <class T>
 void reverse(MyList2<T> &lista) {
   if (lista.begin() == NULL) return;
 
-  int auxSize = 1;
+  int auxSize = 1;      // Guarda o tamanho da lista
   typename MyList2<T>::iterator it1 = lista.begin();
   typename MyList2<T>::iterator it2 = lista.begin();
   typename MyList2<T>::iterator itAux = lista.begin();
@@ -20,7 +20,7 @@ void reverse(MyList2<T> &lista) {
     auxSize++;
   }
 
-  T aux;
+  T aux;      // Guarda o elemento para realizar a troca entre it1 e it2
   int cont1 = 0, cont2 = auxSize;
   while (cont1 < cont2) {
     aux = *it2;
