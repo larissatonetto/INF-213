@@ -113,6 +113,10 @@ void etapa4() {
 	int n;
 	
 	cin >> tam;
+	if (tam == 0) {
+		cout << "SIM\n";
+		return;
+	}
 
 	// A primeira operação sempre adicionará números
 	for (int i = 1; i <= tam; i++) {
