@@ -12,12 +12,16 @@ Screen::Screen(int height, int width) {
     }
 }
 
+Screen::Screen(const Screen &other) {
+    this->dataHeight = NULL;
+    *this = other;
+}
+
 Screen::~Screen() {
     destroy();
 }
 
 void Screen::destroy() {
-    // std::cout << "Destrutor de Screen\n";
     for (int i = 0; i < width; i++) delete[] data[i];
     delete[] data;
     delete[] dataHeight;
@@ -57,6 +61,22 @@ void Screen::set(int r, int c, int val) {
     }
 
     data[c][r] = val;
+}
+
+Screen& Screen::operator= (const Screen &other) {
+    if (dataHeight != NULL) this->destroy();
+
+    this->height = other.height;
+    this->width = other.width;
+    this->data = new int*[other.width];
+    this->dataHeight = new int[other.width];
+
+    for (int i = 0; i < other.width; i++) {
+        this->data[i] = new int[other.dataHeight[i]];
+        this->dataHeight[i] = other.dataHeight[i];
+    }
+
+    return *this;
 }
 
 // https://stackoverflow.com/questions/14955824/initializing-a-dynamic-array-to-0

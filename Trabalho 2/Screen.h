@@ -5,7 +5,8 @@ class Screen {
 public:
     const static int EMPTY = 0, SNAKE = 1, FOOD = 2, WALL = 3;
 
-    Screen(int, int);
+    Screen(int = 1, int = 1);
+    Screen(const Screen &);
     ~Screen();
 
     void destroy();
@@ -15,6 +16,8 @@ public:
     int get(int, int) const;
 
     void set(int r, int c, int val);
+
+    Screen& operator= (const Screen&);
 
 private:
     int width, height;

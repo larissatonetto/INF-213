@@ -8,6 +8,11 @@ Snake::Snake(int size) {
     }
 }
 
+Snake::Snake(const Snake &other) {
+    dataFirst = NULL;
+    *this = other;
+}
+
 Snake::~Snake() {
     destroy();
 }
@@ -24,8 +29,21 @@ void Snake::destroy(Node *curr) {
 void Snake::destroy() {
     if (dataFirst == NULL) return;
 
-    // std::cout << "Destrutor de Snake\n";
     destroy(dataFirst);
+    dataFirst = NULL;
+}
+
+Snake& Snake::operator=(const Snake &other) {
+    this->destroy();
+    dataFirst = dataLast = NULL;
+
+    Node *aux = other.dataFirst;
+    while(aux != NULL) {
+        this->push_back(( aux->y ),( aux->x ));
+        aux = aux->next;
+    }
+
+    return *this;
 }
 
 int Snake::getLength() const {
@@ -59,7 +77,6 @@ void Snake::pop() {
     delete aux;
 }
 
-// Retorna a posição da cabeça da cobra
 int Snake::head(char pos) {
     return (pos == 'y' ? dataLast->y : dataLast->x);
 }
@@ -68,6 +85,7 @@ void Snake::draw(Screen &s, int state) {
     Node *aux = dataFirst;
     for (int i = 0; i < getLength(); i++) {
         s.set((aux->y),(aux->x),state);
+        // std::cout << "set = " << s.get(aux->y, aux->x) << "\n";
         aux = aux->next;
     }
 }

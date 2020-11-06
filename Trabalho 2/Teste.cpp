@@ -1,10 +1,18 @@
-#include "Snake.h"
+#include "Game.h"
 #include <iostream>
 using namespace std;
 
 int main() {
-    Snake c(3);
-    Screen s(10,10);
+    Game g(10,10,5);
 
-    c.move(1,0,0);
+    cout << g.step(1,0) << "\n";
+    cout << g.step(1,0) << "\n";
+    cout << g.step(-1,0) << "\n";
+    cout << g.step(1,0) << "\n";
+    cout << g.step(0,1) << "\n";
+    cout << g.step(-1,0) << "\n";
+    cout << g.step(0,1) << "\n";
+    cout << g.step(0,-1) << "\n";
+
+    return 0;
 }

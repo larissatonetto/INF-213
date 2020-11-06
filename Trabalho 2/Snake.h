@@ -14,6 +14,7 @@ public:
 class Snake {
 public:
     Snake(int = 1);
+    Snake(const Snake &);
     ~Snake();
 
     void destroy();
@@ -25,9 +26,10 @@ public:
     int head(char); 
 
     void draw(Screen &, int);
-    void move(int, int, bool);  // Novo dataFirst caso haja comida no espaço, o final da cobra não se move
+    void move(int, int, bool);  // Novo dataFirst caso haja comida no espaço, o final da cobra não se mov
 
-    void print();
+    Snake& operator= (const Snake &);
+
 private:
     Node *dataFirst, *dataLast;
 
