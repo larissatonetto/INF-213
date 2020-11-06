@@ -81,9 +81,9 @@ void etapa2() {
 // Na etapa 3 voce deve implementar MyQueue2.h e descomentar os codigos de teste abaixo...
 
 
-//#include "MyQueue2.h"
+#include "MyQueue2.h"
 void etapa3() {
-	/*char operacao;
+	char operacao;
 	MyQueue2<string> q;
 
 	//le um arquivo contendo "comandos" para a fila e aplica-os a fila criada com sua classe...
@@ -99,7 +99,7 @@ void etapa3() {
 		} else if(operacao=='e') {
 			cout << ((q.empty())?"vazia":"cheia") << "\n";
 		} else cout << q.size() << "\n";
-	}	*/
+	}
 }
 
 //---------------------------------------
@@ -108,7 +108,33 @@ void etapa3() {
 
 
 void etapa4() {
+	MyStack<int> pilha;
+	int tam, max = 1;
+	int n;
 	
+	cin >> tam;
+
+	// A primeira operação sempre adicionará números
+	for (int i = 1; i <= tam; i++) {
+		cin >> n;
+
+		if (n > max) {
+			for (int i = max; i <= n; i++) {
+				pilha.push(i);
+				max++;
+			}
+			pilha.pop();
+		} else if (n <= max) {
+			if (n == pilha.top()) pilha.pop();
+
+			else {
+				cout << "NAO\n";
+				return;
+			}
+		}
+	}
+
+	cout << "SIM\n";
 }
 
 //---------------------------------------
