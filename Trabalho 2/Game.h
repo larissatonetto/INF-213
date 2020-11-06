@@ -34,6 +34,7 @@ public:
 
     void addFood(int, int, int);
     void foodDown();
+    void drawFood();
 
     Game& operator= (const Game&);
 

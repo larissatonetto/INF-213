@@ -58,52 +58,41 @@ int Game::getNumFood() {
 bool Game::step(int dr, int dc) {
     // lastStep é responsável pelo movimento
     // Verificar se lastStep deve ser atualizado (não houve inversão de direção)
-    /*if ((lastStepY != (dr*-1) || lastStepY == 0) || (lastStepX != (dc*-1) || lastStepX == 0)) {
+    if ((dr != 0) && (lastStepY != (dr*-1) || lastStepY == 0)) {
         lastStepY = dr;
         lastStepX = dc;
-    }*/
-    
-    if (dr == 1 && dc == 0) {
-        if (lastStepY != -1) {
-            lastStepY = 1;
-            lastStepX = 0;
-        } //else if (lastStepY == -1) std::cout << "Inversão\n";
-    } else if (dr == -1 && dc == 0) {
-        if (lastStepY != 1) {
-            lastStepY = -1;
-            lastStepX = 0;
-        } //else if (lastStepY == 1) std::cout << "Inversão\n";
-    } else if (dr == 0 && dc == 1) {
-        if (lastStepX != -1) {
-            lastStepY = 0;
-            lastStepX = 1;
-        } //else if (lastStepX == -1) std::cout << "Inversão\n";
-    } else if (dr == 0 && dc == -1) {
-        if (lastStepX != 1) {
-            lastStepY = 0;
-            lastStepX = -1;
-        } //else if (lastStepX == 1) std::cout << "Inversão\n";
+    } else if ((dc != 0) && (lastStepX != (dc*-1) || lastStepX == 0)) {
+        lastStepY = dr;
+        lastStepX = dc;
     }
 
-    std::cout << "last = " << lastStepY << "," << lastStepX << "\n";
-
-    // A cobra é desenhada no início de step() para que possa verificar
-    // se houve colisão com ela mesma
+    drawFood();
     snake->draw(*screen,1);
-    if (screen->get(( snake->head('y')+lastStepY ), ( snake->head('x')+lastStepX )) == 1) {
-            return false;
-    }
 
-    snake->draw(*screen,0);
-    foodDown();
-    // Se vai bater na parede
     if (snake->head('y')+lastStepY == screen->getHeight() ||
         snake->head('x')+lastStepX == screen->getWidth() ||
         snake->head('y')+lastStepY < 0 ||
         snake->head('x')+lastStepX < 0) {
         return false;
+    }
+
+    // A cobra é desenhada no início de step() para que possa verificar
+    // se houve colisão com ela mesma
+    // snake->draw(*screen,1);
+    if (screen->get(( snake->head('y')+lastStepY ), ( snake->head('x')+lastStepX )) == 1) {
+            return false;
+    }
+    // snake->draw(*screen,1);
+    snake->draw(*screen,0);
+    foodDown();
+    // Se vai bater na parede
+    /*if (snake->head('y') == screen->getHeight() ||
+        snake->head('x') == screen->getWidth() ||
+        snake->head('y') < 0 ||
+        snake->head('x') < 0) {
+        return false;
     // Se há comida no espaço
-    } else if (screen->get(( snake->head('y')+lastStepY ), ( snake->head('x')+lastStepX )) == 2) {
+    } else*/ if (screen->get(( snake->head('y')+lastStepY ), ( snake->head('x')+lastStepX )) == 2) {
         snake->move(lastStepY,lastStepX,true);
         snake->draw(*screen,1);
         return true;
@@ -134,7 +123,14 @@ void Game::foodDown() {
     // Diminui o tempo de vida de todas as comidas no array
     for (int i = 0; i < 10; i++) {
         food[i].tempo-= 1;
-        if (food[i].tempo < 0) screen->set((food[i].posY),(food[i].posX),0);
-        else screen->set((food[i].posY),(food[i].posX),2);
+        // if (food[i].tempo < 0) screen->set((food[i].posY),(food[i].posX),0);
+        // else screen->set((food[i].posY),(food[i].posX),2);
+    }
+}
+
+void Game::drawFood() {
+    for (int i = 0; i < 10; i++) {
+        if (food[i].tempo >= 0) screen->set(food[i].posY,food[i].posX,2);
+        else if (food[i].tempo < 0) screen->set(food[i].posY,food[i].posX,0);
     }
 }
