@@ -9,6 +9,7 @@ public:
     Screen(const Screen &);
     ~Screen();
 
+    void create();
     void destroy();
 
     int getWidth() const;

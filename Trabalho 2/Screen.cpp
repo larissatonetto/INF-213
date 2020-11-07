@@ -2,6 +2,7 @@
 #include <iostream>
 
 Screen::Screen(int height, int width) {
+    create();
     this->height = height;
     this->width = width;
     data = new int*[width];
@@ -13,7 +14,8 @@ Screen::Screen(int height, int width) {
 }
 
 Screen::Screen(const Screen &other) {
-    this->dataHeight = NULL;
+    // this->dataHeight = NULL;
+    create();
     *this = other;
 }
 
@@ -21,8 +23,15 @@ Screen::~Screen() {
     destroy();
 }
 
+void Screen::create() {
+    // std::cout << "Construindo screen...\n";
+    data = NULL;
+    dataHeight = NULL;
+}
+
 void Screen::destroy() {
-    for (int i = 0; i < width; i++) delete[] data[i];
+    // std::cout << "Destruindo screen...\n";
+    if (data != NULL) for (int i = 0; i < width; i++) delete[] data[i];
     delete[] data;
     delete[] dataHeight;
 }
@@ -64,16 +73,18 @@ void Screen::set(int r, int c, int val) {
 }
 
 Screen& Screen::operator= (const Screen &other) {
-    if (dataHeight != NULL) this->destroy();
+    // std::cout << "destroy() operator=\n";
+    destroy();
+    // destroy();
 
-    this->height = other.height;
-    this->width = other.width;
-    this->data = new int*[other.width];
-    this->dataHeight = new int[other.width];
+    height = other.height;
+    width = other.width;
+    data = new int*[other.width];
+    dataHeight = new int[other.width];
 
     for (int i = 0; i < other.width; i++) {
-        this->data[i] = new int[other.dataHeight[i]];
-        this->dataHeight[i] = other.dataHeight[i];
+        data[i] = new int[other.dataHeight[i]];
+        dataHeight[i] = other.dataHeight[i];
     }
 
     return *this;
