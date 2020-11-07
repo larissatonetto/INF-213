@@ -14,7 +14,6 @@ Screen::Screen(int height, int width) {
 }
 
 Screen::Screen(const Screen &other) {
-    // this->dataHeight = NULL;
     create();
     *this = other;
 }
@@ -24,14 +23,12 @@ Screen::~Screen() {
 }
 
 void Screen::create() {
-    // std::cout << "Construindo screen...\n";
     data = NULL;
     dataHeight = NULL;
 }
 
 void Screen::destroy() {
-    // std::cout << "Destruindo screen...\n";
-    if (data != NULL) for (int i = 0; i < width; i++) delete[] data[i];
+    for (int i = 0; i < width; i++) delete[] data[i];
     delete[] data;
     delete[] dataHeight;
 }
@@ -73,9 +70,7 @@ void Screen::set(int r, int c, int val) {
 }
 
 Screen& Screen::operator= (const Screen &other) {
-    // std::cout << "destroy() operator=\n";
     destroy();
-    // destroy();
 
     height = other.height;
     width = other.width;
