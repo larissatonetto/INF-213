@@ -17,6 +17,7 @@ public:
     Snake(const Snake &);
     ~Snake();
 
+    void create();
     void destroy();
 
     int getLength() const;
