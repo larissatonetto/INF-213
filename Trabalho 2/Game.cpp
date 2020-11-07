@@ -5,7 +5,6 @@ Game::Game(int height, int width, int size) {
     screen = Screen(height, width);
     snake = Snake(size);
     snake.draw(screen,1);
-    // drawFood();
 }
 
 Game::Game(const Game &other) {
@@ -34,7 +33,9 @@ const Screen & Game::getScreen() {
 int Game::getNumFood() {
     int cont = 0;
     for (int i = 0; i < 10; i++) {
-        if (food[i].tempo != 0) cont++;
+        if (food[i].tempo > 0) {
+            cont++;
+        }
     }
 
     return cont;
@@ -70,7 +71,8 @@ bool Game::step(int dr, int dc) {
     
     // Atualizando o estado da comida na tela
     foodDown();
-    drawFood();
+
+    // Apagando o estado anterior da cobra antes de desenhar a nova posição
     snake.draw(screen,0);
 
     // Verificando se há comida no espaço
@@ -87,23 +89,21 @@ bool Game::step(int dr, int dc) {
     return true;
 }
 
-void Game::addFood(int r, int c, int t) {
+void Game::addFood(int r, int c, int ttl) {
     if (screen.get(r,c) == 1 || screen.get(r,c) == 3) return;
 
-    if (t <= 0) return;
+    if (ttl <= 0) return;
 
     // Encontra o primeiro espaço disponível no array de food para armazenar
     for (int i = 0; i < 10; i++) {
         if (food[i].tempo <= 0) {
             food[i].posY = r;
             food[i].posX = c;
-            food[i].tempo = t;
+            food[i].tempo = ttl;
 
             break;
         }
     }
-
-    drawFood();
 }
 
 void Game::foodDown() {
@@ -111,6 +111,8 @@ void Game::foodDown() {
     for (int i = 0; i < 10; i++) {
         food[i].tempo-= 1;
     }
+
+    drawFood();
 }
 
 void Game::drawFood() {
