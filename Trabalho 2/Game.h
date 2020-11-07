@@ -39,8 +39,8 @@ public:
     Game& operator= (const Game&);
 
 private:
-    Snake *snake;
-    Screen *screen;
+    Snake snake;
+    Screen screen;
     Food food[10];
     int numFood = 0;
     int lastStepX = 1, lastStepY = 0;

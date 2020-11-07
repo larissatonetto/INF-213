@@ -3,52 +3,32 @@
 
 Game::Game(int height, int width, int size) {
     screen = Screen(height, width);
-    snake = new Snake(size);
-    snake->draw(*screen,1);
+    snake = Snake(size);
+    snake.draw(screen,1);
     // drawFood();
 }
 
 Game::Game(const Game &other) {
-    std::cout << "Construtor de cópia\n";
-    // snake->create();
-    // screen->create();
-
-    /*for (int i = 0; i < 10; i++) {
-        food[i] = other.food[i];
-    }
-
-    screen = other.screen;
-    snake = other.snake;*/
-
     *this = other;
 }
 
 Game::~Game() {
-    screen->destroy();
-    snake->destroy();
-    // delete[] screen;
-    // delete[] snake;
-    // delete[] this;
 }
 
 Game& Game::operator= (const Game &other) {
-    std::cout << "Operador de atribuição\n";
-    snake->destroy();
-    screen->destroy();
-
+    // Copiando comida
     for (int i = 0; i < 10; i++) {
         food[i] = other.food[i];
     }
     
-    // Alocando screen:
-    *screen = *other.screen;
-    *snake = *other.snake;
+    screen = other.screen;
+    snake = other.snake;
 
     return *this;
 }
 
 const Screen & Game::getScreen() {
-    return *screen;
+    return screen;
 }
 
 int Game::getNumFood() {
@@ -61,9 +41,8 @@ int Game::getNumFood() {
 }
 
 bool Game::step(int dr, int dc) {
-    snake->draw(*screen,1);
-    foodDown();
-    drawFood();
+    snake.draw(screen,1);
+    
     // lastStep é responsável pelo movimento
     // Verificar se lastStep deve ser atualizado (não houve inversão de direção)
     if ((dr != 0) && (lastStepY != (dr*-1) || lastStepY == 0)) {
@@ -74,31 +53,34 @@ bool Game::step(int dr, int dc) {
         lastStepX = dc;
     }
 
-    // snake->draw(*screen,1);
-
-    if (snake->head('y')+lastStepY == screen->getHeight() ||
-        snake->head('x')+lastStepX == screen->getWidth() ||
-        snake->head('y')+lastStepY < 0 ||
-        snake->head('x')+lastStepX < 0) {
-        snake->draw(*screen,1);
+    // Verificando colisão com a parede
+    if (snake.head('y')+lastStepY == screen.getHeight() ||
+        snake.head('x')+lastStepX == screen.getWidth() ||
+        snake.head('y')+lastStepY < 0 ||
+        snake.head('x')+lastStepX < 0) {
+        snake.draw(screen,1);
         return false;
     }
 
-    if (screen->get(( snake->head('y')+lastStepY ), ( snake->head('x')+lastStepX )) == 1) {
-        snake->draw(*screen,1);
+    // Verificando colisão com o corpo
+    if (screen.get(( snake.head('y')+lastStepY ), ( snake.head('x')+lastStepX )) == 1) {
+        snake.draw(screen,1);
         return false;
     }
-    // snake->draw(*screen,1);
-    snake->draw(*screen,0);
+    
+    // Atualizando o estado da comida na tela
+    foodDown();
+    drawFood();
+    snake.draw(screen,0);
 
-    // Se há comida no espaço
-    if (screen->get(( snake->head('y')+lastStepY ), ( snake->head('x')+lastStepX )) == 2) {
-        snake->move(lastStepY,lastStepX,true);
-        snake->draw(*screen,1);
+    // Verificando se há comida no espaço
+    if (screen.get(( snake.head('y')+lastStepY ), ( snake.head('x')+lastStepX )) == 2) {
+        snake.move(lastStepY,lastStepX,true);
+        snake.draw(screen,1);
         return true;
     } else {
-        snake->move(lastStepY,lastStepX,false);
-        snake->draw(*screen,1);
+        snake.move(lastStepY,lastStepX,false);
+        snake.draw(screen,1);
         return true;
     }
 
@@ -106,7 +88,10 @@ bool Game::step(int dr, int dc) {
 }
 
 void Game::addFood(int r, int c, int t) {
-    if (screen->get(r,c) == 1) return;
+    if (screen.get(r,c) == 1 || screen.get(r,c) == 3) return;
+
+    if (t <= 0) return;
+
     // Encontra o primeiro espaço disponível no array de food para armazenar
     for (int i = 0; i < 10; i++) {
         if (food[i].tempo <= 0) {
@@ -117,26 +102,25 @@ void Game::addFood(int r, int c, int t) {
             break;
         }
     }
-    screen->set(r,c,2);
+
+    drawFood();
 }
 
 void Game::foodDown() {
     // Diminui o tempo de vida de todas as comidas no array
     for (int i = 0; i < 10; i++) {
         food[i].tempo-= 1;
-        // if (food[i].tempo < 0) screen->set((food[i].posY),(food[i].posX),0);
-        // else screen->set((food[i].posY),(food[i].posX),2);
     }
 }
 
 void Game::drawFood() {
     for (int i = 0; i < 10; i++) {
         if (food[i].tempo >= 0) {
-            if (screen->get(food[i].posY,food[i].posX) != 1)
-                screen->set(food[i].posY,food[i].posX,2);
+            if (screen.get(food[i].posY,food[i].posX) != 1)
+                screen.set(food[i].posY,food[i].posX,2);
         }
         else if (food[i].tempo < 0)
-            if (screen->get(food[i].posY,food[i].posX) != 1)
-                screen->set(food[i].posY,food[i].posX,0);
+            if (screen.get(food[i].posY,food[i].posX) != 1)
+                screen.set(food[i].posY,food[i].posX,0);
     }
 }
