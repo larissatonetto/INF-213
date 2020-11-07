@@ -79,6 +79,13 @@ bool Game::step(int dr, int dc) {
     if (screen.get(( snake.head('y')+lastStepY ), ( snake.head('x')+lastStepX )) == 2) {
         snake.move(lastStepY,lastStepX,true);
         snake.draw(screen,1);
+
+        for (int i = 0; i < 10; i++) {
+            if (food[i].posY == snake.head('y') &&
+                food[i].posX == snake.head('x'))
+                food[i].tempo = -1;
+        }
+
         return true;
     } else {
         snake.move(lastStepY,lastStepX,false);
