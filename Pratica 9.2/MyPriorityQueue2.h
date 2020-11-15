@@ -45,15 +45,15 @@ T & MyPriorityQueue2<T>::top() {
 
 template<class T>
 void MyPriorityQueue2<T>::pop() {
-	typename MyList2<T>::iterator it1 = elementos.begin();
-	typename MyList2<T>::iterator it2 = elementos.begin();
+	typename MyList2<T>::iterator it = elementos.begin();
 
-	while(it2 != elementos.end()) {
-		if (*it2 > *it1) it1 = it2;
-		it2++;
+	while(it != elementos.end()) {
+		if (*it == top()) {
+			elementos.erase(it);
+			return;
+		}
+		it++;
 	}
-
-	elementos.erase(it1);
 }
 
 template<class T>
