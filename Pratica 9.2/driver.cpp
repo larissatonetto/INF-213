@@ -67,6 +67,16 @@ void etapa2() {
 	cin >> n;
 	cin >> j;
 
+	if (j == 0) {
+		cout << "0\n";
+		return;
+	}
+
+	if (n == 0) {
+		cout << "-1\n";
+		return;
+	}
+
 	for (int i = 0; i < n; i++) {
 		cin >> nPont;
 		listaN.push_back(nPont);
