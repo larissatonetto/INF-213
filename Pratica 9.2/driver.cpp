@@ -61,7 +61,38 @@ void etapa1() {
 // Insira aqui o codigo para a etapa 2....
 
 void etapa2() {
+	int n, j, nPont, numAtaques = 0;
+	MyList2<int> listaN;
+
+	cin >> n;
+	cin >> j;
+
+	for (int i = 0; i < n; i++) {
+		cin >> nPont;
+		listaN.push_back(nPont);
+	}
+
+	while(true) {
+		MyList2<int>::iterator it = listaN.begin();
+		if (it == NULL) break;
+
+		while(it != listaN.end()) {
+			// Ataca depois verifica a vida restante
+			j-= *it;
+			numAtaques++;
+			if (j <= 0) {
+				cout << numAtaques << "\n";
+				return;
+			}
+
+			*it/= 2;
+			if (*it <= 0) {				// Se a capivara tem <= 0 pontos, ela não ataca
+				it = listaN.erase(it);	// Se apagar, o iterador será avançado automaticamente
+			} else it++;
+		}
+	}
 	
+	cout << "-1" << "\n";
 }
 
 //---------------------------------------

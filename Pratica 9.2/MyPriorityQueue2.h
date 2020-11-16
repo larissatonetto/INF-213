@@ -25,12 +25,12 @@ private:
 
 //ATENCAO: propositalmente nao temos funcoes constantes, visto que nao implementamos iteradores
 // constantes na nossa classe lista...
-template<class T>	// OK
+template<class T>
 void MyPriorityQueue2<T>::push(const T&el) {
 	elementos.push_back(el);
 }
 
-template<class T>	// OK
+template<class T>
 T & MyPriorityQueue2<T>::top() {
 	typename MyList2<T>::iterator it1 = elementos.begin();	// Guarda o elemento que será retornado
 	typename MyList2<T>::iterator it2 = elementos.begin();	// Percorre a lista
