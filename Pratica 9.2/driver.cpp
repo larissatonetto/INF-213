@@ -101,10 +101,10 @@ void etapa2() {
 
 
 //#include "MedianaLenta.h" //use essa implementacao para fazer os primeiros testes (com o calculo lento da mediana...)
-//#include "Mediana.h" //descomente esta linha para utilizar sua classe mais eficiente!
+#include "Mediana.h" //descomente esta linha para utilizar sua classe mais eficiente!
 void etapa3() {
 	//descomente o codigo abaixo ao fazer a etapa 3
-	/*Mediana mediana;
+	Mediana mediana;
 
 	int n,elem;	
 	cin >> n;
@@ -113,7 +113,7 @@ void etapa3() {
 		mediana.insere(elem);
 		cout << mediana.getMediana() << " ";
 	}
-	cout << endl;*/
+	cout << endl;
 }
 
 //---------------------------------------
