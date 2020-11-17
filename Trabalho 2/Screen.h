@@ -14,7 +14,7 @@ public:
 
     int getWidth() const;
     int getHeight() const;
-    int get(int, int) const;
+    int get(int r, int c) const;
 
     void set(int r, int c, int val);
 

@@ -33,7 +33,7 @@ const Screen & Game::getScreen() {
 int Game::getNumFood() {
     int cont = 0;
     for (int i = 0; i < 10; i++) {
-        if (food[i].tempo > 0) {
+        if (food[i].tempo >= 0) {
             cont++;
         }
     }
@@ -73,10 +73,10 @@ bool Game::step(int dr, int dc) {
     foodDown();
 
     // Apagando o estado anterior da cobra antes de desenhar a nova posição
-    snake.draw(screen,0);
 
     // Verificando se há comida no espaço
     if (screen.get(( snake.head('y')+lastStepY ), ( snake.head('x')+lastStepX )) == 2) {
+        snake.draw(screen,0);
         snake.move(lastStepY,lastStepX,true);
         snake.draw(screen,1);
 
@@ -88,6 +88,7 @@ bool Game::step(int dr, int dc) {
 
         return true;
     } else {
+        snake.draw(screen,0);
         snake.move(lastStepY,lastStepX,false);
         snake.draw(screen,1);
         return true;
@@ -97,7 +98,7 @@ bool Game::step(int dr, int dc) {
 }
 
 void Game::addFood(int r, int c, int ttl) {
-    if (screen.get(r,c) == 1 || screen.get(r,c) == 3) return;
+    if (screen.get(r,c) == 1) return;
 
     if (ttl <= 0) return;
 
@@ -111,6 +112,7 @@ void Game::addFood(int r, int c, int ttl) {
             break;
         }
     }
+    drawFood();
 }
 
 void Game::foodDown() {
