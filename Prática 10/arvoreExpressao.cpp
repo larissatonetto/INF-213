@@ -25,6 +25,8 @@ private:
 	int avaliaValor(int i) const;
 	int altura(int i) const;
 	void nivelMaisNodos(int i, int nivel, int *largura) const;
+
+	bool isOperator(char c) const;
 };
 
 void ArvoreExpressao::imprimeArrays() const {
@@ -38,7 +40,11 @@ void ArvoreExpressao::imprimeArrays() const {
 /***********************************************************************************************/
 /***********************************************************************************************/
 //sua implementacao:
+bool ArvoreExpressao::isOperator(char c) const {
+	if (c == '+' || c == '-' || c == '*') return true;
 
+	return false;
+}
 
 void ArvoreExpressao::leArvore() {
 	MyVec<char> nodo;
@@ -63,15 +69,13 @@ void ArvoreExpressao::leArvore() {
 
 void ArvoreExpressao::imprimeExpressao(int i) const {
 	// Se o filho do operador for outro operador, abrir parênteses
-	if (operador[i] == '+' || operador[i] == '-' || operador[i] == '*') {
-		if (operador[filhoEsquerdo[i]] == '+' || operador[filhoEsquerdo[i]] == '-' || operador[filhoEsquerdo[i]] == '*')
-			cout << "(";
+	if (isOperator(operador[i])) {
+		if (isOperator(operador[filhoEsquerdo[i]])) cout << "(";
 		imprimeExpressao(filhoEsquerdo[i]);
 		cout << operador[i];
 
-		if (operador[filhoDireito[i]] == '+' || operador[filhoDireito[i]] == '-' || operador[filhoDireito[i]] == '*') {
-			cout << "(";
-		}
+		if (isOperator(operador[filhoDireito[i]])) cout << "(";
+
 		imprimeExpressao(filhoDireito[i]);
 	} else {
 		if (i%2 == 0) {
@@ -91,7 +95,7 @@ void ArvoreExpressao::imprimeExpressao() const {
 }
 
 int ArvoreExpressao::avaliaValor(int i) const {
-	if (operador[i] == '+' || operador[i] == '-' || operador[i] == '*') {
+	if (isOperator(operador[i])) {
 		if (operador[i] == '+') {
 			return (avaliaValor(filhoEsquerdo[i]) + avaliaValor(filhoDireito[i]));
 		} else if (operador[i] == '-') {
@@ -110,7 +114,7 @@ int ArvoreExpressao::avaliaValor() const {
 }
 
 int ArvoreExpressao::altura(int i) const {
-	if (operador[i] != '+' && operador[i] != '-' && operador[i] != '*') return 0;
+	if (!isOperator(operador[i])) return 0;
 	
 	return 1+max(altura(filhoEsquerdo[i]),altura(filhoDireito[i]));
 }
@@ -124,13 +128,15 @@ int ArvoreExpressao::altura() const {
 void ArvoreExpressao::nivelMaisNodos(int i, int nivel, int *largura) const {
 	largura[nivel]++;
 
-	if (operador[i] != '+' && operador[i] != '-' && operador[i] != '*') return;
+	if (!isOperator(operador[i])) return;
 
 	nivelMaisNodos(filhoEsquerdo[i], nivel+1, largura);
 	nivelMaisNodos(filhoDireito[i], nivel+1, largura);
 }
 
 int ArvoreExpressao::nivelMaisNodos() const {
+	if (operador.size() == 1) return 1;
+
 	int max = 0, h = altura();
 	int largura[h] = {0};
 
