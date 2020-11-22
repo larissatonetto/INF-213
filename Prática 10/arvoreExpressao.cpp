@@ -62,15 +62,22 @@ void ArvoreExpressao::leArvore() {
 }
 
 void ArvoreExpressao::imprimeExpressao(int i) const {
+	// Se o filho do operador for outro operador, abrir parênteses
 	if (operador[i] == '+' || operador[i] == '-' || operador[i] == '*') {
+		if (operador[filhoEsquerdo[i]] == '+' || operador[filhoEsquerdo[i]] == '-' || operador[filhoEsquerdo[i]] == '*')
+			cout << "(";
 		imprimeExpressao(filhoEsquerdo[i]);
 		cout << operador[i];
+
+		if (operador[filhoDireito[i]] == '+' || operador[filhoDireito[i]] == '-' || operador[filhoDireito[i]] == '*') {
+			cout << "(";
+		}
 		imprimeExpressao(filhoDireito[i]);
 	} else {
 		if (i%2 == 0) {
 			cout << operador[i] << ")";
 		} else {
-			cout << "(" << operador[i];
+			cout << operador[i];
 		}
 	}
 }
