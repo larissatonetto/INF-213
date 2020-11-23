@@ -81,8 +81,8 @@ void Snake::pop() {
 }
 
 // Retorna a posição da cabeça da cobra
-int Snake::head(char pos) {
-    return (pos == 'y' ? dataLast->y : dataLast->x);
+int Snake::head(char c) {
+    return (c == 'y' ? dataLast->y : dataLast->x);
 }
 
 void Snake::draw(Screen &s, int state) {

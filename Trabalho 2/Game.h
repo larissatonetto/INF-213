@@ -23,25 +23,24 @@ public:
 
 class Game {
 public:
-    Game(int, int, int);
-    Game(const Game&);
+    Game(int height, int width, int size);
+    Game(const Game &other);
     ~Game();
 
     const Screen & getScreen();
     int getNumFood();
 
-    bool step(int, int);
+    bool step(int dr, int dc);
 
-    void addFood(int, int, int);
+    void addFood(int r, int c, int ttl);
 
-    Game& operator= (const Game&);
+    Game& operator= (const Game &other);
 
 private:
     Snake snake;
     Screen screen;
     Food food[10];
-    int numFood = 0;
-    int lastStepX = 1, lastStepY = 0;
+    int lastStepX = 1, lastStepY = 0;   // A cobra inicialmente se move para a direita
 
     void foodDown();
     void drawFood();

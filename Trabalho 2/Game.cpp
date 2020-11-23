@@ -1,5 +1,4 @@
 #include "Game.h"
-#include <iostream>
 
 Game::Game(int height, int width, int size) {
     screen = Screen(height, width);
@@ -41,9 +40,7 @@ int Game::getNumFood() {
     return cont;
 }
 
-bool Game::step(int dr, int dc) {
-    // snake.draw(screen,1);
-    
+bool Game::step(int dr, int dc) {    
     // lastStep é responsável pelo movimento
     // Verificar se lastStep deve ser atualizado (não houve inversão de direção)
     if ((dr != 0) && (lastStepY != (dr*-1) || lastStepY == 0)) {
@@ -72,8 +69,6 @@ bool Game::step(int dr, int dc) {
     // Atualizando o estado da comida na tela
     foodDown();
 
-    // Apagando o estado anterior da cobra antes de desenhar a nova posição
-
     // Verificando se há comida no espaço
     if (screen.get(( snake.head('y')+lastStepY ), ( snake.head('x')+lastStepX )) == 2) {
         snake.draw(screen,0);
@@ -98,15 +93,18 @@ bool Game::step(int dr, int dc) {
 }
 
 void Game::addFood(int r, int c, int ttl) {
+    // Verifica se está sendo inserido fora da tela
     if (r > screen.getHeight() || r < 0 || c > screen.getWidth() || c < 0) return;
 
+    // Verifica se está sendo inserido sobre o corpo da cobra
     if (screen.get(r,c) == 1) return;
 
+    // Verifica se o tempo de comida é válido
     if (ttl <= 0) return;
 
     // Encontra o primeiro espaço disponível no array de food para armazenar
     for (int i = 0; i < 10; i++) {
-        if (food[i].tempo <= 0) {
+        if (food[i].tempo < 0) {
             food[i].posY = r;
             food[i].posX = c;
             food[i].tempo = ttl;
@@ -132,7 +130,7 @@ void Game::drawFood() {
             // Veririca se o corpo da cobra não está no lugar
             if (screen.get(food[i].posY,food[i].posX) != 1)
                 screen.set(food[i].posY,food[i].posX,2);
-        } else if (food[i].tempo < 0)
+        } else if (food[i].tempo < 0)   // Apaga a comida caso o tempo seja menor que 0
             if (screen.get(food[i].posY,food[i].posX) != 1)
                 screen.set(food[i].posY,food[i].posX,0);
     }

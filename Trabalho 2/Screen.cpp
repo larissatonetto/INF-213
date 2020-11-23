@@ -61,7 +61,7 @@ void Screen::set(int r, int c, int val) {
 
         dataHeight[c] = r+1;
         delete[] data[c];
-        data[c] = new int[(dataHeight[c])]();           // Inicia o array com valor 0  
+        data[c] = new int[(dataHeight[c])]();   // Inicia o array com valor 0  
         for (int i = 0; i < auxHeight; i++) data[c][i] = auxData[i];
     }
 

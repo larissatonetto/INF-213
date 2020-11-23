@@ -13,8 +13,8 @@ public:
 
 class Snake {
 public:
-    Snake(int = 1);
-    Snake(const Snake &);
+    Snake(int size = 1);
+    Snake(const Snake &other);
     ~Snake();
 
     void create();
@@ -22,14 +22,14 @@ public:
 
     int getLength() const;
 
-    void push_back(int, int);
+    void push_back(int r, int c);
     void pop();
-    int head(char); 
+    int head(char c); 
 
-    void draw(Screen &, int);
-    void move(int, int, bool);  // Novo dataFirst caso haja comida no espaço, o final da cobra não se mov
+    void draw(Screen &s, int state);
+    void move(int dr, int dc, bool eating);
 
-    Snake& operator= (const Snake &);
+    Snake& operator= (const Snake &other);
 
 private:
     Node *dataFirst, *dataLast;
