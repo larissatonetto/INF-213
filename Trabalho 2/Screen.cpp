@@ -43,11 +43,10 @@ int Screen::getHeight() const  {
 
 // r = linha, c = coluna
 int Screen::get(int r, int c) const {
-    if (r > width || c > width) return WALL;
+    if (r > height || c > width || r < 0 || c < 0) return WALL;
 
     if (r >= dataHeight[c]) return EMPTY;
 
-    // Não há a necessidade de especificar qual valor será retornado
     return data[c][r];
 }
 
@@ -84,5 +83,3 @@ Screen& Screen::operator= (const Screen &other) {
 
     return *this;
 }
-
-// https://stackoverflow.com/questions/14955824/initializing-a-dynamic-array-to-0

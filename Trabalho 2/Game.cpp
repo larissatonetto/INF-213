@@ -11,8 +11,7 @@ Game::Game(const Game &other) {
     *this = other;
 }
 
-Game::~Game() {
-}
+Game::~Game() {}
 
 Game& Game::operator= (const Game &other) {
     // Copiando comida
@@ -20,6 +19,7 @@ Game& Game::operator= (const Game &other) {
         food[i] = other.food[i];
     }
     
+    // destroy() e create() de snake e screen são chamados dentro de suas classes
     screen = other.screen;
     snake = other.snake;
 
@@ -42,7 +42,7 @@ int Game::getNumFood() {
 }
 
 bool Game::step(int dr, int dc) {
-    snake.draw(screen,1);
+    // snake.draw(screen,1);
     
     // lastStep é responsável pelo movimento
     // Verificar se lastStep deve ser atualizado (não houve inversão de direção)
@@ -98,6 +98,8 @@ bool Game::step(int dr, int dc) {
 }
 
 void Game::addFood(int r, int c, int ttl) {
+    if (r > screen.getHeight() || r < 0 || c > screen.getWidth() || c < 0) return;
+
     if (screen.get(r,c) == 1) return;
 
     if (ttl <= 0) return;
