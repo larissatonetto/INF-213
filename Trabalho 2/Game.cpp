@@ -127,10 +127,10 @@ void Game::foodDown() {
 void Game::drawFood() {
     for (int i = 0; i < 10; i++) {
         if (food[i].tempo >= 0) {
+            // Veririca se o corpo da cobra não está no lugar
             if (screen.get(food[i].posY,food[i].posX) != 1)
                 screen.set(food[i].posY,food[i].posX,2);
-        }
-        else if (food[i].tempo < 0)
+        } else if (food[i].tempo < 0)
             if (screen.get(food[i].posY,food[i].posX) != 1)
                 screen.set(food[i].posY,food[i].posX,0);
     }
