@@ -72,14 +72,16 @@ void ArvoreExpressao::imprimeExpressao(int i) const {
 	if (isOperator(operador[i])) {
 		if (isOperator(operador[filhoEsquerdo[i]])) cout << "(";
 		imprimeExpressao(filhoEsquerdo[i]);
+
 		cout << operador[i];
 
 		if (isOperator(operador[filhoDireito[i]])) cout << "(";
-
 		imprimeExpressao(filhoDireito[i]);
+
+		if (!isOperator(operador[filhoDireito[i]])) cout << ")";
 	} else {
 		if (i%2 == 0) {
-			cout << operador[i] << ")";
+			cout << operador[i];
 		} else {
 			cout << operador[i];
 		}
@@ -128,15 +130,13 @@ int ArvoreExpressao::altura() const {
 void ArvoreExpressao::nivelMaisNodos(int i, int nivel, int *largura) const {
 	largura[nivel]++;
 
-	if (!isOperator(operador[i])) return;
+	if (!(isOperator(operador[i]))) return;
 
 	nivelMaisNodos(filhoEsquerdo[i], nivel+1, largura);
 	nivelMaisNodos(filhoDireito[i], nivel+1, largura);
 }
 
 int ArvoreExpressao::nivelMaisNodos() const {
-	if (operador.size() == 1) return 1;
-
 	int max = 0, h = altura();
 	int largura[h] = {0};
 
