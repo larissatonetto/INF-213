@@ -137,8 +137,6 @@ void ArvoreExpressao::nivelMaisNodos(int i, int nivel, int *largura) const {
 }
 
 int ArvoreExpressao::nivelMaisNodos() const {
-	if (altura() == 0) return 0;
-
 	int max = 0, h = altura();
 	int largura[h] = {0};
 
