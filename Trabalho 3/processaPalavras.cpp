@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <sstream>
 #include "MyVec.h"
 #include "MyMap.h"
 
@@ -70,11 +71,19 @@ int main(int argc, char **argv) {
         frases.push_back(s);
     }
 
-    for (int i = 0; i < frases.size(); i++) {
-        cout << frases[i] << "\n";
-    }
+    // for (int i = 0; i < frases.size(); i++) {
+        // cout << frases[i] << "\n";
+    // }
 
-    
+
+    // Passando as palavras para map1 ------------------------------------------------
+    string palavra;
+    for (int i = 0; i < frases.size(); i++) {
+        stringstream t(frases[i]);
+        while (t >> palavra) {
+            map1[palavra]++;
+        }
+    }
 
     return 0;
 }
