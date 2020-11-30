@@ -37,16 +37,15 @@ int main(int argc, char **argv) {
             }
 
             teste+=line + " ";
-            
         }   
     }
 
+    // Separando as sentenças e passando para MyVec ---------------------------
     string s;
-    cout << "teste = " << teste << "\n";
     for (int i = 0; i < teste.size(); i++) {
         if (s[0] == ' ') s.erase(0,1);
 
-        if (teste[i] == 39) {
+        if (teste[i] == 39) {    // Verifica se tem apóstrofe
             s+= ' ';
             continue;
         }
@@ -54,7 +53,7 @@ int main(int argc, char **argv) {
         if (teste[i] == '!'   ||
             (teste[i] > 45 && teste[i] < 65) ||    // Retira de . até @
             (teste[i] > 34 && teste[i] < 39) ||
-            (teste[i] > 39 && teste[i] < 45)){
+            (teste[i] > 39 && teste[i] < 45)) {
             if (s != "") {
                 frases.push_back(s);
             }
@@ -71,10 +70,11 @@ int main(int argc, char **argv) {
         frases.push_back(s);
     }
 
-    cout << frases.size() << "\n";
     for (int i = 0; i < frases.size(); i++) {
         cout << frases[i] << "\n";
     }
+
+    
 
     return 0;
 }
