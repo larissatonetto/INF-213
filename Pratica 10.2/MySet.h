@@ -23,6 +23,10 @@ public:
 
 	int size() const;
 	MySet() : size_(0), root(NULL) {}
+	MySet(const MySet &other);
+	~MySet() { destroy(); };
+
+	MySet& operator= (const MySet<T> &other);
 
 	pair<iterator,bool> insert(const T&elem); //retorna um iterador para o elemento inserido (o valor booleano sera' true se o elemento nao existia no conjunto e falso caso ele ja exista (ou seja, o novo elemento nao foi inserido) ).
 	iterator find(const T&elem); //por simplicidade, nao vamos deixar implementar um find constante...
@@ -48,6 +52,10 @@ private:
 	void imprimeDFS_pre(const Node<T> *root) const;
 	void imprimeDFS_in(const Node<T> *root) const;
 	void imprimeDFS_pos(const Node<T> *root) const;
+
+	Node<T>* copy(const Node<T> *node);
+	void destroy();
+	void destroy(Node<T> *node);
 };
 
 
@@ -128,9 +136,47 @@ MySetIterator<T>  MySetIterator<T>::operator--(int) {
 	return old;
 }
 
+template <class T>
+Node<T>* MySet<T>::copy(const Node<T> *node) {
+	if (!node) return NULL;
 
+	Node<T> *copyNode = new Node<T>(node->elem);
+	copyNode->parent = node->parent;
+	copyNode->left = copy(node->left);
+	copyNode->right = copy(node->right);
 
+	return copyNode;
+}
 
+template <class T>
+void MySet<T>::destroy() {
+	destroy(root);
+}
+
+template <class T>
+void MySet<T>::destroy(Node<T> *node) {
+	if (!node) return;
+
+	if (node->left) destroy(node->left);
+	if (node->right) destroy(node->right);
+
+	delete node;
+}
+
+template <class T>
+MySet<T>::MySet(const MySet<T> &other) {
+	root = NULL;
+	*this = other;
+}
+
+template <class T>
+MySet<T>& MySet<T>::operator= (const MySet<T> &other) {
+	if (this == &other) return *this;
+
+	destroy();
+	root = copy(other.root);
+	size_ = other.size_;
+}
 
 
 
