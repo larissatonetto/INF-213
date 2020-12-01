@@ -15,6 +15,12 @@ int main(int argc, char **argv) {
     MyVec<string> frases;
     MyMap<string,int> map1;
     MyMap<string, MyMap<string,int> > map2;
+    MyMap<string, MyMap<string, MyMap<string,int> > > map3;
+
+    // it->first aponta para a chave, it->second aponta para o map
+    // Dá pra fazer sem usar o find
+
+    // Se o operador [] retornar 0 não deve imprimir
 
     // Lê a entrada a cada char e adiciona à string
     // Se o char for um separador de sentença, a string atual é passada para MyVec e resetada
@@ -90,21 +96,25 @@ int main(int argc, char **argv) {
         stringstream t(frases[i]);
         while (t >> palavra) {
             int pos = t.tellg();    // Guarda a posição da palavra lida
+            string aux1 = palavra;         // Guarda a palavra atual
 
             // cout << "Palavra lida: " << palavra << "\n";
 
-            map1[palavra]++;
+            map1[palavra]++;    // palavra = aux1
 
-            if (!t.peek()) {    // Verifica se chegou no final da frase
-                // cout << "\nFinal da frase\n\n";
-                break;
-            }
             // Lê a palavra -> adiciona chave -> guarda valor da próxima palavra
-            string aux = palavra;    // Guarda a palavra atual
-            t >> palavra;    // Lê a próxima palavra da frase
-            if (aux == palavra) break;    // Se cheguei na última palavra, ela não é adicionada
 
-            map2[aux][palavra]++;
+            t >> palavra;                  // Lê a próxima palavra da frase
+            string aux2 = palavra;
+
+            if (aux1 != palavra) {    // Se cheguei na última palavra, ela não é adicionada
+                map2[aux1][palavra]++;
+            }
+
+            t >> palavra;
+            if (aux2 != palavra) {
+                map3[aux1][aux2][palavra]++;
+            }
 
             // cout << "Palavra lida 2: " << palavra << "\n\n";
 
@@ -112,16 +122,10 @@ int main(int argc, char **argv) {
         }
     }
 
-    cout << map2["vai"]["tambem"] << "\n";
+    cout << map1["voce"] << "\n";
+    cout << map2["voce"]["vai"] << "\n";
+    cout << map3["voce"]["vai"]["viajar"] << "\n";
     
-    map2["teste"].insert(make_pair("teste2",5));
-    map2["test"].insert(make_pair("TESTE 3",2));
-    MyMap<string, MyMap<string,int> >::iterator it = map2.find("teste");
-    // cout << map2["teste"]["teste2"] << "\n";
-    // if (it != map2.end()) {
-        // cout << ((*it).second)["teste2"] << "\n";    // Acessa o valor de teste->teste2
-    // }
-
     return 0;
 }
 
