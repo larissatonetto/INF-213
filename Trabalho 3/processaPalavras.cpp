@@ -104,7 +104,7 @@ int main(int argc, char **argv) {
             t >> palavra;    // Lê a próxima palavra da frase
             if (aux == palavra) break;    // Se cheguei na última palavra, ela não é adicionada
 
-            map2[aux].insert(make_pair(palavra,2));    // Insere com valor 2
+            map2[aux][palavra]++;
 
             // cout << "Palavra lida 2: " << palavra << "\n\n";
 
@@ -112,7 +112,7 @@ int main(int argc, char **argv) {
         }
     }
 
-    // cout << map2["meu"]["guarda-chuva"] << "\n";
+    cout << map2["vai"]["tambem"] << "\n";
     
     map2["teste"].insert(make_pair("teste2",5));
     map2["test"].insert(make_pair("TESTE 3",2));
