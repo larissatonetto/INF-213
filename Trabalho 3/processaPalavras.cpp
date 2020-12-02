@@ -88,19 +88,24 @@ int main(int argc, char **argv) {
         cout << frases[i] << "\n\n\n";
     }
 
+    
 
-
-    // Passando as palavras para map1 ------------------------------------------------
+    // Passando as palavras para map ------------------------------------------------
     string palavra;
+
     for (int i = 0; i < frases.size(); i++) {
         stringstream t(frases[i]);
         while (t >> palavra) {
-            int pos = t.tellg();    // Guarda a posição da palavra lida
+            map1[palavra]++;
+        }
+    }
+
+    for (int i = 0; i < frases.size(); i++) {
+        stringstream t(frases[i]);
+        while (t >> palavra) {
+            int pos = t.tellg();           // Guarda a posição da palavra lida
             string aux1 = palavra;         // Guarda a palavra atual
-
-            // cout << "Palavra lida: " << palavra << "\n";
-
-            map1[palavra]++;    // palavra = aux1
+            // map1[palavra]++;    // palavra = aux1
 
             // Lê a palavra -> adiciona chave -> guarda valor da próxima palavra
 
@@ -112,17 +117,16 @@ int main(int argc, char **argv) {
             }
 
             t >> palavra;
-            if (aux2 != palavra) {
-                map3[aux1][aux2][palavra]++;
+            string aux3 = palavra;
+            if (aux2 != aux3) {
+                map3[aux1][aux2][aux3]++;
             }
-
-            // cout << "Palavra lida 2: " << palavra << "\n\n";
 
             t.seekg(pos);    // Volta para a palavra anterior
         }
     }
 
-    cout << map1["voce"] << "\n";
+    cout << map1["tambem"] << "\n";
     cout << map2["voce"]["vai"] << "\n";
     cout << map3["voce"]["vai"]["viajar"] << "\n";
     
