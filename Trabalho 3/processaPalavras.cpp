@@ -56,13 +56,13 @@ string aleatorio(MyVec<pair<int,string> > v) {
     for (int i = 0; i < v.size(); i++) {
         for (int j = 0; j < v[i].first; j++) {
             vecAux.push_back(v[i].second);
-            // cout << v[i].second << " adicionado\n";
         }
     }
 
+    if (vecAux.size() == 1) return vecAux[0];
+
     srand(time(NULL));
     int n = rand() % (vecAux.size()-1);
-    // cout << "Cheguei aqui\n";
     
     return vecAux[n];
 }
@@ -144,6 +144,7 @@ void gerar(MyMap<string,int> map1,
         }
 
         i++;
+
     } else {
         palavraAnterior[0] = v[v.size()-2];
         palavraAnterior[1] = v[v.size()-1];
@@ -152,45 +153,40 @@ void gerar(MyMap<string,int> map1,
     if (i == k) return;
     
     while (i < k) {
-        if ((palavraAnterior[0] != "") && (palavraAnterior[1] != "")) {
-            if (m3[palavraAnterior[0]][palavraAnterior[1]].size() != 0) {
-                cout << m3[palavraAnterior[0]][palavraAnterior[1]][0].second << " ";    // padrao
-
-                string aux = palavraAnterior[0];
-                palavraAnterior[0] = palavraAnterior[1];
-                palavraAnterior[1] = m3[aux][palavraAnterior[1]][0].second;
-
-            } else if (m2[palavraAnterior[1]].size() != 0){
-                cout << m2[palavraAnterior[1]][0].second << " ";          // padrao
-                palavraAnterior[0] = palavraAnterior[1];
-                palavraAnterior[1] = m2[palavraAnterior[1]][0].second;
-
+        if (m3[palavraAnterior[0]][palavraAnterior[1]].size() != 0) {
+            if (modo == "aleat") {
+                palavraAtual = aleatorio(m3[palavraAnterior[0]][palavraAnterior[1]]);
             } else {
-                cout << m1[0].second << " ";
-                palavraAnterior[0] = palavraAnterior[1];
-                palavraAnterior[1] = m1[0].second;
+                palavraAtual = m3[palavraAnterior[0]][palavraAnterior[1]][0].second;
             }
 
-            i++;
+            string aux = palavraAnterior[0];
+            palavraAnterior[0] = palavraAnterior[1];
+            palavraAnterior[1] = palavraAtual;
 
-        } else if (palavraAnterior[0] != "") {
-            if (m2[palavraAnterior[0]].size() != 0) {
-                cout << m2[palavraAnterior[0]][0].second << " ";          // padrao
-                palavraAnterior[1] = m2[palavraAnterior[0]][0].second;
-
+        } else if (m2[palavraAnterior[1]].size() != 0){
+            if (modo == "aleat") {
+                palavraAtual = aleatorio(m2[palavraAnterior[1]]);
             } else {
-                cout << m1[0].second << " ";
-                palavraAnterior[1] = m1[0].second;
+                palavraAtual = m2[palavraAnterior[1]][0].second;
             }
 
-            i++;
+            palavraAnterior[0] = palavraAnterior[1];
+            palavraAnterior[1] = palavraAtual;
 
         } else {
-            cout << m1[0].second << " ";
-            palavraAnterior[0] = m1[0].second;
+            if (modo == "aleat") {
+                palavraAtual = aleatorio(m1);
+            } else {
+                palavraAtual = m1[0].second;
+            }
 
-            i++;
+            palavraAnterior[0] = palavraAnterior[1];
+            palavraAnterior[1] = palavraAtual;
         }
+
+        cout << palavraAtual << " ";
+        i++; 
     }
 }
 
@@ -201,19 +197,13 @@ int main(int argc, char **argv) {
     MyMap<string, MyMap<string,int> > map2;
     MyMap<string, MyMap<string, MyMap<string,int> > > map3;
 
-    // it->first aponta para a chave, it->second aponta para o map
-    // Dá pra fazer sem usar o find
-
-    // Se o operador [] retornar 0 não deve imprimir
-
     // Lê a entrada a cada char e adiciona à string
-    // Se o char for um separador de sentença, a string atual é passada para MyVec e resetada
 
     if (argc == 2) {
         ifstream entrada(argv[1]);
         while(getline(entrada,line)) {
             
-            for (int i = 0; i < line.size(); i++) {    // TODO: Colocar em uma função?
+            for (int i = 0; i < line.size(); i++) {
                 // Convertendo maiúscula para minúscula
                 if (line[i] > 64 && line[i] < 91) line[i]+= 32;
             }
@@ -221,7 +211,7 @@ int main(int argc, char **argv) {
             teste+=line + " ";
         }
     } else {
-        cin >> line;    // Ignora o INICIO_TREINO
+        cin >> line;    // Lê o INICIO_TREINO
         cin.ignore();
         while (getline(cin,line)) {
             if (line == "FINAL_TREINO") break;
@@ -235,8 +225,8 @@ int main(int argc, char **argv) {
         }   
     }
 
-    // Separando as sentenças e passando para MyVec ---------------------------
-    // Passar daqui direto para map1?
+    // Separando as sentenças e passando para MyVec --------------------------------
+
     string s;
     for (int i = 0; i < teste.size(); i++) {
         if (s[0] == ' ') s.erase(0,1);
@@ -260,21 +250,14 @@ int main(int argc, char **argv) {
         s+=teste[i];
     }
 
-    // Se ainda há uma sentença a ser guardada
+    // Verifica se ainda há uma sentença a ser guardada
     if (s != "") {
         if (s[0] == ' ') s.erase(0,1);
         frases.push_back(s);
     }
 
-
-
-    /*for (int i = 0; i < frases.size(); i++) {
-        cout << frases[i] << "\n\n";
-    }*/
-
-    
-
     // Passando as palavras para os maps -----------------------------------------------
+
     string palavra;
 
     for (int i = 0; i < frases.size(); i++) {
@@ -289,7 +272,6 @@ int main(int argc, char **argv) {
         while (t >> palavra) {
             int pos = t.tellg();           // Guarda a posição da palavra lida
             string aux1 = palavra;         // Guarda a palavra atual
-            // map1[palavra]++;    // palavra = aux1
 
             // Lê a palavra -> adiciona chave -> guarda valor da próxima palavra
 
@@ -310,43 +292,36 @@ int main(int argc, char **argv) {
         }
     }
     
-    // Criando maps ordenados ------------------------------------------
+    // Criando maps ordenados --------------------------------------------------
 
-    // Funcionando para ordenar map1
     // m1 guarda as palavras em ordem decrescente de ocorrência
     // m1[0] guarda 4,voce
     MyVec<pair<int,string> > m1;
     for (MyMap<string,int>::iterator it = map1.begin(); it!=NULL;it++) {
         m1.sortedInsert(make_pair((*it).second,(*it).first));
-        // m1.push_back(make_pair((*it).second,(*it).first));
     }
 
-    MyVec<MyVec<pair<int,string> > > v2;
+    // Exemplo de acesso em m2:
+    // [como].size() fala quantas opções depois de "como"
     MyMap<string,MyVec<pair<int,string> > > m2;
 
     for (MyMap<string,MyMap<string,int> >::iterator it = map2.begin();it!=NULL;it++) {
         for (MyMap<string,int>::iterator it2 = (*it).second.begin();it2!=NULL;it2++) {
             m2[(*it).first].sortedInsert(make_pair((*it2).second,(*it2).first));
-            // m2[(*it).first].push_back(make_pair((*it2).second,(*it2).first));
         }
     }
-    // voce[0] é o mais provável, voce[1] é o segundo mais provável, etc
 
-    MyVec<MyVec<pair<int,string> > > v3;
+    // Exemplo de acesso em m3:
+    // [como][voce].size() fala quantas opções depois de "como voce"
     MyMap<string,MyMap<string,MyVec<pair<int,string> > > > m3;
 
     for (MyMap<string, MyMap<string, MyMap<string,int> > >::iterator it = map3.begin();it!=NULL;it++) {
         for (MyMap<string,MyMap<string,int> >::iterator it2 = (*it).second.begin();it2!=NULL;it2++) {
             for (MyMap<string,int>::iterator it3 = (*it2).second.begin();it3!=NULL;it3++) {
                 m3[(*it).first][(*it2).first].sortedInsert(make_pair((*it3).second,(*it3).first));
-                // m3[(*it).first][(*it2).first].push_back(make_pair((*it3).second,(*it3).first));
             }
         }
     }
-
-    // Exemplo de acesso em m3
-    // [como][voce].size() fala quantas opções depois de "como voce"
-    // cout << m3["como"]["voce"][1].first << "\n";
 
     // Leitura dos comandos ------------------------------------------------
     string st;
@@ -363,15 +338,13 @@ int main(int argc, char **argv) {
             while (sConsulta >> st) {
                 valores.push_back(st);
             }
-            consulta(map1,map2,map3,m1,m2,m3,k,valores);
 
-            // break;
+            consulta(map1,map2,map3,m1,m2,m3,k,valores);
 
         } else {
             string modo;
             int k, n = 0;
             MyVec<string> valores;
-            // string valores[3];
 
             cin >> k;
             cin >> modo;
@@ -385,12 +358,8 @@ int main(int argc, char **argv) {
             
             gerar(map1,map2,map3,m1,m2,m3,k,modo,valores);
             cout << "\n";
-
-            // break;
         }
     }
-
-
-
+    
     return 0;
 }
