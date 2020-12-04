@@ -10,6 +10,47 @@ using namespace std;
 
 // Tentar colocar em string 3d
 
+void consulta(MyMap<string,int> map1,
+              MyMap<string, MyMap<string,int> > map2,
+              MyMap<string, MyMap<string, MyMap<string,int> > > map3,
+              MyVec<pair<int,string> > m1,
+              MyMap<string,MyVec<pair<int,string> > > m2,
+              MyMap<string,MyMap<string,MyVec<pair<int,string> > > > m3,
+              int k, const MyVec<string> &v) {
+    if (v.size() == 1) {
+        cout << v[0] << " (" << map1[v[0]] << ")\n";
+
+        if (m2[v[0]].size() >= 1) {
+            int i = 0;
+
+            while((i < m2[v[0]].size()) && (i < k)) {
+                cout << v[0] << " " << m2[v[0]][i].second << " (" << m2[v[0]][i].first << ")\n";
+
+                i++;
+            }
+        }
+
+
+    } else if (v.size() == 2) {
+        cout << v[0] << " " << v[1] << " (" << map2[v[0]][v[1]] << ")\n"; 
+
+        if (m3[v[0]][v[1]].size() >= 1) {
+            int i = 0;
+
+            while((i < m3[v[0]][v[1]].size()) && (i < k)) {
+                cout << v[0] << " " << v[1] << " ";
+                cout << m3[v[0]][v[1]][i].second << " (" << m3[v[0]][v[1]][i].first << ")\n";
+
+                i++;
+            }
+        }
+
+
+    } else {
+        cout << v[0] << " " << v[1] << " " << v[2] << " (" << map3[v[0]][v[1]][v[2]] << ")\n";
+    }
+}
+
 int main(int argc, char **argv) {
     string line, teste;
     MyVec<string> frases;
@@ -85,12 +126,12 @@ int main(int argc, char **argv) {
 
 
     for (int i = 0; i < frases.size(); i++) {
-        cout << frases[i] << "\n\n\n";
+        cout << frases[i] << "\n\n";
     }
 
     
 
-    // Passando as palavras para map ------------------------------------------------
+    // Passando as palavras para os maps -----------------------------------------------
     string palavra;
 
     for (int i = 0; i < frases.size(); i++) {
@@ -125,11 +166,68 @@ int main(int argc, char **argv) {
             t.seekg(pos);    // Volta para a palavra anterior
         }
     }
-
-    cout << map1["tambem"] << "\n";
-    cout << map2["voce"]["vai"] << "\n";
-    cout << map3["voce"]["vai"]["viajar"] << "\n";
     
+    // Criando maps ordenados ------------------------------------------
+
+    // Funcionando para ordenar map1
+    // m1 guarda as palavras em ordem decrescente de ocorrência
+    // m1[0] guarda 4,voce
+    MyVec<pair<int,string> > m1;
+    for (MyMap<string,int>::iterator it = map1.begin(); it!=NULL;it++) {
+        m1.sortedInsert(make_pair((*it).second,(*it).first));
+    }
+
+    cout << m1[0].second << "\n";
+
+    MyVec<MyVec<pair<int,string> > > v2;
+    MyMap<string,MyVec<pair<int,string> > > m2;
+
+    for (MyMap<string,MyMap<string,int> >::iterator it = map2.begin();it!=NULL;it++) {
+        for (MyMap<string,int>::iterator it2 = (*it).second.begin();it2!=NULL;it2++) {
+            m2[(*it).first].sortedInsert(make_pair((*it2).second,(*it2).first));
+        }
+    }
+    // voce[0] é o mais provável, voce[1] é o segundo mais provável, etc
+    cout << m2["voce"][0].second << "\n";
+
+    MyVec<MyVec<pair<int,string> > > v3;
+    MyMap<string,MyMap<string,MyVec<pair<int,string> > > > m3;
+
+    for (MyMap<string, MyMap<string, MyMap<string,int> > >::iterator it = map3.begin();it!=NULL;it++) {
+        for (MyMap<string,MyMap<string,int> >::iterator it2 = (*it).second.begin();it2!=NULL;it2++) {
+            for (MyMap<string,int>::iterator it3 = (*it2).second.begin();it3!=NULL;it3++) {
+                m3[(*it).first][(*it2).first].sortedInsert(make_pair((*it3).second,(*it3).first));
+            }
+        }
+    }
+
+    // Exemplo de acesso em m3
+    // [como][voce].size() fala quantas opções depois de "como voce"
+    cout << m3["como"]["voce"][1].first << "\n";
+
+    // Leitura dos comandos ------------------------------------------------
+    string st;
+    while (cin >> st) {
+        if (st == "consultar") {
+            int k;
+            MyVec<string> valores;
+
+            cin >> k;
+            cin.ignore();
+            
+            getline(cin, st);
+            stringstream steste(st);
+            while (steste >> st) {
+                valores.push_back(st);
+            }
+            consulta(map1,map2,map3,m1,m2,m3,k,valores);
+            break;
+        }
+        break;
+    }
+
+
+
     return 0;
 }
 
@@ -141,3 +239,12 @@ int main(int argc, char **argv) {
 // voce vai tambem
 // a chave “vai” seria mapeada em um segundo map contendo: “tambem” e
 // “viajar” como chaves (ambos com o número 1 como valor associado a tais chaves)
+
+/*for (MyMap<string,MyMap<string,int> >::iterator it = map2.begin();it!=NULL;it++) {
+        for (MyMap<string,int>::iterator it2 = (*it).second.begin();it2!=NULL;it2++) {
+            // cout << "it = " << (*it).first << "\n";
+            // cout << "it2 = " << (*it2).first << " " << (*it2).second << "\n";
+
+            v2.sortedInsert(make_pair((*it).first,make_pair((*it2).second,(*it2).first)));
+        }
+    }*/
