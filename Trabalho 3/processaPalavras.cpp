@@ -51,6 +51,16 @@ void consulta(MyMap<string,int> map1,
     }
 }
 
+void gerar(MyMap<string,int> map1,
+           MyMap<string, MyMap<string,int> > map2,
+           MyMap<string, MyMap<string, MyMap<string,int> > > map3,
+           MyVec<pair<int,string> > m1,
+           MyMap<string,MyVec<pair<int,string> > > m2,
+           MyMap<string,MyMap<string,MyVec<pair<int,string> > > > m3,
+           int k, const MyVec<string> &v) {
+    
+}
+
 int main(int argc, char **argv) {
     string line, teste;
     MyVec<string> frases;
@@ -223,28 +233,17 @@ int main(int argc, char **argv) {
             consulta(map1,map2,map3,m1,m2,m3,k,valores);
             break;
         }
-        break;
+        else {
+            string modo;
+            int k;
+
+            cin >> k;
+            cin >> modo;
+
+        }
     }
 
 
 
     return 0;
 }
-
-// Aspas, apóstrofo e newline separam palavras
-// Números e sinais de pontuação separam sentenças
-
-
-// voce vai viajar
-// voce vai tambem
-// a chave “vai” seria mapeada em um segundo map contendo: “tambem” e
-// “viajar” como chaves (ambos com o número 1 como valor associado a tais chaves)
-
-/*for (MyMap<string,MyMap<string,int> >::iterator it = map2.begin();it!=NULL;it++) {
-        for (MyMap<string,int>::iterator it2 = (*it).second.begin();it2!=NULL;it2++) {
-            // cout << "it = " << (*it).first << "\n";
-            // cout << "it2 = " << (*it2).first << " " << (*it2).second << "\n";
-
-            v2.sortedInsert(make_pair((*it).first,make_pair((*it2).second,(*it2).first)));
-        }
-    }*/
