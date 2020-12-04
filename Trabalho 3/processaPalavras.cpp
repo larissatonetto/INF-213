@@ -8,8 +8,6 @@
 
 using namespace std;
 
-// Tentar colocar em string 3d
-
 void consulta(MyMap<string,int> map1,
               MyMap<string, MyMap<string,int> > map2,
               MyMap<string, MyMap<string, MyMap<string,int> > > map3,
@@ -44,8 +42,6 @@ void consulta(MyMap<string,int> map1,
                 i++;
             }
         }
-
-
     } else {
         cout << v[0] << " " << v[1] << " " << v[2] << " (" << map3[v[0]][v[1]][v[2]] << ")\n";
     }
@@ -57,8 +53,32 @@ void gerar(MyMap<string,int> map1,
            MyVec<pair<int,string> > m1,
            MyMap<string,MyVec<pair<int,string> > > m2,
            MyMap<string,MyMap<string,MyVec<pair<int,string> > > > m3,
-           int k, const MyVec<string> &v) {
+           int k, string modo,const string *v) {
+    cout << "Aqui\n";
+    string p[2];
+
+    for (int i = 0; i < 3; i++) {
+        cout << v[i] << " | ";
+    }
     
+    // Verifica se há alguma palavra tomando as duas últimas como base
+    /*if (m3[v[1]][v[2]].size() != 0) {
+        p[0] = v[1];
+        p[1] = v[2];
+
+    } else if (map2[v[0]][v[1]] != 0) {
+        p[0] = v[0];
+        p[1] = v[1];
+
+    } else if (map1[v[2]] != 0) {
+
+    } else if (map1[v[1]] != 0) {
+
+    } else if (map1[v[0]] != 0) {
+
+    } else {
+
+    }*/
 }
 
 int main(int argc, char **argv) {
@@ -135,9 +155,9 @@ int main(int argc, char **argv) {
 
 
 
-    for (int i = 0; i < frases.size(); i++) {
+    /*for (int i = 0; i < frases.size(); i++) {
         cout << frases[i] << "\n\n";
-    }
+    }*/
 
     
 
@@ -185,9 +205,8 @@ int main(int argc, char **argv) {
     MyVec<pair<int,string> > m1;
     for (MyMap<string,int>::iterator it = map1.begin(); it!=NULL;it++) {
         m1.sortedInsert(make_pair((*it).second,(*it).first));
+        // m1.push_back(make_pair((*it).second,(*it).first));
     }
-
-    cout << m1[0].second << "\n";
 
     MyVec<MyVec<pair<int,string> > > v2;
     MyMap<string,MyVec<pair<int,string> > > m2;
@@ -195,10 +214,10 @@ int main(int argc, char **argv) {
     for (MyMap<string,MyMap<string,int> >::iterator it = map2.begin();it!=NULL;it++) {
         for (MyMap<string,int>::iterator it2 = (*it).second.begin();it2!=NULL;it2++) {
             m2[(*it).first].sortedInsert(make_pair((*it2).second,(*it2).first));
+            // m2[(*it).first].push_back(make_pair((*it2).second,(*it2).first));
         }
     }
     // voce[0] é o mais provável, voce[1] é o segundo mais provável, etc
-    cout << m2["voce"][0].second << "\n";
 
     MyVec<MyVec<pair<int,string> > > v3;
     MyMap<string,MyMap<string,MyVec<pair<int,string> > > > m3;
@@ -207,13 +226,14 @@ int main(int argc, char **argv) {
         for (MyMap<string,MyMap<string,int> >::iterator it2 = (*it).second.begin();it2!=NULL;it2++) {
             for (MyMap<string,int>::iterator it3 = (*it2).second.begin();it3!=NULL;it3++) {
                 m3[(*it).first][(*it2).first].sortedInsert(make_pair((*it3).second,(*it3).first));
+                // m3[(*it).first][(*it2).first].push_back(make_pair((*it3).second,(*it3).first));
             }
         }
     }
 
     // Exemplo de acesso em m3
     // [como][voce].size() fala quantas opções depois de "como voce"
-    cout << m3["como"]["voce"][1].first << "\n";
+    // cout << m3["como"]["voce"][1].first << "\n";
 
     // Leitura dos comandos ------------------------------------------------
     string st;
@@ -226,20 +246,36 @@ int main(int argc, char **argv) {
             cin.ignore();
             
             getline(cin, st);
-            stringstream steste(st);
-            while (steste >> st) {
+            stringstream sConsulta(st);
+            while (sConsulta >> st) {
                 valores.push_back(st);
             }
             consulta(map1,map2,map3,m1,m2,m3,k,valores);
+
             break;
         }
         else {
             string modo;
-            int k;
+            int k, n = 0;
+            // MyVec<string> valores;
+            string valores[3];
 
             cin >> k;
             cin >> modo;
+            cin.ignore();
 
+            cout << k << " " << modo << "\n";
+
+            getline(cin,st);
+            stringstream sGerar(st);
+            while (sGerar >> st) {
+                valores[n++] = st;
+            }
+            
+            gerar(map1,map2,map3,m1,m2,m3,k,modo,valores);
+            cout << "\n";
+
+            break;
         }
     }
 
