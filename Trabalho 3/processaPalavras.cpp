@@ -3,6 +3,8 @@
 #include <string>
 #include <sstream>
 #include <utility>
+#include <stdlib.h>
+#include <time.h>
 #include "MyVec.h"
 #include "MyMap.h"
 
@@ -28,7 +30,6 @@ void consulta(MyMap<string,int> map1,
             }
         }
 
-
     } else if (v.size() == 2) {
         cout << v[0] << " " << v[1] << " (" << map2[v[0]][v[1]] << ")\n"; 
 
@@ -42,9 +43,28 @@ void consulta(MyMap<string,int> map1,
                 i++;
             }
         }
+        
     } else {
         cout << v[0] << " " << v[1] << " " << v[2] << " (" << map3[v[0]][v[1]][v[2]] << ")\n";
     }
+}
+
+string aleatorio(MyVec<pair<int,string> > v) {
+    string palavraAleatoria;
+    MyVec<string> vecAux;
+
+    for (int i = 0; i < v.size(); i++) {
+        for (int j = 0; j < v[i].first; j++) {
+            vecAux.push_back(v[i].second);
+            // cout << v[i].second << " adicionado\n";
+        }
+    }
+
+    srand(time(NULL));
+    int n = rand() % (vecAux.size()-1);
+    // cout << "Cheguei aqui\n";
+    
+    return vecAux[n];
 }
 
 void gerar(MyMap<string,int> map1,
@@ -53,32 +73,125 @@ void gerar(MyMap<string,int> map1,
            MyVec<pair<int,string> > m1,
            MyMap<string,MyVec<pair<int,string> > > m2,
            MyMap<string,MyMap<string,MyVec<pair<int,string> > > > m3,
-           int k, string modo,const string *v) {
-    cout << "Aqui\n";
-    string p[2];
+           int k, string modo,const MyVec<string> &v) {
 
-    for (int i = 0; i < 3; i++) {
-        cout << v[i] << " | ";
+    string palavraAnterior[2], palavraAtual;
+
+    for (int i = 0; i < v.size(); i++) {
+        cout << v[i] << " ";
+    }
+
+    int i = 0;
+    if (v.size() == 0) {
+        if (modo == "aleat") {
+            palavraAtual = aleatorio(m1);
+        } else {
+            palavraAtual = m1[0].second;
+        }
+    
+        cout << palavraAtual << " ";
+        palavraAnterior[0] = palavraAtual;
+
+        i++;
+
+        if (i == k) return;
+
+        if (m2[m1[0].second].size() != 0) {
+            if (modo == "aleat") {
+                palavraAtual = aleatorio(m2[m1[0].second]);
+            } else {
+                palavraAtual = m2[m1[0].second][0].second;
+            }
+
+            cout << palavraAtual << " ";
+            palavraAnterior[1] = palavraAtual;
+
+        } else {
+            if (modo == "aleat") {
+                palavraAtual = aleatorio(m1);
+            } else {
+                palavraAtual = m1[0].second;
+            }
+
+            cout << palavraAtual << " ";
+            palavraAnterior[1] = palavraAtual;
+        }
+
+        i++;
+
+    } else if (v.size() == 1) {
+        palavraAnterior[0] = v[0];
+
+        if (m2[v[0]].size() != 0) {
+            if (modo == "aleat") {
+                palavraAtual = aleatorio(m2[v[0]]);
+            } else {
+                palavraAtual = m2[v[0]][0].second;
+            }
+
+            cout << palavraAtual << " ";
+            palavraAnterior[1] = palavraAtual;
+
+        } else {
+            if (modo == "aleat") {
+                palavraAtual = aleatorio(m1);
+            } else {
+                palavraAtual = m1[0].second;
+            }
+
+            cout << palavraAtual << " ";
+            palavraAnterior[1] = palavraAtual;
+        }
+
+        i++;
+    } else {
+        palavraAnterior[0] = v[v.size()-2];
+        palavraAnterior[1] = v[v.size()-1];
     }
     
-    // Verifica se há alguma palavra tomando as duas últimas como base
-    /*if (m3[v[1]][v[2]].size() != 0) {
-        p[0] = v[1];
-        p[1] = v[2];
+    if (i == k) return;
+    
+    while (i < k) {
+        if ((palavraAnterior[0] != "") && (palavraAnterior[1] != "")) {
+            if (m3[palavraAnterior[0]][palavraAnterior[1]].size() != 0) {
+                cout << m3[palavraAnterior[0]][palavraAnterior[1]][0].second << " ";    // padrao
 
-    } else if (map2[v[0]][v[1]] != 0) {
-        p[0] = v[0];
-        p[1] = v[1];
+                string aux = palavraAnterior[0];
+                palavraAnterior[0] = palavraAnterior[1];
+                palavraAnterior[1] = m3[aux][palavraAnterior[1]][0].second;
 
-    } else if (map1[v[2]] != 0) {
+            } else if (m2[palavraAnterior[1]].size() != 0){
+                cout << m2[palavraAnterior[1]][0].second << " ";          // padrao
+                palavraAnterior[0] = palavraAnterior[1];
+                palavraAnterior[1] = m2[palavraAnterior[1]][0].second;
 
-    } else if (map1[v[1]] != 0) {
+            } else {
+                cout << m1[0].second << " ";
+                palavraAnterior[0] = palavraAnterior[1];
+                palavraAnterior[1] = m1[0].second;
+            }
 
-    } else if (map1[v[0]] != 0) {
+            i++;
 
-    } else {
+        } else if (palavraAnterior[0] != "") {
+            if (m2[palavraAnterior[0]].size() != 0) {
+                cout << m2[palavraAnterior[0]][0].second << " ";          // padrao
+                palavraAnterior[1] = m2[palavraAnterior[0]][0].second;
 
-    }*/
+            } else {
+                cout << m1[0].second << " ";
+                palavraAnterior[1] = m1[0].second;
+            }
+
+            i++;
+
+        } else {
+            cout << m1[0].second << " ";
+            palavraAnterior[0] = m1[0].second;
+
+            i++;
+        }
+    }
 }
 
 int main(int argc, char **argv) {
@@ -252,30 +365,28 @@ int main(int argc, char **argv) {
             }
             consulta(map1,map2,map3,m1,m2,m3,k,valores);
 
-            break;
-        }
-        else {
+            // break;
+
+        } else {
             string modo;
             int k, n = 0;
-            // MyVec<string> valores;
-            string valores[3];
+            MyVec<string> valores;
+            // string valores[3];
 
             cin >> k;
             cin >> modo;
             cin.ignore();
 
-            cout << k << " " << modo << "\n";
-
             getline(cin,st);
             stringstream sGerar(st);
             while (sGerar >> st) {
-                valores[n++] = st;
+                valores.push_back(st);
             }
             
             gerar(map1,map2,map3,m1,m2,m3,k,modo,valores);
             cout << "\n";
 
-            break;
+            // break;
         }
     }
 
