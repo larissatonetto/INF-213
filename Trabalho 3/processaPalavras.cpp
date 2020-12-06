@@ -2,7 +2,6 @@
 #include <fstream>
 #include <string>
 #include <sstream>
-#include <utility>
 #include <stdlib.h>
 #include <time.h>
 #include "MyVec.h"
@@ -50,20 +49,20 @@ void consulta(MyMap<string,int> map1,
 }
 
 string aleatorio(MyVec<pair<int,string> > v) {
-    string palavraAleatoria;
     MyVec<string> vecAux;
 
+    // Palavras mais frequentes são adicionadas mais vezes no vetor,
+    // logo elas tem mais chance de serem escolhidas
     for (int i = 0; i < v.size(); i++) {
         for (int j = 0; j < v[i].first; j++) {
             vecAux.push_back(v[i].second);
         }
     }
 
-    if (vecAux.size() == 1) return vecAux[0];
+    if (vecAux.size() == 1) return vecAux[0];   // Se só tem uma opção, ela é retornada
 
-    srand(time(NULL));
-    int n = rand() % (vecAux.size()-1);
-    
+    int n = rand()%(vecAux.size());
+
     return vecAux[n];
 }
 
@@ -74,7 +73,9 @@ void gerar(MyMap<string,int> map1,
            MyMap<string,MyVec<pair<int,string> > > m2,
            MyMap<string,MyMap<string,MyVec<pair<int,string> > > > m3,
            int k, string modo,const MyVec<string> &v) {
-
+    
+    // As duas últimas palavras da frase são guardadas em um array
+    // O array é atualizado a cada palavra gerada
     string palavraAnterior[2], palavraAtual;
 
     for (int i = 0; i < v.size(); i++) {
@@ -191,14 +192,13 @@ void gerar(MyMap<string,int> map1,
 }
 
 int main(int argc, char **argv) {
-    string line, teste;
-    MyVec<string> frases;
+    string line, textoTratado;    // line lê de linha em linha, cada linha tratada é adicionada a textoTratado
+    MyVec<string> frases;   // Armazena as frases separadas
     MyMap<string,int> map1;
     MyMap<string, MyMap<string,int> > map2;
     MyMap<string, MyMap<string, MyMap<string,int> > > map3;
 
     // Lê a entrada a cada char e adiciona à string
-
     if (argc == 2) {
         ifstream entrada(argv[1]);
         while(getline(entrada,line)) {
@@ -208,7 +208,7 @@ int main(int argc, char **argv) {
                 if (line[i] > 64 && line[i] < 91) line[i]+= 32;
             }
 
-            teste+=line + " ";
+            textoTratado+= line + " ";
         }
     } else {
         cin >> line;    // Lê o INICIO_TREINO
@@ -221,25 +221,23 @@ int main(int argc, char **argv) {
                 if (line[i] > 64 && line[i] < 91) line[i]+= 32;
             }
 
-            teste+=line + " ";
+            textoTratado+= line + " ";
         }   
     }
 
     // Separando as sentenças e passando para MyVec --------------------------------
-
     string s;
-    for (int i = 0; i < teste.size(); i++) {
+    for (int i = 0; i < textoTratado.size(); i++) {
         if (s[0] == ' ') s.erase(0,1);
 
-        if (teste[i] == 39) {    // Verifica se tem apóstrofe
+        if (textoTratado[i] == 39) {    // Verifica se tem apóstrofe
             s+= ' ';
             continue;
         }
 
-        if (teste[i] == '!'   ||
-            (teste[i] > 45 && teste[i] < 65) ||    // Retira de . até @
-            (teste[i] > 34 && teste[i] < 39) ||
-            (teste[i] > 39 && teste[i] < 45)) {
+        if ((textoTratado[i] > 45 && textoTratado[i] < 65) ||    // Retira de . até @
+            (textoTratado[i] > 32 && textoTratado[i] < 39) ||    // Retira de ! até '
+            (textoTratado[i] > 39 && textoTratado[i] < 45)) {    // Retira de ( até '
             if (s != "") {
                 frases.push_back(s);
             }
@@ -247,7 +245,7 @@ int main(int argc, char **argv) {
             continue;
         }
 
-        s+=teste[i];
+        s+=textoTratado[i];
     }
 
     // Verifica se ainda há uma sentença a ser guardada
@@ -257,7 +255,6 @@ int main(int argc, char **argv) {
     }
 
     // Passando as palavras para os maps -----------------------------------------------
-
     string palavra;
 
     for (int i = 0; i < frases.size(); i++) {
@@ -270,12 +267,10 @@ int main(int argc, char **argv) {
     for (int i = 0; i < frases.size(); i++) {
         stringstream t(frases[i]);
         while (t >> palavra) {
-            int pos = t.tellg();           // Guarda a posição da palavra lida
-            string aux1 = palavra;         // Guarda a palavra atual
+            int pos = t.tellg();    // Guarda a posição da palavra lida
+            string aux1 = palavra;  // Guarda a palavra atual
 
-            // Lê a palavra -> adiciona chave -> guarda valor da próxima palavra
-
-            t >> palavra;                  // Lê a próxima palavra da frase
+            t >> palavra;    // Lê a próxima palavra da frase
             string aux2 = palavra;
 
             if (aux1 != palavra) {    // Se cheguei na última palavra, ela não é adicionada
@@ -283,9 +278,8 @@ int main(int argc, char **argv) {
             }
 
             t >> palavra;
-            string aux3 = palavra;
-            if (aux2 != aux3) {
-                map3[aux1][aux2][aux3]++;
+            if (aux2 != palavra) {
+                map3[aux1][aux2][palavra]++;
             }
 
             t.seekg(pos);    // Volta para a palavra anterior
@@ -295,7 +289,6 @@ int main(int argc, char **argv) {
     // Criando maps ordenados --------------------------------------------------
 
     // m1 guarda as palavras em ordem decrescente de ocorrência
-    // m1[0] guarda 4,voce
     MyVec<pair<int,string> > m1;
     for (MyMap<string,int>::iterator it = map1.begin(); it!=NULL;it++) {
         m1.sortedInsert(make_pair((*it).second,(*it).first));
@@ -324,6 +317,8 @@ int main(int argc, char **argv) {
     }
 
     // Leitura dos comandos ------------------------------------------------
+    srand(time(NULL));
+
     string st;
     while (cin >> st) {
         if (st == "consultar") {

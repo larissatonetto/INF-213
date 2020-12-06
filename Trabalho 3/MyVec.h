@@ -159,7 +159,7 @@ void MyVec<T>::sortedInsert(const T &elem) {
 	}
 
 	for (int i = 0; i < this->size(); i++) {
-		if (data[i] <= elem) {
+		if (data[i] < elem) {	// Adiciona em ordem decrescente
 			insert(elem, i);
 			return;
 		}
