@@ -9,7 +9,7 @@
 
 using namespace std;
 
-void consulta(MyMap<string,int> map1,
+void consultar(MyMap<string,int> map1,
               MyMap<string, MyMap<string,int> > map2,
               MyMap<string, MyMap<string, MyMap<string,int> > > map3,
               MyVec<pair<int,string> > m1,
@@ -191,6 +191,26 @@ void gerar(MyMap<string,int> map1,
     }
 }
 
+string processaTexto(istream &fin) {
+    string texto, line;
+    fin >> texto;
+
+    while(getline(fin,line)) {
+        if (line == "INICIO_TREINO") continue;
+
+        if (line == "FINAL_TREINO") return texto;
+            
+        for (int i = 0; i < line.size(); i++) {
+            // Convertendo maiúscula para minúscula
+            if (line[i] > 64 && line[i] < 91) line[i]+= 32;
+        }
+
+        texto+= line + " ";
+}
+
+    return texto;
+}
+
 int main(int argc, char **argv) {
     string line, textoTratado;    // line lê de linha em linha, cada linha tratada é adicionada a textoTratado
     MyVec<string> frases;   // Armazena as frases separadas
@@ -201,34 +221,16 @@ int main(int argc, char **argv) {
     // Lê a entrada a cada char e adiciona à string
     if (argc == 2) {
         ifstream entrada(argv[1]);
-        while(getline(entrada,line)) {
-            
-            for (int i = 0; i < line.size(); i++) {
-                // Convertendo maiúscula para minúscula
-                if (line[i] > 64 && line[i] < 91) line[i]+= 32;
-            }
-
-            textoTratado+= line + " ";
-        }
+        textoTratado = processaTexto(entrada);
+        
     } else {
-        cin >> line;    // Lê o INICIO_TREINO
-        cin.ignore();
-        while (getline(cin,line)) {
-            if (line == "FINAL_TREINO") break;
-            
-            for (int i = 0; i < line.size(); i++) {
-                // Convertendo maiúscula para minúscula
-                if (line[i] > 64 && line[i] < 91) line[i]+= 32;
-            }
-
-            textoTratado+= line + " ";
-        }   
+        textoTratado = processaTexto(cin);  
     }
 
-    // Separando as sentenças e passando para MyVec --------------------------------
+    // Separando as sentenças e passando para um MyVec --------------------------------
     string s;
     for (int i = 0; i < textoTratado.size(); i++) {
-        if (s[0] == ' ') s.erase(0,1);
+        if (s[0] == ' ') s.erase(0,1);  // Retira espaço vazio antes da frase
 
         if (textoTratado[i] == 39) {    // Verifica se tem apóstrofe
             s+= ' ';
@@ -236,8 +238,8 @@ int main(int argc, char **argv) {
         }
 
         if ((textoTratado[i] > 45 && textoTratado[i] < 65) ||    // Retira de . até @
-            (textoTratado[i] > 32 && textoTratado[i] < 39) ||    // Retira de ! até '
-            (textoTratado[i] > 39 && textoTratado[i] < 45)) {    // Retira de ( até '
+            (textoTratado[i] > 32 && textoTratado[i] < 39) ||    // Retira de ! até &
+            (textoTratado[i] > 39 && textoTratado[i] < 45)) {    // Retira de ( até ,
             if (s != "") {
                 frases.push_back(s);
             }
@@ -245,10 +247,10 @@ int main(int argc, char **argv) {
             continue;
         }
 
-        s+=textoTratado[i];
+        s+= textoTratado[i];
     }
 
-    // Verifica se ainda há uma sentença a ser guardada
+    // Verifica se ainda há alguma sentença a ser guardada
     if (s != "") {
         if (s[0] == ' ') s.erase(0,1);
         frases.push_back(s);
@@ -334,11 +336,11 @@ int main(int argc, char **argv) {
                 valores.push_back(st);
             }
 
-            consulta(map1,map2,map3,m1,m2,m3,k,valores);
+            consultar(map1,map2,map3,m1,m2,m3,k,valores);
 
         } else {
             string modo;
-            int k, n = 0;
+            int k;
             MyVec<string> valores;
 
             cin >> k;
